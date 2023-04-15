@@ -1,0 +1,28 @@
+# docker/docker-compose.yaml
+
+version: "3.8"
+
+services:
+  mongodb:
+    image: "mongo:latest"
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_NAME: "cinehub"
+      MONGO_USER: "cinehub"
+      MONGO_PASS: "cinehub"
+    volumes:
+      - "./mongodb:/docker-entrypoint-initdb.d"
+
+  minio:
+    image: "bitnami/minio:latest"
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "root"
+      MINIO_ROOT_PASSWORD: "password"

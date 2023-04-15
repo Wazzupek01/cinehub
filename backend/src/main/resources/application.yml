@@ -1,0 +1,20 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://cinehub:cinehub@localhost:27017/cinehub
+      auto-index-creation: true
+
+minio:
+  bucket:
+    name: cinehub
+  access:
+    key: root
+    secret: password
+  url: http://localhost:9000
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 5MB
+      max-request-size: 10MB
