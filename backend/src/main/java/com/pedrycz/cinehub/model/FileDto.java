@@ -1,4 +1,4 @@
-package com.pedrycz.cinehub;
+package com.pedrycz.cinehub.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

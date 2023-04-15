@@ -1,6 +1,11 @@
-package com.pedrycz.cinehub;
+package com.pedrycz.cinehub.services;
 
-import io.minio.*;
+import com.pedrycz.cinehub.model.FileDto;
+import io.minio.GetObjectArgs;
+import io.minio.ListObjectsArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.Result;
 import io.minio.messages.Item;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +20,15 @@ import java.util.List;
 @Service
 public class MinioService {
 
-    @Autowired
-    private MinioClient minioClient;
+    private final MinioClient minioClient;
 
     @Value("${minio.bucket.name}")
     private String bucketName;
+
+    @Autowired
+    public MinioService(MinioClient minioClient) {
+        this.minioClient = minioClient;
+    }
 
     public List<FileDto> getListObjects() {
         List<FileDto> objects = new ArrayList<>();
