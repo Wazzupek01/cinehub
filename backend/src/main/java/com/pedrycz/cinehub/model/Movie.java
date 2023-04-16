@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,13 +18,13 @@ public class Movie {
     private String id;
     private String title;
     private Integer budget;
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private Integer length;
     private String distributor;
     private String genre;
     private String director;
 
-    public Movie(String title, Integer budget, Date releaseDate, Integer length, String distributor, String genre, String director) {
+    public Movie(String title, Integer budget, LocalDate releaseDate, Integer length, String distributor, String genre, String director) {
         this.title = title;
         this.budget = budget;
         this.releaseDate = releaseDate;
