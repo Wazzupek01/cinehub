@@ -2,19 +2,15 @@ package com.pedrycz.cinehub;
 
 import com.pedrycz.cinehub.model.Movie;
 import com.pedrycz.cinehub.repositories.MovieRepository;
-import me.tongfei.progressbar.ProgressBar;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.FileReader;
 import java.util.List;
-import java.util.Scanner;
 
 @Component
 public class MovieCollectionInitializer implements CommandLineRunner {
@@ -25,90 +21,52 @@ public class MovieCollectionInitializer implements CommandLineRunner {
     public MovieCollectionInitializer(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
-
     @Override
     public void run(String... args) throws Exception {
-        if(movieRepository.count() == 0)
-            InitializeData();
-    }
+        if(movieRepository.count() == 0) return;
 
-    private void InitializeData() {
-        List<JSONObject> objects = loadJSON("./src/main/resources/movies.json");
-        if (objects != null) {
-            ProgressBar pb = new ProgressBar("Initializing DB", objects.size());
-            pb.start();
+        FileReader fileReader;
 
-            for (JSONObject object : objects) {
-                Integer runtime;
-                try {
-                    runtime = Integer.parseInt(getElementFromJSONObject(object.getJSONObject("runtime"),"$numberInt"));
-                } catch(JSONException e){
-                    runtime = null;
-                }
-                String year;
-                try {
-                    year = getElementFromJSONObject(object.getJSONObject("year"), "$numberInt");
-                } catch (JSONException e){
-                    year = null;
-                }
-
-                movieRepository.insert(
-                        new Movie(
-                                getElementFromJSONObject(object, "title"),
-                                getElementFromJSONObject(object, "plot"),
-                                year,
-                                runtime,
-                                getElementFromJSONObject(object, "poster"),
-                                getArrayFromJSONObject(object, "genres"),
-                                getArrayFromJSONObject(object, "directors"),
-                                getArrayFromJSONObject(object, "cast")
-                        )
-                );
-                pb.step();
-            }
-            pb.stop();
-
-            System.out.println("Added " + movieRepository.count() + " from " + objects.size());
-        }
-    }
-
-    private List<JSONObject> loadJSON(String path) {
-        List<JSONObject> objects = null;
         try {
-            File file = new File(path);
-            objects = new ArrayList<>();
-            Scanner myReader = new Scanner(file);
-            while (myReader.hasNextLine()) {
-                objects.add(new JSONObject(myReader.nextLine()));
-            }
-            myReader.close();
+            fileReader = new FileReader("./src/main/resources/movies.json");
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return;
         }
-        return (objects.isEmpty()) ? null : objects;
-    }
 
-    private List<String> getArrayFromJSONObject(JSONObject object, String fieldname) {
-        List<String> elements = new ArrayList<>();
-        try {
-            JSONArray array = object.getJSONArray(fieldname);
-            for (Object o : array) {
-                elements.add(o.toString());
+        BufferedReader br = new BufferedReader(fileReader);
+
+        String line;
+        Document document;
+        int incompleteDocuments = 0;
+        int count = 0;
+        System.out.println("Initializing db...");
+
+        while ((line = br.readLine()) != null) {
+            document = Document.parse(line);
+            try {
+                movieRepository.insert(new Movie(getField(document, "title").toString(),
+                        getField(document, "plot").toString(),
+                        getField(document, "year").toString(),
+                        (Integer) getField(document, "runtime"),
+                        getField(document, "poster").toString(),
+                        (List<String>) getField(document, "genres"),
+                        (List<String>) getField(document, "directors"),
+                        (List<String>) getField(document, "cast")));
+            } catch(NullPointerException e){
+                incompleteDocuments++;
+            } finally {
+                count ++;
             }
-        } catch (JSONException e) {
-            return null;
         }
-        return elements;
+        System.out.println("DB initialized, missed " + incompleteDocuments + " from " + count + " records due to incomplete data");
     }
 
-    private String getElementFromJSONObject(JSONObject object, String fieldname) {
-        String value = null;
-        try {
-            value = object.get(fieldname).toString();
-        } catch (JSONException e) {
-            // logger here in future
+    private Object getField(Document document, String fieldname) throws NullPointerException {
+        Object field = document.get(fieldname);
+        if(field == null){
+            throw new NullPointerException("Field not found");
         }
-        return value;
+        return field;
     }
 }
