@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub.services;
 
-import com.pedrycz.cinehub.model.FileDto;
+import com.pedrycz.cinehub.model.dto.FileDto;
 import io.minio.GetObjectArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;

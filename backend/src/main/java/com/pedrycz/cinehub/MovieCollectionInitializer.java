@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub;
 
-import com.pedrycz.cinehub.model.Movie;
+import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class MovieCollectionInitializer implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        if(movieRepository.count() == 0) return;
+        if(movieRepository.count() != 0) return;
 
         FileReader fileReader;
 

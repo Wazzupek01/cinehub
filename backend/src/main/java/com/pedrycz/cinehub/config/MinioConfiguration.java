@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Configuration
 public class MinioConfiguration {
+
     @Value("${minio.access.key}")
     private String accessKey;
 

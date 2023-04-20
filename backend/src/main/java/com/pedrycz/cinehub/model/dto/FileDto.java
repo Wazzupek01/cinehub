@@ -1,4 +1,4 @@
-package com.pedrycz.cinehub.model;
+package com.pedrycz.cinehub.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileDto {
+
     private static final long serialVersionUID = 232836038145089522L;
 
     private String title;
