@@ -11,10 +11,9 @@ import java.util.Optional;
 
 public interface MovieRepository extends MongoRepository<Movie, String> {
 
-    Optional<Movie> findMovieById(String id);
-    List<Movie> findMoviesByTitle(String title);
     @NotNull
     Page<Movie> findAll(@NotNull Pageable pageable);
+    Optional<Movie> findMovieById(String id);
 
     Page<Movie> findAllByOrderByRatingDesc(Pageable pageable);
     Page<Movie> findAllByOrderByRatingAsc(Pageable pageable);
@@ -23,21 +22,29 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     Page<Movie> findAllByOrderByRuntimeDesc(Pageable pageable);
     Page<Movie> findAllByOrderByRuntimeAsc(Pageable pageable);
 
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCase(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingDesc(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingAsc(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearDesc(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearAsc(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeDesc(String director);
-    List<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeAsc(String director);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCase(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByRatingDesc(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByRatingAsc(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByReleaseYearDesc(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByReleaseYearAsc(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByRuntimeDesc(String title, Pageable pageable);
+    Page<Movie> findMoviesByTitleIsContainingIgnoreCaseOrderByRuntimeAsc(String title, Pageable pageable);
 
-    List<Movie> findMoviesByCastIsContainingIgnoreCase(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRatingDesc(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRatingAsc(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearDesc(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearAsc(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeDesc(String actor);
-    List<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeAsc(String actor);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCase(String director,Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingDesc(String director, Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingAsc(String director, Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearDesc(String director, Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearAsc(String director, Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeDesc(String director, Pageable pageable);
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeAsc(String director, Pageable pageable);
+
+    Page<Movie> findMoviesByCastIsContainingIgnoreCase(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRatingDesc(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRatingAsc(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearDesc(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearAsc(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeDesc(String actor, Pageable pageable);
+    Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeAsc(String actor, Pageable pageable);
 
 
 
@@ -72,6 +79,4 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     Page<Movie> findMoviesByRuntimeLessThanOrderByReleaseYearAsc(Integer max, Pageable pageable);
     Page<Movie> findMoviesByRuntimeLessThanOrderByRuntimeDesc(Integer max, Pageable pageable);
     Page<Movie> findMoviesByRuntimeLessThanOrderByRuntimeAsc(Integer max, Pageable pageable);
-
-
 }
