@@ -4,6 +4,7 @@ import java.util.List;
 
 public record MovieDTO(String id,
                        String title,
+                       String plot,
                        Float rating,
                        String releaseYear,
                        Integer runtime,

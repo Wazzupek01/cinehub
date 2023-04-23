@@ -6,7 +6,6 @@ import java.util.List;
 
 public record AddMovieDTO(String title,
                        String plot,
-                       Float rating,
                        String releaseYear,
                        Integer runtime,
                        MultipartFile posterFile,

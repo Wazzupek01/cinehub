@@ -2,24 +2,20 @@ package com.pedrycz.cinehub.services;
 
 import com.pedrycz.cinehub.controllers.GetParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
+import com.pedrycz.cinehub.helpers.Constants;
 import com.pedrycz.cinehub.model.dto.AddMovieDTO;
-import com.pedrycz.cinehub.model.dto.FileDto;
 import com.pedrycz.cinehub.model.dto.MovieDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -259,17 +255,20 @@ public class MovieServiceImpl implements MovieService {
                 "",
                 movie.genres(), movie.directors(), movie.cast()));
 
-        inserted.setPosterUrl(posterService.addPoster(inserted.getId() + ".png", movie.posterFile()));
+        inserted.setPosterUrl(posterService.addPoster(inserted.getId() + Constants.FILE_TYPE, movie.posterFile()));
         return movieDTOMapper.movieToMovieDTO(movieRepository.save(inserted));
     }
 
     @Override
-    public MovieDTO update(String id, Movie movie) {
+    public MovieDTO update(MovieDTO movieDTO) {
+        Movie movie = movieDTOMapper.movieDTOToMovie(movieDTO);
         return movieDTOMapper.movieToMovieDTO(movieRepository.save(movie));
     }
 
     @Override
     public void deleteById(String id) {
+        String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id).getPosterUrl();
+        if(posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deletePoster(id + Constants.FILE_TYPE);
         movieRepository.deleteById(id);
     }
 

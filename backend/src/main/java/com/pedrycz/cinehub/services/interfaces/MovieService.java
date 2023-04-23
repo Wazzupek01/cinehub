@@ -3,7 +3,6 @@ package com.pedrycz.cinehub.services.interfaces;
 import com.pedrycz.cinehub.controllers.GetParams;
 import com.pedrycz.cinehub.model.dto.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.MovieDTO;
-import com.pedrycz.cinehub.model.entities.Movie;
 import org.springframework.data.domain.Page;
 
 public interface MovieService {
@@ -18,6 +17,7 @@ public interface MovieService {
     Page<MovieDTO> getShorts(GetParams params);
     Page<MovieDTO> getFullLength(GetParams params);
     MovieDTO add(AddMovieDTO movie);
-    MovieDTO update(String id, Movie movie);
+    MovieDTO update(MovieDTO movieDTO);
+
     void deleteById(String id);
 }
