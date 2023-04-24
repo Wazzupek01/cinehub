@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 @RestController
 @RequestMapping("/poster")
 public class PosterController {
@@ -23,7 +21,7 @@ public class PosterController {
     }
 
     @GetMapping(value = "/**")
-    public ResponseEntity<Object> getFile(HttpServletRequest request) throws IOException {
+    public ResponseEntity<Object> getFile(HttpServletRequest request) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(posterService.getPoster(request));
