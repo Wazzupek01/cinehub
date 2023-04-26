@@ -1,8 +1,8 @@
 package com.pedrycz.cinehub.services.interfaces;
 
 import com.pedrycz.cinehub.controllers.GetParams;
-import com.pedrycz.cinehub.model.dto.AddMovieDTO;
-import com.pedrycz.cinehub.model.dto.MovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import org.springframework.data.domain.Page;
 
 public interface MovieService {

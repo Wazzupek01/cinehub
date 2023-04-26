@@ -3,8 +3,8 @@ package com.pedrycz.cinehub.services;
 import com.pedrycz.cinehub.controllers.GetParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.helpers.Constants;
-import com.pedrycz.cinehub.model.dto.AddMovieDTO;
-import com.pedrycz.cinehub.model.dto.MovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
@@ -23,8 +23,8 @@ public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final PosterService posterService;
-
     private final MovieToMovieDTOMapper movieDTOMapper;
+
 
     @Autowired
     public MovieServiceImpl(MovieRepository movieRepository, PosterService posterService) {

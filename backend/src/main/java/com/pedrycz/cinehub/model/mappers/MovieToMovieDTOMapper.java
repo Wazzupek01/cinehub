@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub.model.mappers;
 
-import com.pedrycz.cinehub.model.dto.MovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
 import org.mapstruct.Mapper;
 

@@ -18,3 +18,7 @@ minio:
       file-size-threshold: 2KB
       max-file-size: 5MB
       max-request-size: 10MB
+
+security:
+  secret-key: "566B59703373357638792F423F4528482B4D6251655468576D5A7134743777397A24432646294A404E635266556A586E3272357538782F4125442A472D4B6150"
+  key-expiration-time: 1440000

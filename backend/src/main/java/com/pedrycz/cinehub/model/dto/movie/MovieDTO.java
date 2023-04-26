@@ -1,4 +1,4 @@
-package com.pedrycz.cinehub.model.dto;
+package com.pedrycz.cinehub.model.dto.movie;
 
 import java.util.List;
 

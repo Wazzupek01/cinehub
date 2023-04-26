@@ -1,7 +1,7 @@
 package com.pedrycz.cinehub.controllers;
 
-import com.pedrycz.cinehub.model.dto.AddMovieDTO;
-import com.pedrycz.cinehub.model.dto.MovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
+import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

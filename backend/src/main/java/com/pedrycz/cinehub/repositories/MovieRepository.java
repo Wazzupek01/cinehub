@@ -1,17 +1,17 @@
 package com.pedrycz.cinehub.repositories;
 
 import com.pedrycz.cinehub.model.entities.Movie;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
 public interface MovieRepository extends MongoRepository<Movie, String> {
 
-    @NotNull
-    Page<Movie> findAll(@NotNull Pageable pageable);
+    @NonNull
+    Page<Movie> findAll(@NonNull Pageable pageable);
     Optional<Movie> findMovieById(String id);
 
     Page<Movie> findAllByOrderByRatingDesc(Pageable pageable);
