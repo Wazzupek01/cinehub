@@ -2,6 +2,7 @@
 
 version: "3.8"
 
+name: cinehub-backend
 services:
   mongodb:
     image: "mongo:latest"
