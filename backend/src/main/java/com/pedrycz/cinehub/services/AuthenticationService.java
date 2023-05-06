@@ -15,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class AuthenticationService {
@@ -40,8 +40,8 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
-                .watchLater(List.of())
-                .myReviews(List.of())
+                .watchLater(Set.of())
+                .myReviews(Set.of())
                 .build();
         userRepository.save(user);
         Map<String, Object> extraClaims = new HashMap<String, Object>();

@@ -36,6 +36,12 @@ public class MovieController {
         this.jwtService = jwtService;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Couldn't find requested movie", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Requested movie found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = MovieDTO.class)))
+    })
+    @Operation(summary = "Get movie by ID", description = "Get movie of requested ID")
     @GetMapping("/id/{id}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable String id){
         return new ResponseEntity<>(movieService.getById(id), HttpStatus.FOUND);
@@ -45,7 +51,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for all movies found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of movies", description = "Get requested page from all movies")
     public ResponseEntity<Page<MovieDTO>> getAllMovies(@PathVariable int page){
@@ -56,7 +62,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for all movies found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get one of pages of all movies ordered",
             description = "Get requested page from all movies ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -69,7 +75,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this title", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this title found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for title of movies", description = "Get page of movies with title containing requested string")
     public ResponseEntity<Page<MovieDTO>> getMoviesByTitle(@PathVariable String title, @PathVariable int page){
@@ -80,7 +86,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this title", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this title found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for title of movies ordered",
             description = "Get page of movies with title containing requested string ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -93,7 +99,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this director", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this director found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for director of movies", description = "Get page of movies with director name containing requested string")
     public ResponseEntity<Page<MovieDTO>> getMoviesByDirector(@PathVariable String director, @PathVariable int page){
@@ -104,7 +110,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this director", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this director found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for director of movies ordered",
             description = "Get page of movies with director name containing requested string ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -117,7 +123,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this actor", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this actor found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for actor in movies", description = "Get page of movies with actor name containing requested string")
     public ResponseEntity<Page<MovieDTO>> getMoviesByActor(@PathVariable String actor, @PathVariable int page){
@@ -128,7 +134,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this actor", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this actor found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for actor in movies ordered",
             description = "Get page of movies with actor name containing requested string ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -141,7 +147,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this genre", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this genre found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for genre of movies", description = "Get page of movies with genre name containing requested string")
     public ResponseEntity<Page<MovieDTO>> getMoviesByGenre(@PathVariable String genre, @PathVariable int page){
@@ -152,7 +158,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this genre", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this genre found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page for genre of movies ordered",
             description = "Get page of movies with genre name containing requested string ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -165,7 +171,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested short movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested short movies page found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of short movies", description = "Get page of movies with director name containing requested string")
     public ResponseEntity<Page<MovieDTO>> getShorts(@PathVariable int page){
@@ -176,7 +182,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested short movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested short movies page found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of short movies ordered", description = "Get page of short movies ordered by RATING, RELEASEYEAR or RUNTIME")
     public ResponseEntity<Page<MovieDTO>> getShortsOrdered(@PathVariable int page,
@@ -188,7 +194,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested full length movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested full length movies page found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of full length movies", description = "Get page of full length movies")
     public ResponseEntity<Page<MovieDTO>> getFullLength(@PathVariable int page){
@@ -199,7 +205,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested full length movies page", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page of full length found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of full lenght movies ordered",
             description = "Get page of full length movies ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -212,7 +218,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies with runtime in requested range", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page of movies with runtime in requested range found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of movies with runtime in range", description = "Get page of movies with runtime between specified range")
     public ResponseEntity<Page<MovieDTO>> getMoviesByRuntime(@PathVariable int min, @PathVariable int max, @PathVariable int page){
@@ -223,7 +229,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies with runtime in requested range", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page of movies with runtime in requested range found",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
     })
     @Operation(summary = "Get page of movies with runtime in range ordered",
             description = "Get page of movies with runtime between specified range ordered by RATING, RELEASEYEAR or RUNTIME")
@@ -236,7 +242,7 @@ public class MovieController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "403", description = "You're not logged in user", content = @Content),
             @ApiResponse(responseCode = "201", description = "New movie added to database",
-                    content = @Content(mediaType = "application/jon", schema = @Schema(implementation = Page.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = MovieDTO.class)))
     })
     @Operation(summary = "Add new movie", description = "Add new movie with poster to database")
     public ResponseEntity<MovieDTO> addMovie(@Valid @ParameterObject @ModelAttribute AddMovieDTO movie) {
@@ -262,7 +268,7 @@ public class MovieController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "403", description = "You're not logged in user ", content = @Content),
         @ApiResponse(responseCode = "204", description = "Movie updated",
-                content = @Content(mediaType = "application/jon", schema = @Schema(implementation = MovieDTO.class)))
+                content = @Content(mediaType = "application/json", schema = @Schema(implementation = MovieDTO.class)))
     })
     @Operation(summary = "Update movie", description = "Update movie data")
     public ResponseEntity<MovieDTO> updateMovie(@PathVariable String id, @Valid @ParameterObject @ModelAttribute AddMovieDTO movieDTO){

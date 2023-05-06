@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -36,10 +37,13 @@ public class User implements UserDetails {
     private Role role;
 
     @DocumentReference
-    private List<Movie> watchLater;
+    private Set<Movie> watchLater;
 
     @DocumentReference
-    private List<Review> myReviews;
+    private Set<Review> myReviews;
+
+    @DocumentReference
+    private Set<User> friends;
 
     @Override
     public String getUsername() {

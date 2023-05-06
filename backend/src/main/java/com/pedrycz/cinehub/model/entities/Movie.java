@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Getter
@@ -52,7 +53,7 @@ public class Movie {
     private List<String> cast;
 
     @DocumentReference
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     public Movie(@NotNull String title, @NotNull String plot, @NotNull String releaseYear, Integer runtime, String posterUrl,
                  @NotNull List<String> genres, @NotNull List<String> directors, @NotNull List<String> cast) {
