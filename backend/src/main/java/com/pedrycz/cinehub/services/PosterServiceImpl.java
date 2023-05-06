@@ -47,9 +47,7 @@ public class PosterServiceImpl implements PosterService {
         return getPreSignedUrl(filename);
     }
 
-    public Object getPoster(HttpServletRequest request) {
-        String pattern = (String) request.getAttribute(BEST_MATCHING_PATTERN_ATTRIBUTE);
-        String filename = new AntPathMatcher().extractPathWithinPattern(pattern, request.getServletPath());
+    public Object getPoster(String filename) {
         InputStream stream;
         try {
             stream = minioClient.getObject(GetObjectArgs.builder()
