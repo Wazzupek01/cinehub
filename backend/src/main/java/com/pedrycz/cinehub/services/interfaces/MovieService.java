@@ -17,7 +17,7 @@ public interface MovieService {
     Page<MovieDTO> getShorts(GetParams params);
     Page<MovieDTO> getFullLength(GetParams params);
     MovieDTO add(AddMovieDTO movie);
-    MovieDTO update(MovieDTO movieDTO);
+    MovieDTO update(String id, AddMovieDTO movieDTO);
 
     void deleteById(String id);
 }

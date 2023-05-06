@@ -1,5 +1,6 @@
 package com.pedrycz.cinehub.model.dto.movie;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;

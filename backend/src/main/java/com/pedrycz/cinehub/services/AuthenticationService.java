@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AuthenticationService {
@@ -42,7 +44,9 @@ public class AuthenticationService {
                 .myReviews(List.of())
                 .build();
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
+        Map<String, Object> extraClaims = new HashMap<String, Object>();
+        extraClaims.put("ROLE", user.getRole());
+        String jwtToken = jwtService.generateToken(extraClaims, user);
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -54,7 +58,9 @@ public class AuthenticationService {
             );
 
         User user =  userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException(request.getEmail()));
-        String jwtToken = jwtService.generateToken(user);
+        Map<String, Object> extraClaims = new HashMap<String, Object>();
+        extraClaims.put("ROLE", user.getRole());
+        String jwtToken = jwtService.generateToken(extraClaims, user);
         return new AuthenticationResponse(jwtToken);
     }
 }

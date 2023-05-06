@@ -2,6 +2,7 @@ package com.pedrycz.cinehub.services;
 
 import com.pedrycz.cinehub.controllers.GetParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
+import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.helpers.Constants;
 import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
@@ -10,6 +11,7 @@ import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
+import jakarta.validation.constraints.Null;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -61,7 +63,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -87,7 +94,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -113,7 +125,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -139,7 +156,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -165,7 +187,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -191,7 +218,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -217,7 +249,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -243,7 +280,12 @@ public class MovieServiceImpl implements MovieService {
             }
         }
 
-        return moviePage != null ? moviePage.map(movieDTOMapper::movieToMovieDTO) : null;
+        try {
+            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
+            else throw new PageNotFoundException(getParams.getPageNum());
+        } catch (NullPointerException e){
+            throw new PageNotFoundException(getParams.getPageNum());
+        }
     }
 
     @Override
@@ -260,9 +302,22 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDTO update(MovieDTO movieDTO) {
-        Movie movie = movieDTOMapper.movieDTOToMovie(movieDTO);
-        return movieDTOMapper.movieToMovieDTO(movieRepository.save(movie));
+    public MovieDTO update(String id, AddMovieDTO movieDTO) {
+        Optional<Movie> movie = movieRepository.findMovieById(id);
+        if(movie.isPresent()){
+            Movie updatedMovie =  movie.get();
+            updatedMovie.setCast(movieDTO.cast());
+            updatedMovie.setPlot(movieDTO.plot());
+            updatedMovie.setId(id);
+            updatedMovie.setGenres(movieDTO.genres());
+            updatedMovie.setDirectors(movieDTO.directors());
+            updatedMovie.setReleaseYear(movieDTO.releaseYear());
+            updatedMovie.setRuntime(movieDTO.runtime());
+            updatedMovie.setTitle(movieDTO.title());
+            updatedMovie.setPosterUrl(posterService.addPoster(updatedMovie.getId() + Constants.FILE_TYPE, movieDTO.posterFile()));
+            return movieDTOMapper.movieToMovieDTO(movieRepository.save(updatedMovie));
+        }
+        throw new DocumentNotFoundException(id);
     }
 
     @Override

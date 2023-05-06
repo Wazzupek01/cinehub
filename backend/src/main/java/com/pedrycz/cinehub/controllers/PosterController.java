@@ -1,6 +1,7 @@
 package com.pedrycz.cinehub.controllers;
 
 import com.pedrycz.cinehub.services.interfaces.PosterService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/poster")
-@Tag(name = "Poster", description = "Get single poster for requested movie from Minio Storage")
+@Tag(name = "Poster", description = "Get single poster for requested movie from Minio Storage only")
 public class PosterController {
 
     private final PosterService posterService;
@@ -32,6 +33,7 @@ public class PosterController {
             @ApiResponse(responseCode = "200", description = "Poster found for requested movie",
                     content = @Content(mediaType = "image/png"))
     })
+    @Operation(summary = "Get poster stored in Minio", description = "Returns file described in path variable if exists in Minio storage")
     public ResponseEntity<Object> getFile(@PathVariable String filename) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)

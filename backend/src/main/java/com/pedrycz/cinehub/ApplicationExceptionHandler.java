@@ -1,11 +1,9 @@
 package com.pedrycz.cinehub;
 
-import com.pedrycz.cinehub.exceptions.BadFileException;
-import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
-import com.pedrycz.cinehub.exceptions.ErrorResponse;
-import com.pedrycz.cinehub.exceptions.PosterNotFoundException;
+import com.pedrycz.cinehub.exceptions.*;
 import io.minio.errors.MinioException;
 import lombok.NonNull;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,6 +19,12 @@ import java.util.List;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler({PageNotFoundException.class})
+    public ResponseEntity<Object> handlePageNotFoundException(PageNotFoundException e){
+        ErrorResponse error = new ErrorResponse(List.of(e.getMessage()));
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler({PosterNotFoundException.class})
     public ResponseEntity<Object> handlePosterNotFoundException(PosterNotFoundException e){
