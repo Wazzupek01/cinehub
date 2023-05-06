@@ -4,7 +4,7 @@ public class SecurityConstants {
     public static final String[] WHITELIST = {
             "/documentation/**",
             "/auth/**",
-            "/user/**",
+            "/user/nickname/**",
             "/poster/**",
             "/movies/all/**",
             "/movies/id/**",
