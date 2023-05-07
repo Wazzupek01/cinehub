@@ -2,6 +2,7 @@ package com.pedrycz.cinehub.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,19 +32,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null){
+            filterChain.doFilter(request, response);
+        }
+        String jwt = null;
         final String userEmail;
 
-        if(authHeader == null || !authHeader.startsWith(SecurityConstants.BEARER)){
-            filterChain.doFilter(request, response);
-            return;
+        for(Cookie c: cookies){
+            if(c.getName().equals("jwt")) jwt = c.getValue();
         }
 
-        jwt = authHeader.replace(SecurityConstants.BEARER, "");
+        if(jwt == null){
+            filterChain.doFilter(request, response);
+        }
+
         userEmail = jwtService.extractUsername(jwt);
+
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            System.out.println(userEmail);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if(jwtService.isTokenValid(jwt, userDetails)){
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

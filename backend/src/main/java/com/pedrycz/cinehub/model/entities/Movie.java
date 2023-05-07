@@ -67,4 +67,15 @@ public class Movie {
         this.directors = directors;
         this.cast = cast;
     }
+
+    public void updateRating(){
+        float rating = 0;
+
+        for(Review r: reviews){
+            rating += r.getRating();
+        }
+        rating /= reviews.size();
+
+        this.rating = rating;
+    }
 }

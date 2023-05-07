@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
+import java.util.Optional;
+import java.util.Set;
+
 public interface ReviewRepository extends MongoRepository<Review, String> {
-    Review findReviewById(String id);
+    Optional<Review> findReviewById(String id);
     Page<Review> findReviewsByUserId(String userId, Pageable pageable);
     Page<Review> findReviewsByUserIdOrderByRatingDesc(String userId, Pageable pageable);
     Page<Review> findReviewsByUserIdOrderByRatingAsc(String userId, Pageable pageable);
@@ -15,6 +18,8 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
     Page<Review> findReviewsByUserIdOrderByTimestampAsc(String userId, Pageable pageable);
 
     Page<Review> findAllByMovieId(String movieId, Pageable pageable);
+
+    Set<Review> findAllByMovieId(String movieId);
     @Query("{ 'movie' : ObjectId(?0), '$expr': { '$gt': [{ '$strLenCP': '$content' }, 0 ] }}")
     Page<Review> findAllByMovieIdWithReviewNotEmpty(String Movie_Id, Pageable pageable); // Use Sort parameter in PageRequest here
 }
