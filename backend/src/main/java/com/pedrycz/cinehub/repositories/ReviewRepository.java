@@ -17,9 +17,9 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
     Page<Review> findReviewsByUserIdOrderByTimestampDesc(String userId, Pageable pageable);
     Page<Review> findReviewsByUserIdOrderByTimestampAsc(String userId, Pageable pageable);
 
-    Page<Review> findAllByMovieId(String movieId, Pageable pageable);
+    Page<Review> findReviewsByMovieId(String movieId, Pageable pageable);
 
-    Set<Review> findAllByMovieId(String movieId);
+    Set<Review> findReviewsByMovieId(String movieId);
     @Query("{ 'movie' : ObjectId(?0), '$expr': { '$gt': [{ '$strLenCP': '$content' }, 0 ] }}")
-    Page<Review> findAllByMovieIdWithReviewNotEmpty(String Movie_Id, Pageable pageable); // Use Sort parameter in PageRequest here
+    Page<Review> findReviewsByMovieIdWithReviewNotEmpty(String MovieId, Pageable pageable); // Use Sort parameter in PageRequest here
 }

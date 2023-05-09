@@ -6,6 +6,7 @@ import com.pedrycz.cinehub.validation.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -18,6 +19,7 @@ import java.util.Set;
 
 @Data
 @Builder
+@EqualsAndHashCode
 @Document
 public class User implements UserDetails {
 

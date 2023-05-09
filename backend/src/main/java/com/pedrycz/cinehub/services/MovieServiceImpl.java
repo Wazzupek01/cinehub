@@ -11,7 +11,6 @@ import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
-import jakarta.validation.constraints.Null;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

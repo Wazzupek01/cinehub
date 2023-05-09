@@ -8,20 +8,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @Getter
 @Setter
 @Document
-@Builder
 public class Review {
 
     @Id
     private String id;
 
     @NonNull
-    @DecimalMin(value = "1", inclusive = true)
-    @DecimalMax(value = "10", inclusive = true)
+    @DecimalMin(value = "1")
+    @DecimalMax(value = "10")
     private Integer rating;
     private String content;
     private LocalDateTime timestamp;
@@ -32,11 +32,19 @@ public class Review {
     @DocumentReference(lazy = true)
     private User user;
 
-//    public Review(Integer rating, String content, Movie movie, User user) {
-//        this.rating = rating;
-//        this.content = content;
-//        this.timestamp = LocalDateTime.now();
-//        this.movie = movie;
-//        this.user = user;
-//    }
+    public Review(@NonNull Integer rating, String content, Movie movie, User user) {
+        this.rating = rating;
+        this.content = content;
+        this.timestamp = LocalDateTime.now();
+        this.movie = movie;
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review = (Review) o;
+        return Objects.equals(id, review.id) && Objects.equals(rating, review.rating) && Objects.equals(content, review.content) && Objects.equals(timestamp, review.timestamp) && Objects.equals(movie, review.movie) && Objects.equals(user, review.user);
+    }
 }

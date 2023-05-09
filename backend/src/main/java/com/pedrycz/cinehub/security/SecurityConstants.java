@@ -13,8 +13,10 @@ public class SecurityConstants {
             "/movies/actor/**",
             "/movies/genre/**",
             "/movies/runtime/**",
+            "/review/id/**",
+            "/review/movie/**",
+            "/review/user/**",
             "/swagger-ui.html", "/docs", "/swagger-resources/**",
             "/swagger-resources", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**", "/proxy/**"
     };
-    public static final String BEARER = "Bearer ";
 }
