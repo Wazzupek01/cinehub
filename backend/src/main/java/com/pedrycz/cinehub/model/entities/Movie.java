@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,6 +67,7 @@ public class Movie {
         this.genres = genres;
         this.directors = directors;
         this.cast = cast;
+        this.reviews = new HashSet<>();
     }
 
     public void updateRating(){

@@ -12,9 +12,9 @@ public interface ReviewService {
     ReviewDTO addReview(String token, ReviewDTO reviewDTO);
     void removeReview(String token, String reviewId);
     ReviewDTO getReviewById(String id);
-    Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams, Pageable pageable);
-    Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams, Pageable pageable);
+    Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams);
+    Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams);
     Set<ReviewDTO> getReviewsByMovieId(String movieId);
-    Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams, Pageable pageable);
+    Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams);
     Set<ReviewDTO> getMostRecentReviewsWithContentForMovie(String movieId);
 }

@@ -44,9 +44,6 @@ public class User implements UserDetails {
     @DocumentReference
     private Set<Review> myReviews;
 
-    @DocumentReference
-    private Set<User> friends;
-
     @Override
     public String getUsername() {
         return email;

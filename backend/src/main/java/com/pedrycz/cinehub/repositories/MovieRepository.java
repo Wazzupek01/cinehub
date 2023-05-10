@@ -78,4 +78,6 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     Page<Movie> findMoviesByRuntimeLessThanOrderByReleaseYearAsc(Integer max, Pageable pageable);
     Page<Movie> findMoviesByRuntimeLessThanOrderByRuntimeDesc(Integer max, Pageable pageable);
     Page<Movie> findMoviesByRuntimeLessThanOrderByRuntimeAsc(Integer max, Pageable pageable);
+
+    void deleteMovieById(String id);
 }
