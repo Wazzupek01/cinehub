@@ -2,7 +2,7 @@ package com.pedrycz.cinehub.services;
 
 import com.pedrycz.cinehub.model.dto.user.UserLoginDTO;
 import com.pedrycz.cinehub.model.dto.user.UserRegisterDTO;
-import com.pedrycz.cinehub.model.entities.Role;
+import com.pedrycz.cinehub.model.enums.Role;
 import com.pedrycz.cinehub.model.entities.User;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.security.AuthenticationResponse;

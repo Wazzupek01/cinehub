@@ -45,6 +45,9 @@ public class Review {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
-        return Objects.equals(id, review.id) && Objects.equals(rating, review.rating) && Objects.equals(content, review.content) && Objects.equals(timestamp, review.timestamp) && Objects.equals(movie, review.movie) && Objects.equals(user, review.user);
+        return Objects.equals(id, review.id) && Objects.equals(rating, review.rating)
+                && Objects.equals(content, review.content)
+                && Objects.equals(timestamp, review.timestamp)
+                && Objects.equals(movie, review.movie) && Objects.equals(user, review.user);
     }
 }

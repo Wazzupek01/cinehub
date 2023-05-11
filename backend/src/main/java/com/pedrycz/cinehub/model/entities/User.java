@@ -1,5 +1,6 @@
 package com.pedrycz.cinehub.model.entities;
 
+import com.pedrycz.cinehub.model.enums.Role;
 import com.pedrycz.cinehub.validation.Nickname;
 import com.pedrycz.cinehub.validation.Password;
 import com.pedrycz.cinehub.validation.UniqueEmail;

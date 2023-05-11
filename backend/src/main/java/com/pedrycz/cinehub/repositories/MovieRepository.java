@@ -45,8 +45,6 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
     Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeDesc(String actor, Pageable pageable);
     Page<Movie> findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeAsc(String actor, Pageable pageable);
 
-
-
     Page<Movie> findMoviesByGenresContainingIgnoreCase(String genre, Pageable pageable);
     Page<Movie> findMoviesByGenresContainingIgnoreCaseOrderByRatingDesc(String genre, Pageable pageable);
     Page<Movie> findMoviesByGenresContainingIgnoreCaseOrderByRatingAsc(String genre, Pageable pageable);
