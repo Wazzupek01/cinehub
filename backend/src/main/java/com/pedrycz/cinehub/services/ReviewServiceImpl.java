@@ -68,10 +68,15 @@ public class ReviewServiceImpl implements ReviewService {
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
         if (review.getUser().getEmail().equals(email)) {
-            user.getMyReviews().remove(review);
+            Set<Review> userReviews = user.getMyReviews();
+            userReviews.removeIf((r) -> r.getId().equals(reviewId));
+            user.setMyReviews(userReviews);
             userRepository.save(user);
             Movie movie = review.getMovie();
-            movie.getReviews().remove(review);
+            Set<Review> movieReviews = movie.getReviews();
+            movieReviews.removeIf((r) -> r.getId().equals(reviewId));
+            movie.setReviews(movieReviews);
+            movieRepository.deleteMovieById(movie.getId());
             movieRepository.save(movie);
             reviewRepository.delete(review);
         } else throw new ReviewNotOwnedException();
@@ -83,7 +88,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams, Pageable pageable) {
+    public Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -114,7 +119,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams, Pageable pageable) {
+    public Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -150,7 +155,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams, Pageable pageable) {
+    public Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -184,6 +189,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Set<ReviewDTO> getMostRecentReviewsWithContentForMovie(String movieId) {
         PageRequest pageRequest = PageRequest.of(0, 5).withSort(Sort.by("timestamp").descending());
         Page<Review> reviewPage  = reviewRepository.findReviewsByMovieIdWithReviewNotEmpty(movieId, pageRequest);
+        System.out.println(reviewPage.getContent().size());
         Set<Review> reviewSet = new HashSet<>(reviewPage.getContent());
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewSet);
     }

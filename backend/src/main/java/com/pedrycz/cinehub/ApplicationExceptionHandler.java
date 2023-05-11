@@ -1,6 +1,7 @@
 package com.pedrycz.cinehub;
 
 import com.pedrycz.cinehub.exceptions.*;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.minio.errors.MinioException;
 import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
