@@ -1,6 +1,5 @@
 package com.pedrycz.cinehub.services.interfaces;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface PosterService {

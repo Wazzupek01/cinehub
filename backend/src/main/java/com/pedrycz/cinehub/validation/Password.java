@@ -2,7 +2,6 @@ package com.pedrycz.cinehub.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import com.pedrycz.cinehub.validation.PasswordValidator;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

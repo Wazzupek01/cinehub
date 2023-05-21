@@ -2,7 +2,14 @@ package com.pedrycz.cinehub.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.passay.*;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.LengthRule;
+import org.passay.IllegalSequenceRule;
+import org.passay.EnglishSequenceData;
+import org.passay.WhitespaceRule;
+import org.passay.RuleResult;
+import org.passay.PasswordData;
 
 import java.util.List;
 
