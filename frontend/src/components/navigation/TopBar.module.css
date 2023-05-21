@@ -1,0 +1,76 @@
+.topbar {
+    width: calc(100vw - 40px);
+    max-width: 100%;
+    margin: 0;
+    height: 3em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-darker);
+    padding: 0 20px 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.border_gradient {
+    background: linear-gradient(120deg, rgba(154,0,154,1) 0%, rgba(0,121,201,1) 100%);
+    padding: 2px;
+    border-radius: 18px;
+    display: inline-block;
+    margin-right: 5px;
+    transition-duration: 0.3s;
+
+}
+
+.topbar  li  div {
+    list-style-type: none;
+    display: inline-block;
+    background-color: var(--bg-darker);
+    color: var(--white);
+    padding: 5px;
+    border-radius: 15px;
+    transition-duration: 0.3s;
+    font-weight: 500;
+}
+
+.border_gradient:hover, li:has(a.active) {
+    background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
+}
+
+.topbar li div:hover, li:has(a.active) div {
+    background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
+    color: var(--bg-darker);
+}
+
+
+
+.logo {
+    font-weight: 900;
+    font-size: 1.2rem;
+    transition-duration: 0.2s;
+    color: var(--white);
+    text-decoration: none;
+}
+
+.logo_second_half {
+    margin-left: 2px;
+    color: #010710;
+    border-radius: 5px;
+    padding: 2px;
+    background: linear-gradient(120deg, var(--violet) 0%, var(--light-blue) 100%);
+    transition: background 1s;
+}
+
+.logo_second_half:hover {
+    background: linear-gradient(200deg, var(--violet) 0%, var(--light-blue) 100%);
+
+}
+
+.topbar nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}

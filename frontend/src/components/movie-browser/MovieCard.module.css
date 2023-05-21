@@ -1,0 +1,39 @@
+.movieCard {
+    border-radius: 20px;
+    border: 0px solid;
+    max-width: 380px;
+    min-height: 500px;
+    background-size:    100%;
+    background-repeat:   no-repeat;
+    background-position: center center;
+    margin: auto;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.movieCard:hover {
+    background-size: 150%;
+}
+
+.movieCard:hover .movieCard_details {
+    opacity: 0.9;
+}
+
+.movieCard_details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
+    max-width: 380px;
+    min-height: 500px;
+    border-radius: 20px;
+    border: 0px solid;
+    opacity: 0;
+    padding:  0 20px 0 20px;
+    transition: all 0.3s;
+}
+
+.movieCard_details h1,h2,h3 {
+    margin: 0;
+}

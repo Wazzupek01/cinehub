@@ -1,0 +1,29 @@
+:root {
+  font-family: Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: var(--white);
+  background-color: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --bg: #121821; 
+  --bg-darker: #010710;
+  --white: #DEDEFF;
+  --violet: rgba(154,0,154,1);
+  --light-blue: rgba(0,121,201,1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  min-height: 100%;
+  overflow-x: hidden;
+}
