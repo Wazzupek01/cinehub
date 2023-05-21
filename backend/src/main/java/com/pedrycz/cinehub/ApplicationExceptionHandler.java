@@ -21,7 +21,7 @@ import java.util.List;
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ReviewAlreadyExistsException.class})
-    private ResponseEntity<Object> handleReviewAlredyExistsException(ReviewAlreadyExistsException e){
+    private ResponseEntity<Object> handleReviewAlreadyExistsException(ReviewAlreadyExistsException e){
         ErrorResponse error = new ErrorResponse(List.of(e.getMessage()));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

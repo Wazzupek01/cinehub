@@ -16,7 +16,6 @@ public interface ReviewRepository extends MongoRepository<Review, String> {
     Page<Review> findReviewsByUserIdOrderByRatingAsc(String userId, Pageable pageable);
     Page<Review> findReviewsByUserIdOrderByTimestampDesc(String userId, Pageable pageable);
     Page<Review> findReviewsByUserIdOrderByTimestampAsc(String userId, Pageable pageable);
-
     Page<Review> findReviewsByMovieId(String movieId, Pageable pageable);
 
     Set<Review> findReviewsByMovieId(String movieId);

@@ -9,6 +9,9 @@
     justify-content: space-between;
     background-color: var(--bg-darker);
     padding: 0 20px 0 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .border_gradient {
@@ -32,11 +35,11 @@
     font-weight: 500;
 }
 
-.border_gradient:hover {
+.border_gradient:hover, li:has(a.active) {
     background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
 }
 
-.topbar li div:hover {
+.topbar li div:hover, li:has(a.active) div {
     background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
     color: var(--bg-darker);
 }
@@ -57,5 +60,17 @@
     border-radius: 5px;
     padding: 2px;
     background: linear-gradient(120deg, var(--violet) 0%, var(--light-blue) 100%);
-    transition-duration: 0.5s;
+    transition: background 1s;
+}
+
+.logo_second_half:hover {
+    background: linear-gradient(200deg, var(--violet) 0%, var(--light-blue) 100%);
+
+}
+
+.topbar nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }

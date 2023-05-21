@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+  padding: 2%;
+}
+
+.paginationContainer {
+  margin-top: 15px;
+  padding: 5px;
+  border: 0px solid;
+  border-radius: 10px;
+  background-color: var(--white);
+  opacity: 0.7;
+}
+
+.container h1 {
+  margin-bottom: 50px;
+}

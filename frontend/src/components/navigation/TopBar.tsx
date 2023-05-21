@@ -5,13 +5,12 @@ import { Link, NavLink } from "react-router-dom";
 import { AccountCircle } from "@mui/icons-material";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import SearchIcon from "@mui/icons-material/Search";
-import TextField from "@mui/material/TextField";
+import SearchModule from "../ui/SearchModule";
+
 
 function TopBar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [searchedName, setSearchedName] = useState("");
-  const [showSearchField, setShowSearchField] = useState(false);
+
 
   // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   setAuth(event.target.checked);
@@ -25,35 +24,6 @@ function TopBar() {
     setAnchorEl(null);
   };
 
-  const handleSearch = () => {
-    setShowSearchField(!showSearchField);
-  };
-
-  const generateSearch = () => {
-    if (searchedName.trim().length > 1) {
-      return (
-        <>
-          {showSearchField && <input type="text" value={searchedName} onChange={(event) => {setSearchedName(event.target.value)}} />}
-          <Link to={`/find/${searchedName}/0`}>
-          <div onClick={handleSearch}>
-            <SearchIcon fontSize="small" />
-          </div>
-          </Link>
-          </>
-      );
-    }
-    return (
-      <div>
-        {showSearchField && <input type="text" value={searchedName} onChange={(event) => {setSearchedName(event.target.value)}}/>}
-        <div onClick={handleSearch}>
-          <SearchIcon fontSize="small" />
-        </div>
-      </div>
-    );
-  };
-
-  const search = generateSearch();
-
   return (
     <div className={classes.topbar}>
       <Link to="/" className={classes.logo}>
@@ -63,17 +33,21 @@ function TopBar() {
       <nav>
         <ul>
           <li className={classes.border_gradient}>
-            <NavLink to="/top">
+            <NavLink to="/top/0" className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }>
               <div>Top 100</div>
             </NavLink>
           </li>
           <li className={classes.border_gradient}>
-            <NavLink to="/browse/0">
+            <NavLink to="/browse/0" className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }>
               <div>Browse movies</div>
             </NavLink>
           </li>
-          <li className={classes.border_gradient}>{search}</li>
         </ul>
+        <SearchModule />
       </nav>
       <div>
         <IconButton

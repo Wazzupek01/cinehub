@@ -1,0 +1,22 @@
+.navigation_button{
+    background: none;
+    border: none;
+    opacity: 1;
+    position: relative;
+    bottom: 50px;
+}
+
+.button_container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.slide {
+    background-size: auto;
+}
+
+.image {
+    object-fit: cover;
+    object-position: 100% 70%;
+}
