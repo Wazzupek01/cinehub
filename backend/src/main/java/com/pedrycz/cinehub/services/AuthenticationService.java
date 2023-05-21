@@ -44,7 +44,7 @@ public class AuthenticationService {
                 .myReviews(Set.of())
                 .build();
         userRepository.save(user);
-        Map<String, Object> extraClaims = new HashMap<String, Object>();
+        Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("ROLE", user.getRole());
         String jwtToken = jwtService.generateToken(extraClaims, user);
         return new AuthenticationResponse(jwtToken);
@@ -58,7 +58,7 @@ public class AuthenticationService {
             );
 
         User user =  userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException(request.getEmail()));
-        Map<String, Object> extraClaims = new HashMap<String, Object>();
+        Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("ROLE", user.getRole());
         String jwtToken = jwtService.generateToken(extraClaims, user);
         return new AuthenticationResponse(jwtToken);

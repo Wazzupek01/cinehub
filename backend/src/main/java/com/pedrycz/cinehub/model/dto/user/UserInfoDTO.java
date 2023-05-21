@@ -2,7 +2,6 @@ package com.pedrycz.cinehub.model.dto.user;
 
 import com.pedrycz.cinehub.model.dto.ReviewDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
-import com.pedrycz.cinehub.model.entities.Review;
 import lombok.Data;
 
 import java.util.Set;
