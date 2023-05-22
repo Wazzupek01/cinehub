@@ -40,6 +40,16 @@ public class UserController {
     public ResponseEntity<UserInfoDTO> getUserByNickname(@PathVariable String nickname){
         return new ResponseEntity<>(userService.getUserInfo(nickname), HttpStatus.OK);
     }
+    @GetMapping("/id/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content),
+            @ApiResponse(responseCode = "204", description = "User found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserInfoDTO.class)))
+    })
+    @Operation(summary = "Get user info", description = "Get simple user informations by id")
+    public ResponseEntity<UserInfoDTO> getUserInfoById(@PathVariable String id){
+        return new ResponseEntity<>(userService.getUserInfoById(id), HttpStatus.OK);
+    }
 
     @PutMapping("/watchLater/add/{movieId}")
     @ApiResponses(value = {

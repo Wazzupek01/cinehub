@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @Tag(name = "Authentication", description = "Authentication operations, registering new accounts, logging in existing users." +
-        "JWT Token is returned as HttpOnly cookie.")
+        " JWT Token is returned as HttpOnly cookie.")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

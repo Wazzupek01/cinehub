@@ -37,3 +37,10 @@
 .movieCard_details h1,h2,h3 {
     margin: 0;
 }
+
+@media (max-width: 750px) {
+    .movieCard, .movieCard_details {
+        min-height: 250px;
+        max-width: 170px;
+    }
+}
