@@ -108,7 +108,7 @@ public class MovieServiceImpl implements MovieService {
         if(getParams.getOrderBy() == null){
             moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCase(director, pageRequest);
         } else {
-            switch (getParams.getOrderBy()) {
+            switch (getParams.getOrderBy().toUpperCase()) {
                 case "RATING" -> {
                     if (getParams.isAscending()) moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingAsc(director, pageRequest);
                     else moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingDesc(director, pageRequest);
@@ -123,7 +123,6 @@ public class MovieServiceImpl implements MovieService {
                 }
             }
         }
-
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
             else throw new PageNotFoundException(getParams.getPageNum());

@@ -5,6 +5,8 @@ import MainPage from "./pages/MainPage";
 import TopRatedPage from "./pages/TopRatedPage";
 
 import MovieService from './services/MovieService';
+import ErrorPage from "./pages/ErrorPage";
+import MoviePage from "./pages/MoviePage";
 
 function App() {
 
@@ -14,12 +16,21 @@ function App() {
     {
       path: "/",
       element: <RootLayout />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,
           element: <MainPage />,
           loader: async () => {
             return movieService.loadCarouselMovies();
+          }
+        },
+        {
+          path: "movie/:id",
+          element: <MoviePage />,
+          loader: async ({params}) => {
+            if(params.id === undefined) throw Error("Movie not specified");
+            return movieService.getMovieById(params.id);
           }
         },
         {
@@ -47,6 +58,24 @@ function App() {
             return movieService.getMoviesByTitle(+params.page, params.title);
           },
         },
+        {
+          path: "filter/:orderBy/:filterBy/:filterValue/:isAscending/:page",
+          element: <BrowseMoviesPage />,
+          loader: async ({ params }) => {
+            let data = null;
+            switch(params.filterBy){
+              case "director":
+                data = movieService.getMoviesByDirectorSorted(params.page, params.orderBy, params.filterValue, params.isAscending);
+                break;
+              case "runtime":
+                data = movieService.getMoviesByRuntimeSorted(params.page, params.orderBy, params.filterValue, params.isAscending);
+                break;
+              case "genre":
+                data = movieService.getMoviesByGenreSorted(params.page, params.orderBy, params.filterValue, params.isAscending);
+              }
+            return data;
+          },
+        }
       ],
     },
   ]);

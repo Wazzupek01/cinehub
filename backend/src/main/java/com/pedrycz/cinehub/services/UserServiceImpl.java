@@ -37,6 +37,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserInfoDTO getUserInfoById(String id) {
+        User user =  unwrapUser(userRepository.findById(id), id);
+        return mapper.UserToUserInfoDTO(user);
+    }
+
+    @Override
     public void addToWatchLater(String token, String movieId) {
         String email = jwtService.extractUsername(token);
         User user = unwrapUser(userRepository.findUserByEmail(email), email);

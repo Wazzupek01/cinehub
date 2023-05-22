@@ -20,3 +20,7 @@
     object-fit: cover;
     object-position: 100% 70%;
 }
+
+.mainPage_container {
+    text-align: center;
+}

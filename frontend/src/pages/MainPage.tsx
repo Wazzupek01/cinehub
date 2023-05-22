@@ -20,33 +20,33 @@ function MainPage() {
   const [movies, setMovies] = useState([]);
   
   const retrieveMovies = async() => {
-    const m: [] = await data;
+    const m: [any] = await data;
     setMovies(m);
   }
-
-  
 
   useEffect(() => {
     retrieveMovies();
 
   }, []);
-  let it = -1;
+  let it: number = 0;
 
   return (
-    <div>
+    <div className={classes.mainPage_container}>
       <CarouselProvider
         naturalSlideWidth={100}
         naturalSlideHeight={35}
-        totalSlides={2}
+        totalSlides={movies.length}
       >
         <Slider>
-          {movies.map((movie) => (
-            <Link to="/" key={movie.id}>
-              <Slide index={it++}>
-                <Link to=""><Image src={movie.posterUrl} className={classes.image} hasMasterSpinner={true}></Image></Link>
+          {movies.map((movie) => {
+            it += 1;
+            console.log(it);
+            return <Link to="/" key={movie.id}>
+              <Slide index={it}>
+                <Image src={movie.posterUrl} className={classes.image} hasMasterSpinner={true}></Image>
               </Slide>
             </Link>
-          ))}
+})}
         </Slider>
         <div className={classes.button_container}>
           <ButtonBack className={classes.navigation_button}>
