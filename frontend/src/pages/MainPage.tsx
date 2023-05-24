@@ -12,8 +12,11 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { Link, useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { doesHttpOnlyCookieExist } from "../helpers/doesHttpOnlyCookieExist";
+
 
 function MainPage() {
+
 
   const data = useLoaderData();
 
@@ -26,7 +29,6 @@ function MainPage() {
 
   useEffect(() => {
     retrieveMovies();
-
   }, []);
   let it: number = 0;
 
@@ -40,7 +42,6 @@ function MainPage() {
         <Slider>
           {movies.map((movie) => {
             it += 1;
-            console.log(it);
             return <Link to="/" key={movie.id}>
               <Slide index={it}>
                 <Image src={movie.posterUrl} className={classes.image} hasMasterSpinner={true}></Image>
@@ -57,9 +58,10 @@ function MainPage() {
           </ButtonNext>
         </div>
       </CarouselProvider>
+      {!doesHttpOnlyCookieExist("jwt") &&
       <h1>
-        Enhance your experience and <Link to="">Login</Link>
-      </h1>
+        Enhance your experience and <Link to="/login">Login</Link>
+      </h1>}
     </div>
   );
 }

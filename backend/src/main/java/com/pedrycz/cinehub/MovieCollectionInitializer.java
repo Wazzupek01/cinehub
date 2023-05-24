@@ -28,7 +28,7 @@ public class MovieCollectionInitializer implements CommandLineRunner {
         FileReader fileReader;
 
         try {
-            fileReader = new FileReader("./backend/src/main/resources/movies.json");
+            fileReader = new FileReader("./src/main/resources/movies.json");
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
             return;

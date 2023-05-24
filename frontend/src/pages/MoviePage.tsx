@@ -4,10 +4,11 @@ import Grid from "@mui/material/Grid";
 import Rating from "@mui/material/Rating";
 import { useCallback, useEffect, useState } from "react";
 import ReviewService from "../services/ReviewService";
+import RecentReviews from "../components/review-list/RecentReviews";
+import RateMovie from "../components/rating/RateMovie";
 
 function MoviePage() {
   const reviewService = new ReviewService();
-  const [ratingValue, setRatingValue] = useState<number>(5);
   const [topReviews, setTopReviews] = useState();
   const movie = JSON.parse(useLoaderData() as string);
   const [topReviewsLoading, setTopReviewsLoading] = useState(true);
@@ -23,10 +24,8 @@ function MoviePage() {
       }
       
       const data = await response.json();
-      console.log(data);
 
       const transformedReviews = data.map((reviewData) => {
-        console.log(reviewData);
         return {
           id: reviewData.id,
           content: reviewData.content,
@@ -46,6 +45,10 @@ function MoviePage() {
   useEffect(() => {
     fetchReviewsHandler();
   },[fetchReviewsHandler]);
+
+  const addReviewHandler = () => {
+    window.location.reload();
+  }
 
   let genreString: string = "";
   for (let i: number = 0; i < movie.genres.length; i++) {
@@ -72,18 +75,8 @@ function MoviePage() {
       </Grid>
       <Grid item sm={12} md={6} alignItems="center">
         <h1>{movie.title}</h1>
-        <div>
-          <Rating
-            name="simple-controlled"
-            value={ratingValue}
-            onChange={(event, newRatingValue) => {
-              setRatingValue(newRatingValue as number);
-            }}
-          />
-          <input type="text" placeholder="Comment..." />
-          <input type="submit" value="Add review" />
-        </div>
-
+        <RateMovie rating={movie.rating} readOnly={false} movieId={movie.id} onAddReview={addReviewHandler} />
+        <h2>Mean rating: {movie.rating}</h2>
         <h2>{movie.releaseYear}</h2>
         {movie.directors.map((dir: string) => (
           <h3 key={dir}>{dir}</h3>
@@ -92,7 +85,7 @@ function MoviePage() {
         <h4>{movie.runtime} minutes</h4>
       </Grid>
       <Grid item xs={12} alignItems="center">
-        {!topReviewsLoading && topReviews.map(review => (<p key={review.id}>{review.content}</p>))}
+        {!topReviewsLoading && <RecentReviews reviews={topReviews} />}
       </Grid>
     </Grid>
   );

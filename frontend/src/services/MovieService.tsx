@@ -30,12 +30,12 @@ class MovieService {
     return data;
   }
 
-  async getAllMoviesSorted(page: Number, sortBy: string, isAscending: boolean) {
+  async getAllMoviesSorted(page: Number, orderBy: string, isAscending: string) {
     const response = await fetch(
       "http://localhost:8080/movies/all/" +
         page +
         "/" +
-        sortBy +
+        orderBy +
         "/" +
         isAscending
     );
@@ -43,7 +43,7 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByDirectorSorted(page: Number, orderBy: string, filterValue: string, isAscending: boolean){
+  async getMoviesByDirectorSorted(page: Number, orderBy: string, filterValue: string, isAscending: string){
     const response = await fetch(
       "http://localhost:8080/movies/director/" +
         filterValue +
@@ -59,7 +59,24 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByRuntimeSorted(page: Number, orderBy: string, filterValue: string, isAscending: boolean){
+  async getMoviesByActorSorted(page: Number, orderBy: string, filterValue: string, isAscending: string){
+    const response = await fetch(
+      "http://localhost:8080/movies/actor/" +
+        filterValue +
+        "/" +
+        page +
+        "/" +
+        orderBy +
+        "/"+
+        isAscending
+    );
+
+    const data = await response.text();
+    return data;
+  }
+
+
+  async getMoviesByRuntimeSorted(page: Number, orderBy: string, filterValue: string, isAscending: string){
     const values = filterValue.split('-');
 
     const response = await fetch(
@@ -79,7 +96,7 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByGenreSorted(page: Number, orderBy: string, filterValue: string, isAscending: boolean){
+  async getMoviesByGenreSorted(page: Number, orderBy: string, filterValue: string, isAscending: string){
     const response = await fetch(
       "http://localhost:8080/movies/genre/" +
         filterValue +

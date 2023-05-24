@@ -27,3 +27,8 @@ body {
   min-height: 100%;
   overflow-x: hidden;
 }
+
+#menu-appbar * {
+  text-decoration: none;
+  color: var(--bg);
+}

@@ -2,6 +2,7 @@ package com.pedrycz.cinehub.controllers;
 
 import com.pedrycz.cinehub.model.dto.user.UserLoginDTO;
 import com.pedrycz.cinehub.model.dto.user.UserRegisterDTO;
+import com.pedrycz.cinehub.security.AuthenticationResponse;
 import com.pedrycz.cinehub.services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,12 +13,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping("/auth")
@@ -26,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+
+    @Value("${security.key-expiration-time}")
+    private int KEY_EXPIRATION_TIME;
 
     @Autowired
     public AuthenticationController(AuthenticationService authenticationService) {
@@ -38,14 +42,15 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "User registered successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user credentials")
     })
-    public ResponseEntity<HttpStatus> register(@Valid @RequestBody UserRegisterDTO request, HttpServletResponse response){
-        Cookie jwt = new Cookie("jwt", authenticationService.register(request).getToken());
+    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterDTO request, HttpServletResponse response){
+        AuthenticationResponse authenticationResponse = authenticationService.register(request);
+        Cookie jwt = new Cookie("jwt", authenticationResponse.getToken());
         jwt.setMaxAge(24*60*60);
         jwt.setSecure(true);
         jwt.setHttpOnly(true);
         jwt.setPath("/");
         response.addCookie(jwt);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(authenticationResponse.getNickname(), HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
@@ -55,13 +60,15 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "User logged in successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user credentials")
     })
-    public ResponseEntity<HttpStatus> register(@Valid @RequestBody UserLoginDTO request, HttpServletResponse response){
-        Cookie jwt = new Cookie("jwt", authenticationService.authenticate(request).getToken());
-        jwt.setMaxAge(24*60*60);
+    @CrossOrigin(origins = "http://localhost:5173")
+    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO request, HttpServletResponse response){
+        AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
+        Cookie jwt = new Cookie("jwt", authenticationResponse.getToken());
+        jwt.setMaxAge(KEY_EXPIRATION_TIME);
         jwt.setSecure(true);
         jwt.setHttpOnly(true);
         jwt.setPath("/");
         response.addCookie(jwt);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(authenticationResponse.getNickname(), HttpStatus.OK);
     }
 }

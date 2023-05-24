@@ -1,5 +1,5 @@
 import Slider from "@mui/material/Slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import classes from "./MovieFilter.module.css";
 
@@ -17,18 +17,24 @@ const genres: string[] = [
 
 function MovieFilter(props: any) {
   const [orderBy, setOrderBy] = useState<string>("releaseYear");
-  const [filterBy, setFilterBy] = useState<string>("director");
-  const [filterValue, setFilterValue] = useState<string>("");
+  const [filterBy, setFilterBy] = useState<string>("no-filter");
+  const [filterValue, setFilterValue] = useState<string>("-");
   const [isAscending, setIsAscending] = useState<string>("true");
   const [sliderValue, setSliderValue] = useState<number[]>([3, 450]);
-
+  const [searchInfo, setSearchInfo] = useState<string>("");
   const location = useLocation().pathname;
   const pathVariables = location.split('/');
-  console.log(location);
-  console.log(pathVariables[2]);
-  const searchInfo = 
-  `Filtered by ${pathVariables[3]} "${pathVariables[4]}": ordered by ${pathVariables[2]} 
-  ${pathVariables[5] === "true" ? "ascending" : "descending"}`;
+
+  useEffect(() => {
+    if(pathVariables[3] === 'no-filter'){
+      setSearchInfo(`All movies ordered by ${pathVariables[2]} 
+        ${pathVariables[5] === "true" ? "ascending" : "descending"}`)
+    } else {
+    setSearchInfo(`Filtered by ${pathVariables[3]} "${pathVariables[4]}": ordered by ${pathVariables[2]} 
+    ${pathVariables[5] === "true" ? "ascending" : "descending"}`)
+    }
+  },[])
+  
 
   function sliderValueText(value: number) {
     return `${value}`;
@@ -65,9 +71,11 @@ function MovieFilter(props: any) {
       >
         <option value="genre">genre</option>
         <option value="director">director</option>
+        <option value="actor">actor</option>
         <option value="runtime">runtime</option>
+        <option value="no-filter">no filter</option>
       </select>
-      {filterBy === "director" && (
+      {(filterBy === "director" || filterBy === "actor") && (
         <input
           type="text"
           value={filterValue}

@@ -11,6 +11,10 @@
     transition: all 0.3s;
 }
 
+.movieCard * {
+    text-decoration: none;
+}
+
 .movieCard:hover {
     background-size: 150%;
 }

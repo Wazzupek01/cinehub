@@ -4,7 +4,9 @@ public class SecurityConstants {
     public static final String[] WHITELIST = {
             "/documentation/**",
             "/auth/**",
+            "auth/authenticate",
             "/user/nickname/**",
+            "/user/id/**",
             "/poster/**",
             "/movies/all/**",
             "/movies/id/**",
@@ -16,7 +18,10 @@ public class SecurityConstants {
             "/review/id/**",
             "/review/movie/**",
             "/review/user/**",
+//            "/review/add",
             "/swagger-ui.html", "/docs", "/swagger-resources/**",
-            "/swagger-resources", "/v3/api-docs/**", "/swagger-ui/**", "/webjars/swagger-ui/**", "/proxy/**"
+            "/swagger-resources", "/v3/api-docs/**", "/swagger-ui/**",
+            "/swagger-ui/favicon-32x32.png", "/swagger-ui/favicon-16x16.png",
+            "/webjars/swagger-ui/**", "/proxy/**"
     };
 }

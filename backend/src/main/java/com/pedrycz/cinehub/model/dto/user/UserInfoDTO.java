@@ -12,4 +12,10 @@ public class UserInfoDTO {
     private String nickname;
     private Set<MovieDTO> watchLater;
     private Set<ReviewDTO> myReviews;
+
+    public UserInfoDTO(String nickname, Set<MovieDTO> watchLater, Set<ReviewDTO> myReviews) {
+        this.nickname = nickname;
+        this.watchLater = watchLater;
+        this.myReviews = myReviews;
+    }
 }

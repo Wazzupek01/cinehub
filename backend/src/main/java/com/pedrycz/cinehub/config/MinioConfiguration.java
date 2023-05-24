@@ -45,7 +45,6 @@ public class MinioConfiguration {
         } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
                  NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
                  InternalException e) {
-            System.out.println(e.getMessage());
         }
         return client;
     }

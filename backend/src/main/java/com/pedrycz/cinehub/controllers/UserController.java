@@ -11,12 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -51,7 +46,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserInfoById(id), HttpStatus.OK);
     }
 
-    @PutMapping("/watchLater/add/{movieId}")
+    @PostMapping("/watchLater/add/{movieId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Movie not found", content = @Content),
             @ApiResponse(responseCode = "200", description = "Movie added to watch later", content = @Content),
@@ -63,7 +58,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/watchLater/remove/{movieId}")
+    @DeleteMapping("/watchLater/remove/{movieId}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Movie not found", content = @Content),
             @ApiResponse(responseCode = "204", description = "Movie removed from watch later", content = @Content),

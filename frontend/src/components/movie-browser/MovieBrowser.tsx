@@ -7,7 +7,6 @@ import MovieCard from "./MovieCard";
 
 const MovieBrowser = (props: any) => {
   const data = JSON.parse(props.data);
-  console.log(data);
 
   const pageNumber: number = data.pageable.pageNumber;
   const totalPages: number = data.totalPages;
@@ -30,8 +29,7 @@ const MovieBrowser = (props: any) => {
         directors={movie.directors}
         runtime={movie.runtime}
         genres={movie.genres}
-        id={movie.id}
-      />
+        id={movie.id} disabled={false} />
     </Grid>
   ));
 
