@@ -20,10 +20,10 @@ function MainPage() {
 
   const data = useLoaderData();
 
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState<any>([]);
   
   const retrieveMovies = async() => {
-    const m: [any] = await data;
+    const m = await data;
     setMovies(m);
   }
 
@@ -40,7 +40,7 @@ function MainPage() {
         totalSlides={movies.length}
       >
         <Slider>
-          {movies.map((movie) => {
+          {movies.map((movie: any) => {
             it += 1;
             return <Link to="/" key={movie.id}>
               <Slide index={it}>
@@ -60,7 +60,7 @@ function MainPage() {
       </CarouselProvider>
       {!doesHttpOnlyCookieExist("jwt") &&
       <h1>
-        Enhance your experience and <Link to="/login">Login</Link>
+        Enhance your experience and <Link to="/auth/login">Login</Link>
       </h1>}
     </div>
   );

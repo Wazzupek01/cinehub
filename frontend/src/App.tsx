@@ -6,10 +6,13 @@ import TopRatedPage from "./pages/TopRatedPage";
 import MovieService from "./services/MovieService";
 import ErrorPage from "./pages/ErrorPage";
 import MoviePage from "./pages/MoviePage";
-import LoginPage from "./pages/LoginPage";
+import AuthenticationPage from "./pages/AuthenticationPage";
+import UserService from "./services/UserService";
+import UserLists from "./components/profile/UserLists";
 
 function App() {
-  const movieService = new MovieService();
+  const movieService: MovieService = new MovieService();
+  const userService: UserService = new UserService();
 
   const router = createBrowserRouter([
     {
@@ -125,15 +128,30 @@ function App() {
                   params.isAscending
                 );
                 break;
+              case "title":
+                data = movieService.getMoviesByTitleSorted(
+                  +params.page,
+                  params.orderBy,
+                  params.filterValue,
+                  params.isAscending
+                )
             }
             return data;
           },
         },
+        {
+          path: "/profile/:nickname",
+          element: <UserLists />,
+          loader: async ({params}) => {
+            if(params.nickname === undefined) throw new Error("No nickname defined");
+            return await userService.getUserByNickname(params.nickname);
+          }
+        }
       ],
     },
     {
-      path: "/login",
-      element: <LoginPage />,
+      path: "/auth/:method",
+      element: <AuthenticationPage />,
     },
   ]);
 

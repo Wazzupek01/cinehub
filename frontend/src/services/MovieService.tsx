@@ -119,6 +119,22 @@ class MovieService {
     const data = await response.text();
     return data;
   }
+
+  async getMoviesByTitleSorted(page: Number, orderBy: string, filterValue: string, isAscending: string){
+    const response = await fetch(
+      "http://localhost:8080/movies/title/" +
+        filterValue +
+        "/" +
+        page +
+        "/" +
+        orderBy +
+        "/"+
+        isAscending
+    );
+
+    const data = await response.text();
+    return data;
+  }
 }
 
 export default MovieService;

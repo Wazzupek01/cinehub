@@ -15,7 +15,7 @@ const genres: string[] = [
   'Western'
 ];
 
-function MovieFilter(props: any) {
+function MovieFilter() {
   const [orderBy, setOrderBy] = useState<string>("releaseYear");
   const [filterBy, setFilterBy] = useState<string>("no-filter");
   const [filterValue, setFilterValue] = useState<string>("-");
@@ -70,12 +70,13 @@ function MovieFilter(props: any) {
         }}
       >
         <option value="genre">genre</option>
+        <option value="title">title</option>
         <option value="director">director</option>
         <option value="actor">actor</option>
         <option value="runtime">runtime</option>
         <option value="no-filter">no filter</option>
       </select>
-      {(filterBy === "director" || filterBy === "actor") && (
+      {(filterBy === "director" || filterBy === "actor" || filterBy === "title") && (
         <input
           type="text"
           value={filterValue}

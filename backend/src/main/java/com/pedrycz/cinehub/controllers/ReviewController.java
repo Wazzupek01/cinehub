@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub.controllers;
 
-import com.pedrycz.cinehub.model.dto.ReviewDTO;
+import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.services.interfaces.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

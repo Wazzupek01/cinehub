@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import classes from "./SearchModule.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function SearchModule() {
   const [searchedName, setSearchedName] = useState("");
   const [showSearchField, setShowSearchField] = useState(false);
   let navigate = useNavigate();
 
   const handleSearch = () => {
-    if(searchedName.trim().length > 0){
-        
-        let path = '/find/' + searchedName + '/0';
-        navigate(path);
+    if (searchedName.trim().length > 0) {
+      let path = "/find/" + searchedName + "/0";
+      navigate(path);
     }
     setShowSearchField(!showSearchField);
   };
@@ -28,9 +27,9 @@ function SearchModule() {
             }}
           />
         )}
-          <div onClick={handleSearch}>
-            <SearchIcon fontSize="small" />
-          </div>
+        <div onClick={handleSearch}>
+          <SearchIcon fontSize="small" />
+        </div>
       </div>
     </div>
   );

@@ -1,0 +1,12 @@
+
+.invalid {
+  border: 1px solid var(--violet) !important;
+}
+
+.input {
+  background: var(--bg-darker);
+  border: 1px solid var(--light-blue);
+  height: 1.5rem;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}

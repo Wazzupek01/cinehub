@@ -1,0 +1,16 @@
+.review_container {
+  background-color: var(--bg);
+  min-width: 60%;
+  padding: 10px 20px 10px 20px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.review_container a {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.review_container h3, .review_container h4 {
+  margin: 0;
+}

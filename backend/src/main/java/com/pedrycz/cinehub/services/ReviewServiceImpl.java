@@ -5,7 +5,7 @@ import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.exceptions.ReviewAlreadyExistsException;
 import com.pedrycz.cinehub.exceptions.ReviewNotOwnedException;
-import com.pedrycz.cinehub.model.dto.ReviewDTO;
+import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.model.entities.Review;
 import com.pedrycz.cinehub.model.entities.User;

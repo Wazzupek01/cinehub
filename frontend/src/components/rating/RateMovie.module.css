@@ -1,0 +1,13 @@
+.RateMovie_container {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+
+.RateMovie_container * {
+  font-family: 'Roboto';
+}
+.verticalFlex {
+  display: flex;
+  flex-direction: row;
+}

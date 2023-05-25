@@ -60,15 +60,30 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "User logged in successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user credentials")
     })
-    @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO request, HttpServletResponse response){
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
         Cookie jwt = new Cookie("jwt", authenticationResponse.getToken());
-        jwt.setMaxAge(KEY_EXPIRATION_TIME);
+        jwt.setMaxAge(24*60*60);
         jwt.setSecure(true);
         jwt.setHttpOnly(true);
         jwt.setPath("/");
         response.addCookie(jwt);
         return new ResponseEntity<>(authenticationResponse.getNickname(), HttpStatus.OK);
+    }
+
+    @GetMapping("/logout")
+    @SecurityRequirement(name = "Bearer authentication")
+    @Operation(summary = "Logout", description = "Logout active user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged out"),
+    })
+    public ResponseEntity<String> logout(HttpServletResponse response){
+        Cookie jwt = new Cookie("jwt", "");
+        jwt.setMaxAge(0);
+        jwt.setSecure(true);
+        jwt.setHttpOnly(true);
+        jwt.setPath("/");
+        response.addCookie(jwt);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

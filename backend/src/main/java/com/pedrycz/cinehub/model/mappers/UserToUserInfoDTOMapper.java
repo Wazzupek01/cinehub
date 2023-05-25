@@ -16,6 +16,7 @@ public abstract class UserToUserInfoDTOMapper {
     @Named("UserToUserInfoDTO")
     public UserInfoDTO UserToUserInfoDTO(User user){
         MovieToMovieDTOMapper movieMapper = Mappers.getMapper(MovieToMovieDTOMapper.class);
+        ReviewWithMovieDTOMapper reviewMapper = Mappers.getMapper(ReviewWithMovieDTOMapper.class);
         Set<MovieDTO> movieDTOs = new HashSet<>();
         for(Movie m: user.getWatchLater()){
             movieDTOs.add(movieMapper.movieToMovieDTO(m));
@@ -24,8 +25,7 @@ public abstract class UserToUserInfoDTOMapper {
 
         return new UserInfoDTO(user.getNickname(),
                 movieDTOs,
-                ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(user.getMyReviews()
-                )
+                reviewMapper.ReviewSetToReviewWithMovieDTOSetMapper(user.getMyReviews())
         );
     }
 }

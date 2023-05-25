@@ -1,0 +1,35 @@
+.UserLists_container {
+  padding: 50px;
+  margin: 0;
+  text-align: center;
+  
+}
+
+.UserLists_navbar{
+  background-color: var(--bg-darker);
+  margin-top: 10vh;
+}
+
+.UserLists_navbar ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin: 0;
+}
+
+.UserLists_navbar ul li {
+  width: 50%;
+  text-align: center;
+  padding: 1rem 0 1rem 0;
+  font-size: 1.5rem;
+  transition: 0.3s;
+}
+
+.UserLists_navbar ul li:hover {
+  background-color: var(--light-blue);
+}
+
+.active {
+  border-bottom: 2px solid var(--light-blue);
+}

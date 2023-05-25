@@ -14,6 +14,36 @@
     z-index: 100;
 }
 
+.foldable {
+    width: calc(100vw - 20px);
+    background: var(--bg-darker);
+    top: 48px;
+    left: 0px;
+    position: absolute;
+    flex-direction: column;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.foldable .border_gradient,
+.foldable .border_gradient div {
+    display: block;
+    
+}
+
+.foldable .border_gradient {
+    width: 70vw;
+    margin-bottom: 5px;
+}
+
+.foldable .border_gradient * {
+    width: 67.5vw;
+}
+
+.foldable a {
+    text-decoration: none;
+}
+
 .border_gradient {
     background: linear-gradient(120deg, rgba(154,0,154,1) 0%, rgba(0,121,201,1) 100%);
     padding: 2px;
@@ -33,7 +63,7 @@
     transition-duration: 0.3s;
     font-weight: 500;
 }
-
+.foldable .border_gradient:hover,.foldable li:has(a.active),
 .border_gradient:hover, li:has(a.active) {
     background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
 }

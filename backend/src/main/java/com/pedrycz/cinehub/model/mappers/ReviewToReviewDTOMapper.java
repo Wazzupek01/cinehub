@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub.model.mappers;
 
-import com.pedrycz.cinehub.model.dto.ReviewDTO;
+import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.model.entities.Review;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;

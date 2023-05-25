@@ -1,7 +1,7 @@
 package com.pedrycz.cinehub.services.interfaces;
 
 import com.pedrycz.cinehub.controllers.GetParams;
-import com.pedrycz.cinehub.model.dto.ReviewDTO;
+import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.Set;

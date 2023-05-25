@@ -1,0 +1,49 @@
+.MyReviewsItem_container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.MyReviewsItem_movieInfo{
+  display: flex;
+  text-align: left;
+}
+
+.MyReviewsItem_container img {
+  height: 20vh;
+  margin-right: 20px;
+}
+
+.MyReviewsItem_container h1, h2,h3,h4{
+  margin: 0;
+}
+
+.MyReviewsItem_review {
+  float: right !important;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+  text-align: right !important;
+}
+
+.MyReviewsItem_review div div{
+  justify-content: end;
+  padding: 0;
+  float: right;
+}
+
+@media (max-width: 600px){
+  .MyReviewsItem_review {
+    float: left !important;
+    display: flex;
+    flex-direction: column;
+    align-items:left;
+    text-align: left !important;
+  }
+  
+  .MyReviewsItem_review div div{
+    justify-content: left;
+    padding: 0;
+    float: left;
+  }
+}
