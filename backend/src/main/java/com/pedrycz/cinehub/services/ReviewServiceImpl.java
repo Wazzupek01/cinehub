@@ -42,9 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDTO addReview(String token, ReviewDTO reviewDTO) {
+    public ReviewDTO add(String userToken, ReviewDTO reviewDTO) {
         Movie movie = MovieServiceImpl.unwrapMovie(movieRepository.findMovieById(reviewDTO.movieId()), reviewDTO.movieId());
-        String email = jwtService.extractUsername(token);
+        String email = jwtService.extractUsername(userToken);
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         for(Review r: user.getMyReviews()){
             if(r.getMovie().getId().equals(reviewDTO.movieId())){
@@ -62,8 +62,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void removeReview(String token, String reviewId) {
-        String email = jwtService.extractUsername(token);
+    public void remove(String userToken, String reviewId) {
+        String email = jwtService.extractUsername(userToken);
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
         if (review.getUser().getEmail().equals(email)) {
@@ -82,12 +82,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public ReviewDTO getReviewById(String id) {
+    public ReviewDTO getById(String id) {
         return ReviewToReviewDTOMapper.reviewToReviewDTO(unwrapReview(reviewRepository.findReviewById(id), id));
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams) {
+    public Page<ReviewDTO> getByUserId(String userId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -118,7 +118,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams) {
+    public Page<ReviewDTO> getByMovieId(String movieId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -149,12 +149,12 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Set<ReviewDTO> getReviewsByMovieId(String movieId) {
+    public Set<ReviewDTO> getByMovieId(String movieId) {
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewRepository.findReviewsByMovieId(movieId));
     }
 
     @Override
-    public Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams) {
+    public Page<ReviewDTO> getContainingContentByMovieId(String movieId, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Review> reviewPage = null;
         if (getParams.getOrderBy() == null) {
@@ -185,7 +185,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Set<ReviewDTO> getMostRecentReviewsWithContentForMovie(String movieId) {
+    public Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(String movieId) {
         PageRequest pageRequest = PageRequest.of(0, 5).withSort(Sort.by("timestamp").descending());
         Page<Review> reviewPage  = reviewRepository.findReviewsByMovieIdWithReviewNotEmpty(movieId, pageRequest);
         Set<Review> reviewSet = new HashSet<>(reviewPage.getContent());

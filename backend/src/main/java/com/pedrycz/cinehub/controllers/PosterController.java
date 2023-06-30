@@ -36,6 +36,6 @@ public class PosterController {
     public ResponseEntity<Object> getFile(@PathVariable String filename) {
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(posterService.getPoster(filename));
+                .body(posterService.getByFilename(filename));
     }
 }

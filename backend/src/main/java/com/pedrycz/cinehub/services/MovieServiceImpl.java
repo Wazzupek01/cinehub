@@ -40,7 +40,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Page<MovieDTO> getByTitle(String title, GetParams getParams) {
+    public Page<MovieDTO> getByTitleMatching(String title, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
         Page<Movie> moviePage = null;
         if(getParams.getOrderBy() == null){
@@ -92,6 +92,7 @@ public class MovieServiceImpl implements MovieService {
                 }
             }
         }
+
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
@@ -295,12 +296,12 @@ public class MovieServiceImpl implements MovieService {
                 "",
                 movie.genres(), movie.directors(), movie.cast()));
 
-        inserted.setPosterUrl(posterService.addPoster(inserted.getId() + Constants.FILE_TYPE, movie.posterFile()));
+        inserted.setPosterUrl(posterService.add(inserted.getId() + Constants.FILE_TYPE, movie.posterFile()));
         return movieDTOMapper.movieToMovieDTO(movieRepository.save(inserted));
     }
 
     @Override
-    public MovieDTO update(String id, AddMovieDTO movieDTO) {
+    public MovieDTO updateById(String id, AddMovieDTO movieDTO) {
         Optional<Movie> movie = movieRepository.findMovieById(id);
         if(movie.isPresent()){
             Movie updatedMovie =  movie.get();
@@ -312,7 +313,7 @@ public class MovieServiceImpl implements MovieService {
             updatedMovie.setReleaseYear(movieDTO.releaseYear());
             updatedMovie.setRuntime(movieDTO.runtime());
             updatedMovie.setTitle(movieDTO.title());
-            updatedMovie.setPosterUrl(posterService.addPoster(updatedMovie.getId() + Constants.FILE_TYPE, movieDTO.posterFile()));
+            updatedMovie.setPosterUrl(posterService.add(updatedMovie.getId() + Constants.FILE_TYPE, movieDTO.posterFile()));
             return movieDTOMapper.movieToMovieDTO(movieRepository.save(updatedMovie));
         }
         throw new DocumentNotFoundException(id);
@@ -321,7 +322,7 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void deleteById(String id) {
         String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id).getPosterUrl();
-        if(posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deletePoster(id + Constants.FILE_TYPE);
+        if(posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
         movieRepository.deleteById(id);
     }
 

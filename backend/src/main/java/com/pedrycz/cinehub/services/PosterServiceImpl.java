@@ -29,7 +29,7 @@ public class PosterServiceImpl implements PosterService {
         this.minioClient = minioClient;
     }
 
-    public String addPoster(String filename, MultipartFile file) {
+    public String add(String filename, MultipartFile file) {
         System.out.println(filename);
         try {
             minioClient.putObject(PutObjectArgs.builder()
@@ -44,7 +44,7 @@ public class PosterServiceImpl implements PosterService {
         return getPreSignedUrl(filename);
     }
 
-    public Object getPoster(String filename) {
+    public Object getByFilename(String filename) {
         InputStream stream;
         try {
             stream = minioClient.getObject(GetObjectArgs.builder()
@@ -58,7 +58,7 @@ public class PosterServiceImpl implements PosterService {
     }
 
     @Override
-    public void deletePoster(String filename) {
+    public void deleteByFilename(String filename) {
         try {
             minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(filename).build());
         } catch (Exception e){

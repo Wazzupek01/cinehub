@@ -1,6 +1,7 @@
 package com.pedrycz.cinehub.config;
 
 import com.pedrycz.cinehub.repositories.UserRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,8 @@ public class ApplicationConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        return username -> userRepository.findUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 
     @Bean
@@ -51,7 +53,7 @@ public class ApplicationConfiguration {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@NotNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")

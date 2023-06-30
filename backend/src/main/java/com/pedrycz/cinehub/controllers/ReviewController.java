@@ -47,7 +47,7 @@ public class ReviewController {
     })
     @Operation(summary = "Add review", description = "Add new review by active user for selected movie")
     public ResponseEntity<ReviewDTO> addReview(@CookieValue("jwt") String token, @Valid @RequestBody ReviewDTO reviewDTO){
-        return new ResponseEntity<>(reviewService.addReview(token, reviewDTO), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.add(token, reviewDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{reviewId}")
@@ -59,7 +59,7 @@ public class ReviewController {
     })
     @Operation(summary = "Remove review", description = "Remove review if created by active user")
     public ResponseEntity<HttpStatus> removeReview(@CookieValue("jwt") String token, @PathVariable String reviewId){
-        reviewService.removeReview(token, reviewId);
+        reviewService.remove(token, reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -71,7 +71,7 @@ public class ReviewController {
     })
     @Operation(summary = "Get review by ID", description = "Find review using its' id")
     public ResponseEntity<ReviewDTO> getReviewById(@PathVariable String reviewId){
-        return new ResponseEntity<>(reviewService.getReviewById(reviewId), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.getById(reviewId), HttpStatus.OK);
     }
 
     @GetMapping("/movie/recent/{movieId}")
@@ -86,7 +86,7 @@ public class ReviewController {
     @Operation(summary = "Get most recent reviews for movie",
             description = "Get 5 most recent reviews with content for a movie")
     public ResponseEntity<Set<ReviewDTO>> getMostRecentReviewsWithContentForMovie(@PathVariable String movieId) {
-        return new ResponseEntity<>(reviewService.getMostRecentReviewsWithContentForMovie(movieId), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.getSetOfMostRecentWithContentByMovieId(movieId), HttpStatus.OK);
     }
 
     @GetMapping("/movie/{movieId}/{pageNum}/{orderBy}/{isAscending}")
@@ -100,7 +100,7 @@ public class ReviewController {
                                                                          @PathVariable int pageNum,
                                                                          @PathVariable String orderBy,
                                                                          @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getReviewsWithContentByMovieId(movieId,
+        Page<ReviewDTO> reviewPage = reviewService.getContainingContentByMovieId(movieId,
                 new GetParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
@@ -115,7 +115,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(@PathVariable String userId,@PathVariable int pageNum,
                                                               @PathVariable String orderBy,
                                                               @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getReviewsByUserId(userId, new GetParams(pageNum, orderBy, isAscending));
+        Page<ReviewDTO> reviewPage = reviewService.getByUserId(userId, new GetParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 
@@ -130,7 +130,7 @@ public class ReviewController {
     })
     @Operation(summary = "Get all reviews for movie", description = "Get a set of all reviews for specified movie")
     public ResponseEntity<Set<ReviewDTO>> getAllReviewsForMovie(@PathVariable String movieId){
-        return new ResponseEntity<>(reviewService.getReviewsByMovieId(movieId), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.getByMovieId(movieId), HttpStatus.OK);
     }
 
     @GetMapping("/movie/all/{movieId}/{pageNum}/{orderBy}/{isAscending}")
@@ -138,7 +138,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewDTO>> getPageFromAllReviewsForMovie(@PathVariable String movieId,@PathVariable int pageNum,
                                                                          @PathVariable String orderBy,
                                                                          @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getReviewsByMovieId(movieId, new GetParams(pageNum, orderBy, isAscending));
+        Page<ReviewDTO> reviewPage = reviewService.getByMovieId(movieId, new GetParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 }

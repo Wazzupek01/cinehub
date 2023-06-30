@@ -13,8 +13,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -24,7 +22,8 @@ public class SecurityConfiguration {
     private final AuthenticationProvider authenticationProvider;
 
     @Autowired
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, ExceptionFilter exceptionFilter, AuthenticationProvider authenticationProvider) {
+    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, ExceptionFilter exceptionFilter,
+                                 AuthenticationProvider authenticationProvider) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.exceptionFilter = exceptionFilter;
         this.authenticationProvider = authenticationProvider;
@@ -32,9 +31,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().ignoringRequestMatchers("/auth/**","/auth/authenticate", "/review/**", "/user/**").and()
+        http.cors().and().csrf().ignoringRequestMatchers(SecurityConstants.CSRF_IGNORED).and()
                 .authorizeHttpRequests()
-                .requestMatchers(SecurityConstants.WHITELIST)
+                .requestMatchers(SecurityConstants.AUTHORIZATION_WHITELIST)
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()

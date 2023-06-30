@@ -43,16 +43,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addToWatchLater(String token, String movieId) {
-        String email = jwtService.extractUsername(token);
+    public void addMovieToWatchLater(String userToken, String movieId) {
+        String email = jwtService.extractUsername(userToken);
         User user = unwrapUser(userRepository.findUserByEmail(email), email);
         user.getWatchLater().add(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId)));
         userRepository.save(user);
     }
 
     @Override
-    public void removeFromWatchLater(String token, String movieId) {
-        String email = jwtService.extractUsername(token);
+    public void removeMovieFromWatchLater(String userToken, String movieId) {
+        String email = jwtService.extractUsername(userToken);
         User user = unwrapUser(userRepository.findUserByEmail(email), email);
         user.getWatchLater().remove(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId)));
         userRepository.save(user);

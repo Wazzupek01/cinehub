@@ -54,7 +54,7 @@ public class UserController {
     })
     @Operation(summary = "Add to Watch Later", description = "Add specified movie to watch later set of logged in user")
     public ResponseEntity<HttpStatus> addMovieToWatchLater(@CookieValue("jwt") String token, @PathVariable String movieId){
-        userService.addToWatchLater(token, movieId);
+        userService.addMovieToWatchLater(token, movieId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -66,7 +66,7 @@ public class UserController {
     })
     @Operation(summary = "Remove from Watch Later", description = "Remove specified movie from watch later set of logged in user")
     public ResponseEntity<HttpStatus> removeMovieFromWatchLater(@CookieValue("jwt") String token, @PathVariable String movieId){
-        userService.removeFromWatchLater(token, movieId);
+        userService.removeMovieFromWatchLater(token, movieId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

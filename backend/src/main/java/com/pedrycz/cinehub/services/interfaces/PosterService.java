@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface PosterService {
 
-    String addPoster(String filename, MultipartFile file);
-    Object getPoster(String id);
-    void deletePoster(String filename);
+    String add(String filename, MultipartFile file);
+    Object getByFilename(String filename);
+    void deleteByFilename(String filename);
 }
