@@ -8,12 +8,12 @@ import java.util.Set;
 
 public interface ReviewService {
 
-    ReviewDTO addReview(String token, ReviewDTO reviewDTO);
-    void removeReview(String token, String reviewId);
-    ReviewDTO getReviewById(String id);
-    Page<ReviewDTO> getReviewsByUserId(String userId, GetParams getParams);
-    Page<ReviewDTO> getReviewsByMovieId(String movieId, GetParams getParams);
-    Set<ReviewDTO> getReviewsByMovieId(String movieId);
-    Page<ReviewDTO> getReviewsWithContentByMovieId(String movieId, GetParams getParams);
-    Set<ReviewDTO> getMostRecentReviewsWithContentForMovie(String movieId);
+    ReviewDTO add(String userToken, ReviewDTO reviewDTO);
+    void remove(String userToken, String reviewId);
+    ReviewDTO getById(String id);
+    Page<ReviewDTO> getByUserId(String userId, GetParams getParams);
+    Page<ReviewDTO> getByMovieId(String movieId, GetParams getParams);
+    Set<ReviewDTO> getByMovieId(String movieId);
+    Page<ReviewDTO> getContainingContentByMovieId(String movieId, GetParams getParams);
+    Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(String movieId);
 }

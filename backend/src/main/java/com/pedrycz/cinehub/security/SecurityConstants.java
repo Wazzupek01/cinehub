@@ -1,7 +1,7 @@
 package com.pedrycz.cinehub.security;
 
 public class SecurityConstants {
-    public static final String[] WHITELIST = {
+    public static final String[] AUTHORIZATION_WHITELIST = {
             "/documentation/**",
             "/auth/**",
             "auth/authenticate",
@@ -22,5 +22,9 @@ public class SecurityConstants {
             "/swagger-resources", "/v3/api-docs/**", "/swagger-ui/**",
             "/swagger-ui/favicon-32x32.png", "/swagger-ui/favicon-16x16.png",
             "/webjars/swagger-ui/**", "/proxy/**"
+    };
+
+    public static final String[] CSRF_IGNORED = {
+            "/auth/**", "/auth/authenticate", "/review/**", "/user/**", "/movies/add"
     };
 }

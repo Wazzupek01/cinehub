@@ -83,7 +83,7 @@ public class MovieController {
     })
     @Operation(summary = "Get page for title of movies", description = "Get page of movies with title containing requested string")
     public ResponseEntity<Page<MovieDTO>> getMoviesByTitle(@PathVariable String title, @PathVariable int page){
-        return new ResponseEntity<>(movieService.getByTitle(title, new GetParams(page, null, false)), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.getByTitleMatching(title, new GetParams(page, null, false)), HttpStatus.OK);
     }
 
     @GetMapping("/title/{title}/{page}/{orderBy}/{isAscending}")
@@ -96,7 +96,7 @@ public class MovieController {
             description = "Get page of movies with title containing requested string ordered by RATING, RELEASEYEAR or RUNTIME")
     public ResponseEntity<Page<MovieDTO>> getMoviesByTitleOrdered(@PathVariable String title, @PathVariable int page,
                                                                   @PathVariable String orderBy, @PathVariable boolean isAscending){
-        return new ResponseEntity<>(movieService.getByTitle(title, new GetParams(page, orderBy, isAscending)), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.getByTitleMatching(title, new GetParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
     @GetMapping("/director/{director}/{page}")
@@ -276,6 +276,6 @@ public class MovieController {
     })
     @Operation(summary = "Update movie", description = "Update movie data")
     public ResponseEntity<MovieDTO> updateMovie(@PathVariable String id, @Valid @ParameterObject @ModelAttribute AddMovieDTO movieDTO){
-        return new ResponseEntity<>(movieService.update(id, movieDTO), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.updateById(id, movieDTO), HttpStatus.OK);
     }
 }

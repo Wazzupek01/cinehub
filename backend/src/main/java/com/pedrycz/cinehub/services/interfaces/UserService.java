@@ -8,6 +8,6 @@ public interface UserService {
 
     UserInfoDTO getUserInfoById(String id);
 
-    void addToWatchLater(String token, String movieId);
-    void removeFromWatchLater(String token, String movieId);
+    void addMovieToWatchLater(String userToken, String movieId);
+    void removeMovieFromWatchLater(String userToken, String movieId);
 }

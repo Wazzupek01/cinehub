@@ -1,6 +1,5 @@
 package com.pedrycz.cinehub.model.dto.user;
 
-import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.model.dto.review.ReviewWithMovieDTO;
 import lombok.Data;

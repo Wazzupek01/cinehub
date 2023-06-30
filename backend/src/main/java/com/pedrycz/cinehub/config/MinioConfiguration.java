@@ -45,6 +45,7 @@ public class MinioConfiguration {
         } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |
                  NoSuchAlgorithmException | InvalidKeyException | InvalidResponseException | XmlParserException |
                  InternalException e) {
+            throw new RuntimeException(e);
         }
         return client;
     }

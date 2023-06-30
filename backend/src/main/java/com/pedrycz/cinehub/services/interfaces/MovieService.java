@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 public interface MovieService {
 
     MovieDTO getById(String id);
-    Page<MovieDTO> getByTitle(String title, GetParams getParams);
+    Page<MovieDTO> getByTitleMatching(String title, GetParams getParams);
     Page<MovieDTO> getAll(GetParams params);
     Page<MovieDTO> getByDirector(String director, GetParams params);
     Page<MovieDTO> getByActor(String actor, GetParams params);
@@ -17,7 +17,7 @@ public interface MovieService {
     Page<MovieDTO> getShorts(GetParams params);
     Page<MovieDTO> getFullLength(GetParams params);
     MovieDTO add(AddMovieDTO movie);
-    MovieDTO update(String id, AddMovieDTO movieDTO);
+    MovieDTO updateById(String id, AddMovieDTO movieDTO);
 
     void deleteById(String id);
 }
