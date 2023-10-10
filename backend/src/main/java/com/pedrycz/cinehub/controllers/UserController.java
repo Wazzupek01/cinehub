@@ -33,7 +33,7 @@ public class UserController {
     })
     @Operation(summary = "Get user info", description = "Get simple user informations")
     public ResponseEntity<UserInfoDTO> getUserByNickname(@PathVariable String nickname){
-        return new ResponseEntity<>(userService.getUserInfo(nickname), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserInfoByNickname(nickname), HttpStatus.OK);
     }
     @GetMapping("/id/{id}")
     @ApiResponses(value = {

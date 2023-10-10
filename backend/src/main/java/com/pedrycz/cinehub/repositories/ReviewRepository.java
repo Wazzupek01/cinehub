@@ -12,10 +12,6 @@ import java.util.Set;
 public interface ReviewRepository extends MongoRepository<Review, String> {
     Optional<Review> findReviewById(String id);
     Page<Review> findReviewsByUserId(String userId, Pageable pageable);
-    Page<Review> findReviewsByUserIdOrderByRatingDesc(String userId, Pageable pageable);
-    Page<Review> findReviewsByUserIdOrderByRatingAsc(String userId, Pageable pageable);
-    Page<Review> findReviewsByUserIdOrderByTimestampDesc(String userId, Pageable pageable);
-    Page<Review> findReviewsByUserIdOrderByTimestampAsc(String userId, Pageable pageable);
     Page<Review> findReviewsByMovieId(String movieId, Pageable pageable);
 
     Set<Review> findReviewsByMovieId(String movieId);

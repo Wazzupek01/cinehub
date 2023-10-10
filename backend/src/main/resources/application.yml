@@ -1,16 +1,25 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://cinehub:cinehub@localhost:27017/cinehub
       auto-index-creation: true
+  profiles:
+    active: dev
+  batch:
+    jdbc:
+      initialize-schema: always
+    job:
+      enabled: false
 
-minio:
-  bucket:
-    name: cinehub
-  access:
-    key: root
-    secret: password
-  url: http://localhost:9000
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:cinehub
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+  jpa:
+    defer-datasource-initialization: true
 
   servlet:
     multipart:
@@ -18,10 +27,6 @@ minio:
       file-size-threshold: 2KB
       max-file-size: 5MB
       max-request-size: 10MB
-
-security:
-  secret-key: "566B59703373357638792F423F4528482B4D6251655468576D5A7134743777397A24432646294A404E635266556A586E3272357538782F4125442A472D4B6150"
-  key-expiration-time: 86400000
 
 springdoc:
   swagger-ui:

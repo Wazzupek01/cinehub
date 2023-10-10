@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetParams {
     int pageNum;
-    String orderBy;
+    String sortBy;
     boolean ascending;
 }

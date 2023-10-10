@@ -4,7 +4,7 @@ import com.pedrycz.cinehub.model.dto.user.UserInfoDTO;
 
 public interface UserService {
 
-    UserInfoDTO getUserInfo(String nickname);
+    UserInfoDTO getUserInfoByNickname(String nickname);
 
     UserInfoDTO getUserInfoById(String id);
 

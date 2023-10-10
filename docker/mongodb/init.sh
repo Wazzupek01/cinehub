@@ -10,6 +10,10 @@ db.createUser({
     roles: [{
         role: "readWrite",
         db: "${MONGO_NAME}"
+    },
+    {
+        role: "readWrite",
+        db: "${MONGO_NAME}_tests"
     }]
 })
 EOJS

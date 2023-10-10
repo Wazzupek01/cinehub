@@ -2,37 +2,36 @@ package com.pedrycz.cinehub.services;
 
 import com.pedrycz.cinehub.controllers.GetParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
+import com.pedrycz.cinehub.exceptions.IllegalParamTypeException;
 import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.helpers.Constants;
+import com.pedrycz.cinehub.helpers.SortUtils;
+import com.pedrycz.cinehub.model.GetByParam;
 import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
+import com.pedrycz.cinehub.model.enums.GetMovieByParamName;
 import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
-import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.pedrycz.cinehub.model.enums.GetMovieByParamName.*;
+
 @Service
+@RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
     private final PosterService posterService;
     private final MovieToMovieDTOMapper movieDTOMapper;
-
-
-    @Autowired
-    public MovieServiceImpl(MovieRepository movieRepository, PosterService posterService) {
-        this.movieRepository = movieRepository;
-        this.posterService = posterService;
-        this.movieDTOMapper = Mappers.getMapper(MovieToMovieDTOMapper.class);
-    }
 
     @Override
     public MovieDTO getById(String id) {
@@ -41,248 +40,76 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Page<MovieDTO> getByTitleMatching(String title, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCase(title, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByRatingAsc(title, pageRequest);
-                    else moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByRatingDesc(title, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByReleaseYearAsc(title, pageRequest);
-                    else moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByReleaseYearDesc(title, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if(getParams.isAscending()) moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByRuntimeAsc(title, pageRequest);
-                    else moviePage = movieRepository.findMoviesByTitleIsContainingIgnoreCaseOrderByRuntimeDesc(title, pageRequest);
-                }
-            }
-        }
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(GetMovieByParamName.TITLE, title), getParams);
     }
+
 
     @Override
     public Page<MovieDTO> getAll(GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findAll(pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findAllByOrderByRatingAsc(pageRequest);
-                    else moviePage = movieRepository.findAllByOrderByRatingDesc(pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findAllByOrderByReleaseYearAsc(pageRequest);
-                    else moviePage = movieRepository.findAllByOrderByReleaseYearDesc(pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if(getParams.isAscending()) moviePage = movieRepository.findAllByOrderByRuntimeAsc(pageRequest);
-                    else moviePage = movieRepository.findAllByOrderByRuntimeDesc(pageRequest);
-                }
-            }
-        }
-
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(GetMovieByParamName.ALL, null), getParams);
     }
 
     @Override
     public Page<MovieDTO> getByDirector(String director, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCase(director, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingAsc(director, pageRequest);
-                    else moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRatingDesc(director, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearAsc(director, pageRequest);
-                    else moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByReleaseYearDesc(director, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if(getParams.isAscending()) moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeAsc(director, pageRequest);
-                    else moviePage = movieRepository.findMoviesByDirectorsIsContainingIgnoreCaseOrderByRuntimeDesc(director, pageRequest);
-                }
-            }
-        }
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(DIRECTOR, director), getParams);
     }
 
     @Override
     public Page<MovieDTO> getByActor(String actor, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCase(actor, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByRatingAsc(actor, pageRequest);
-                    else moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByRatingDesc(actor, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearAsc(actor, pageRequest);
-                    else moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByReleaseYearDesc(actor, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if(getParams.isAscending()) moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeAsc(actor, pageRequest);
-                    else moviePage = movieRepository.findMoviesByCastIsContainingIgnoreCaseOrderByRuntimeDesc(actor, pageRequest);
-                }
-            }
-        }
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(GetMovieByParamName.ACTOR, actor), getParams);
     }
 
     @Override
     public Page<MovieDTO> getByGenre(String genre, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByGenresContainingIgnoreCase(genre, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByRatingAsc(genre, pageRequest);
-                    else moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByRatingDesc(genre, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByReleaseYearAsc(genre, pageRequest);
-                    else moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByReleaseYearDesc(genre, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if(getParams.isAscending()) moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByRuntimeAsc(genre, pageRequest);
-                    else moviePage = movieRepository.findMoviesByGenresContainingIgnoreCaseOrderByRuntimeDesc(genre, pageRequest);
-                }
-            }
-        }
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(GENRE, genre), getParams);
     }
 
     @Override
     public Page<MovieDTO> getByRuntimeBetween(int min, int max, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByRuntimeBetween(min, max, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByRatingAsc(min, max, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByRatingDesc(min, max, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByReleaseYearAsc(min, max, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByReleaseYearDesc(min, max, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByRuntimeAsc(min, max, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeBetweenOrderByRuntimeDesc(min, max, pageRequest);
-                }
-            }
-        }
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(RUNTIME_BETWEEN, Pair.of(min, max)), getParams);
     }
 
     @Override
     public Page<MovieDTO> getShorts(GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByRuntimeLessThan(60, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByRatingAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByRatingDesc(60, pageRequest);
-                }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByReleaseYearAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByReleaseYearDesc(60, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByRuntimeAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeLessThanOrderByRuntimeDesc(60, pageRequest);
-                }
-            }
-        }
-
-        try {
-            if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
-            throw new PageNotFoundException(getParams.getPageNum());
-        }
+        return getBy(new GetByParam<>(GetMovieByParamName.SHORTS, null), getParams);
     }
 
     @Override
     public Page<MovieDTO> getFullLength(GetParams getParams) {
+        return getBy(new GetByParam<>(GetMovieByParamName.FULL_LENGTH, null), getParams);
+    }
+
+    private <U> Page<MovieDTO> getBy(GetByParam<GetMovieByParamName, U> param, GetParams getParams) {
         PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        Page<Movie> moviePage = null;
-        if(getParams.getOrderBy() == null){
-            moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqual(60, pageRequest);
-        } else {
-            switch (getParams.getOrderBy().toUpperCase()) {
-                case "RATING" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByRatingAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByRatingDesc(60, pageRequest);
+        SortUtils.setSort(getParams, pageRequest);
+
+        Page<Movie> moviePage = switch (param.name()) {
+            case DIRECTOR ->
+                    movieRepository.findMoviesByDirectorsIsContainingIgnoreCase((String) param.value(), pageRequest);
+            case GENRE -> movieRepository.findMoviesByGenresContainingIgnoreCase((String) param.value(), pageRequest);
+            case RUNTIME_BETWEEN -> {
+                if (!(param.value() instanceof Pair)) {
+                    throw new IllegalParamTypeException(param.value().getClass(), Pair.class);
                 }
-                case "RELEASEYEAR" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByReleaseYearAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByReleaseYearDesc(60, pageRequest);
-                }
-                case "RUNTIME" -> {
-                    if (getParams.isAscending()) moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByRuntimeAsc(60, pageRequest);
-                    else moviePage = movieRepository.findMoviesByRuntimeGreaterThanEqualOrderByRuntimeDesc(60, pageRequest);
-                }
+
+                yield movieRepository.findMoviesByRuntimeBetween(
+                        ((Pair<Integer, Integer>) param.value()).getFirst(),
+                        ((Pair<Integer, Integer>) param.value()).getSecond(),
+                        pageRequest
+                );
             }
-        }
+            case SHORTS -> movieRepository.findMoviesByRuntimeLessThan(60, pageRequest);
+            case FULL_LENGTH -> movieRepository.findMoviesByRuntimeGreaterThanEqual(60, pageRequest);
+            case ACTOR -> movieRepository.findMoviesByCastIsContainingIgnoreCase((String) param.value(), pageRequest);
+            case TITLE -> movieRepository.findMoviesByTitleIsContainingIgnoreCase((String) param.value(), pageRequest);
+            default -> movieRepository.findAll(pageRequest);
+        };
+
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
             else throw new PageNotFoundException(getParams.getPageNum());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             throw new PageNotFoundException(getParams.getPageNum());
         }
     }
@@ -303,8 +130,8 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public MovieDTO updateById(String id, AddMovieDTO movieDTO) {
         Optional<Movie> movie = movieRepository.findMovieById(id);
-        if(movie.isPresent()){
-            Movie updatedMovie =  movie.get();
+        if (movie.isPresent()) {
+            Movie updatedMovie = movie.get();
             updatedMovie.setCast(movieDTO.cast());
             updatedMovie.setPlot(movieDTO.plot());
             updatedMovie.setId(id);
@@ -322,12 +149,11 @@ public class MovieServiceImpl implements MovieService {
     @Override
     public void deleteById(String id) {
         String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id).getPosterUrl();
-        if(posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
+        if (posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
         movieRepository.deleteById(id);
     }
 
     public static Movie unwrapMovie(Optional<Movie> document, String paramValue) {
-        if (document.isPresent()) return document.get();
-        throw new DocumentNotFoundException(paramValue);
+        return document.orElseThrow(() -> new DocumentNotFoundException(paramValue));
     }
 }
