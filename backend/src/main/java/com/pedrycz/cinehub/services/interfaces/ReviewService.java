@@ -13,7 +13,7 @@ public interface ReviewService {
     ReviewDTO getById(String id);
     Page<ReviewDTO> getByUserId(String userId, GetParams getParams);
     Page<ReviewDTO> getByMovieId(String movieId, GetParams getParams);
-    Set<ReviewDTO> getByMovieId(String movieId);
+    Set<ReviewDTO> getSetByMovieId(String movieId);
     Page<ReviewDTO> getContainingContentByMovieId(String movieId, GetParams getParams);
     Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(String movieId);
 }

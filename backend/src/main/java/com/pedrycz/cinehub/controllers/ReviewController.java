@@ -130,7 +130,7 @@ public class ReviewController {
     })
     @Operation(summary = "Get all reviews for movie", description = "Get a set of all reviews for specified movie")
     public ResponseEntity<Set<ReviewDTO>> getAllReviewsForMovie(@PathVariable String movieId){
-        return new ResponseEntity<>(reviewService.getByMovieId(movieId), HttpStatus.OK);
+        return new ResponseEntity<>(reviewService.getSetByMovieId(movieId), HttpStatus.OK);
     }
 
     @GetMapping("/movie/all/{movieId}/{pageNum}/{orderBy}/{isAscending}")

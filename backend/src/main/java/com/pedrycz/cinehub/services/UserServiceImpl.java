@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserInfo(String nickname) {
+    public UserInfoDTO getUserInfoByNickname(String nickname) {
         User user =  unwrapUser(userRepository.findUserByNickname(nickname), nickname);
         return mapper.UserToUserInfoDTO(user);
     }
