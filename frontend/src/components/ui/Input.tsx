@@ -1,9 +1,10 @@
 import classes from './Input.module.css'
+import { IInputProps } from "../../interfaces/IInputProps";
 
-const Input = (props: any) => {
+const Input = (props: IInputProps) => {
     return (
         <>
-        <label htmlFor={props.id}>{props.placeholder}</label><br/>
+        <label htmlFor={props.id}>{props.placeholder}</label>
         <input
           placeholder={props.placeholder}
           type={props.type}

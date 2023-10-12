@@ -1,4 +1,4 @@
 export interface IInput {
-  value?: string;
+  value: string;
   isValid: boolean | null;
 }

@@ -3,11 +3,11 @@ import MovieBrowser from "../components/movie-browser/MovieBrowser";
 import MovieFilter from "../components/MovieFilter";
 
 function BrowseMoviesPage() {
-  let url: string = useLocation().pathname;
+  const url: string = useLocation().pathname;
   const pathVariables: string[] = url.split('/');
-  let howMuchToTrim: number = pathVariables[pathVariables.length-1].length;
+  const howMuchToTrim: number = pathVariables[pathVariables.length-1].length;
 
-  const data = useLoaderData();
+  const data: unknown = useLoaderData();
 
   return (
     <>

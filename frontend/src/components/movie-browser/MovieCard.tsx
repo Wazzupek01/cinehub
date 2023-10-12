@@ -7,18 +7,18 @@ type CardProps = {
     title: string,
     releaseYear: string,
     directors: string[],
-    runtime: string,
+    runtime: number,
     genres: string[],
     disabled: boolean
 }
 
-const brokenPosterUrl: string = 
+const brokenPosterUrl = 
 "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/800px-No-Image-Placeholder.svg.png";
 
 const MovieCard = ({posterUrl, title, releaseYear, directors, runtime, genres, disabled = false, id}: CardProps) => {
 
-  let genreString: string = "";
-  for(let i:number = 0; i < genres.length; i++){
+  let genreString = "";
+  for(let i = 0; i < genres.length; i++){
     if(i !== genres.length - 1){
       genreString += `${genres[i]}, `;
     } else {
