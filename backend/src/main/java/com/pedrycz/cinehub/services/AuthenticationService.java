@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 @Service
 public class AuthenticationService {
@@ -41,10 +40,9 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
-                .watchLater(Set.of())
-                .myReviews(Set.of())
                 .build();
         userRepository.save(user);
+        
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("ROLE", user.getRole());
         String jwtToken = jwtService.generateToken(extraClaims, user);

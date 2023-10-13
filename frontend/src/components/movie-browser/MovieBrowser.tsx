@@ -4,14 +4,16 @@ import PaginationItem from "@mui/material/PaginationItem";
 import { Link } from "react-router-dom";
 import classes from "./MovieBrowser.module.css";
 import MovieCard from "./MovieCard";
+import { IMovieBrowserProps } from "../../interfaces/IMovieBrowserProps";
+import { IMovieDto } from "../../interfaces/IMovieDto";
 
-const MovieBrowser = (props: any) => {
+const MovieBrowser = (props: IMovieBrowserProps) => {
   const data = JSON.parse(props.data);
 
   const pageNumber: number = data.pageable.pageNumber;
   const totalPages: number = data.totalPages;
 
-  const movies = data.content.map((movie: any) => (
+  const movies = data.content.map((movie: IMovieDto) => (
     <Grid
       item
       xs={12}
@@ -47,7 +49,7 @@ const MovieBrowser = (props: any) => {
           size="large"
           page={pageNumber + 1}
           count={totalPages}
-          renderItem={(item) => (
+          renderItem={(item: any) => (
             <PaginationItem
               component={Link}
               to={props.url + (item.page - 1)}

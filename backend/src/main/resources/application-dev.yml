@@ -1,7 +1,18 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://cinehub:cinehub@localhost:27017/cinehub
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/cinehub
+    username: cinehub
+    password: cinehub
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      order_inserts: true
+      order_updates: true
+      hibernate:
+        jdbc:
+          batch_size: 100
+          batch_versioned_data: true
 
 minio:
   bucket:

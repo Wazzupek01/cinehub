@@ -5,9 +5,11 @@ import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import org.springframework.data.domain.Page;
 
+import java.util.UUID;
+
 public interface MovieService {
 
-    MovieDTO getById(String id);
+    MovieDTO getById(UUID id);
     Page<MovieDTO> getByTitleMatching(String title, GetParams getParams);
     Page<MovieDTO> getAll(GetParams params);
     Page<MovieDTO> getByDirector(String director, GetParams params);
@@ -17,7 +19,7 @@ public interface MovieService {
     Page<MovieDTO> getShorts(GetParams params);
     Page<MovieDTO> getFullLength(GetParams params);
     MovieDTO add(AddMovieDTO movie);
-    MovieDTO updateById(String id, AddMovieDTO movieDTO);
+    MovieDTO updateById(UUID id, AddMovieDTO movieDTO);
 
-    void deleteById(String id);
+    void deleteById(UUID id);
 }

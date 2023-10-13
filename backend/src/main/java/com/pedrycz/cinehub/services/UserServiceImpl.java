@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,24 +38,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoDTO getUserInfoById(String id) {
-        User user =  unwrapUser(userRepository.findById(id), id);
+    public UserInfoDTO getUserInfoById(UUID id) {
+        User user =  unwrapUser(userRepository.findUserById(id), id.toString());
         return mapper.UserToUserInfoDTO(user);
     }
 
     @Override
-    public void addMovieToWatchLater(String userToken, String movieId) {
+    public void addMovieToWatchLater(String userToken, UUID movieId) {
         String email = jwtService.extractUsername(userToken);
         User user = unwrapUser(userRepository.findUserByEmail(email), email);
-        user.getWatchLater().add(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId)));
+        user.getWatchLater().add(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId.toString())));
         userRepository.save(user);
     }
 
     @Override
-    public void removeMovieFromWatchLater(String userToken, String movieId) {
+    public void removeMovieFromWatchLater(String userToken, UUID movieId) {
         String email = jwtService.extractUsername(userToken);
         User user = unwrapUser(userRepository.findUserByEmail(email), email);
-        user.getWatchLater().remove(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId)));
+        user.getWatchLater().remove(movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId.toString())));
         userRepository.save(user);
     }
 

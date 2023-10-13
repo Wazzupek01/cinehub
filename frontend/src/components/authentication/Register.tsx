@@ -22,7 +22,7 @@ function Register() {
     isValid: null,
   });
 
-  const nicknameChangeHandler = (event: any) => {
+  const nicknameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNickname({
       value: event.target.value,
       isValid: regexUsername.test(event.target.value),
@@ -30,14 +30,14 @@ function Register() {
   };
 
 
-  const emailChangeHandler = (event: any) => {
+  const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail({
       value: event.target.value,
       isValid: regexEmail.test(event.target.value),
     });
   };
 
-  const passwordChangeHandler = (event: any) => {
+  const passwordChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword({
       value: event.target.value,
       isValid: regexPassword.test(event.target.value),
@@ -45,7 +45,7 @@ function Register() {
   };
   const authService = new AuthenticationService();
 
-  const handleRegister = async (event: any) => {
+  const handleRegister = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const nick = await authService.registerUser(nickname.value, email.value, password.value);
     if (nick !== "") {

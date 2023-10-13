@@ -1,8 +1,9 @@
 package com.pedrycz.cinehub.model.dto.movie;
 
 import java.util.List;
+import java.util.UUID;
 
-public record MovieDTO(String id,
+public record MovieDTO(UUID id,
                        String title,
                        String plot,
                        Float rating,

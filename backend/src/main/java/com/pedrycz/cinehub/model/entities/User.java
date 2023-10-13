@@ -4,28 +4,29 @@ import com.pedrycz.cinehub.model.enums.Role;
 import com.pedrycz.cinehub.validation.Nickname;
 import com.pedrycz.cinehub.validation.Password;
 import com.pedrycz.cinehub.validation.UniqueEmail;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
+@Entity
 @Builder
 @EqualsAndHashCode
-@Document
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users")
 public class User implements UserDetails {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Nickname
     private String nickname;
@@ -39,10 +40,15 @@ public class User implements UserDetails {
 
     private Role role;
 
-    @DocumentReference
+    @ManyToMany
+    @JoinTable(
+            name = "watch_later_movie",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
     private Set<Movie> watchLater;
 
-    @DocumentReference
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Review> myReviews;
 
     @Override

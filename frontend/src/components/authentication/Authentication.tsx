@@ -3,7 +3,7 @@ import { Link, NavLink, useParams } from "react-router-dom";
 import classes from "./Authentication.module.css";
 import Register from "./Register";
 
-function Authentication() {
+const Authentication = () => {
   const { method } = useParams();
 
   return (

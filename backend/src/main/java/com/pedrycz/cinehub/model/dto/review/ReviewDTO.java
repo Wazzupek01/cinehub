@@ -6,7 +6,8 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public record ReviewDTO (String id, @NonNull
+public record ReviewDTO (UUID id, @NonNull
 @DecimalMin(value = "1")
-@DecimalMax(value = "10")Integer rating, LocalDateTime timestamp , String content, String movieId, String userId){}
+@DecimalMax(value = "10")Integer rating, LocalDateTime timestamp , String content, UUID movieId, UUID userId){}

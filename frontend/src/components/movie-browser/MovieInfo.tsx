@@ -1,9 +1,10 @@
 import { genCommaDividedList } from '../../helpers/genCommaDividedList';
+import { IMovieInfoProps } from '../../interfaces/IMovieInfoProps';
 import RateMovie from '../rating/RateMovie';
 
 import classes from "./MovieInfo.module.css";
 
-function MovieInfo(props: any) {
+function MovieInfo(props: IMovieInfoProps) {
   
   const movie = props.movie;
 
@@ -11,8 +12,8 @@ function MovieInfo(props: any) {
     window.location.reload();
   }
 
-  let genreString: string = genCommaDividedList(movie.genres);
-  let castString: string = genCommaDividedList(movie.cast);
+  const genreString: string = genCommaDividedList(movie.genres);
+  const castString: string = genCommaDividedList(movie.cast);
 
 
   return (
