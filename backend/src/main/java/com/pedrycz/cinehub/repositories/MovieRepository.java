@@ -3,25 +3,31 @@ package com.pedrycz.cinehub.repositories;
 import com.pedrycz.cinehub.model.entities.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface MovieRepository extends MongoRepository<Movie, String> {
+public interface MovieRepository extends JpaRepository<Movie, String> {
 
     @NonNull
     Page<Movie> findAll(@NonNull Pageable pageable);
 
-    Optional<Movie> findMovieById(String id);
+    Optional<Movie> findMovieById(UUID id);
 
     Page<Movie> findMoviesByTitleIsContainingIgnoreCase(String title, Pageable pageable);
+    
+    @Query("SELECT m from Movie m join m.directors d where lower(d) like lower(concat('%', :director, '%'))")
+    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCase(@Param("director") String director, Pageable pageable);
 
-    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCase(String director, Pageable pageable);
+    @Query("SELECT m from Movie m join m.actors a where lower(a) like lower(concat('%', :actor, '%'))")
+    Page<Movie> findMoviesByActorsIsContainingIgnoreCase(@Param("actor") String actor, Pageable pageable);
 
-    Page<Movie> findMoviesByCastIsContainingIgnoreCase(String actor, Pageable pageable);
-
-    Page<Movie> findMoviesByGenresContainingIgnoreCase(String genre, Pageable pageable);
+    @Query("SELECT m from Movie m join m.genres g where lower(g) like lower(concat('%', :genre, '%'))")
+    Page<Movie> findMoviesByGenresContainingIgnoreCase(@Param("genre") String genre, Pageable pageable);
 
     Page<Movie> findMoviesByRuntimeBetween(Integer min, Integer max, Pageable pageable);
 
@@ -29,5 +35,5 @@ public interface MovieRepository extends MongoRepository<Movie, String> {
 
     Page<Movie> findMoviesByRuntimeLessThan(Integer max, Pageable pageable);
 
-    void deleteMovieById(String id);
+    void deleteMovieById(UUID id);
 }

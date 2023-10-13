@@ -16,16 +16,19 @@ import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.pedrycz.cinehub.model.enums.GetMovieByParamName.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
@@ -34,8 +37,8 @@ public class MovieServiceImpl implements MovieService {
     private final MovieToMovieDTOMapper movieDTOMapper;
 
     @Override
-    public MovieDTO getById(String id) {
-        return movieDTOMapper.movieToMovieDTO(unwrapMovie(movieRepository.findMovieById(id), id));
+    public MovieDTO getById(UUID id) {
+        return movieDTOMapper.movieToMovieDTO(unwrapMovie(movieRepository.findMovieById(id), id.toString()));
     }
 
     @Override
@@ -80,8 +83,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
     private <U> Page<MovieDTO> getBy(GetByParam<GetMovieByParamName, U> param, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20);
-        SortUtils.setSort(getParams, pageRequest);
+        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20)
+                .withSort(SortUtils.getSort(getParams));
 
         Page<Movie> moviePage = switch (param.name()) {
             case DIRECTOR ->
@@ -100,7 +103,7 @@ public class MovieServiceImpl implements MovieService {
             }
             case SHORTS -> movieRepository.findMoviesByRuntimeLessThan(60, pageRequest);
             case FULL_LENGTH -> movieRepository.findMoviesByRuntimeGreaterThanEqual(60, pageRequest);
-            case ACTOR -> movieRepository.findMoviesByCastIsContainingIgnoreCase((String) param.value(), pageRequest);
+            case ACTOR -> movieRepository.findMoviesByActorsIsContainingIgnoreCase((String) param.value(), pageRequest);
             case TITLE -> movieRepository.findMoviesByTitleIsContainingIgnoreCase((String) param.value(), pageRequest);
             default -> movieRepository.findAll(pageRequest);
         };
@@ -108,7 +111,8 @@ public class MovieServiceImpl implements MovieService {
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
+            log.error("Movie with {} {} not found!", param.name(), param.value());
+            throw new PageNotFoundException(getParams.getPageNum());
         } catch (NullPointerException e) {
             throw new PageNotFoundException(getParams.getPageNum());
         }
@@ -116,7 +120,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public MovieDTO add(AddMovieDTO movie) {
-        Movie inserted = movieRepository.insert(new Movie(movie.title(),
+        Movie inserted = movieRepository.save(new Movie(movie.title(),
                 movie.plot(),
                 movie.releaseYear(),
                 movie.runtime(),
@@ -128,11 +132,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public MovieDTO updateById(String id, AddMovieDTO movieDTO) {
+    public MovieDTO updateById(UUID id, AddMovieDTO movieDTO) {
         Optional<Movie> movie = movieRepository.findMovieById(id);
         if (movie.isPresent()) {
             Movie updatedMovie = movie.get();
-            updatedMovie.setCast(movieDTO.cast());
+            updatedMovie.setActors(movieDTO.cast());
             updatedMovie.setPlot(movieDTO.plot());
             updatedMovie.setId(id);
             updatedMovie.setGenres(movieDTO.genres());
@@ -143,14 +147,14 @@ public class MovieServiceImpl implements MovieService {
             updatedMovie.setPosterUrl(posterService.add(updatedMovie.getId() + Constants.FILE_TYPE, movieDTO.posterFile()));
             return movieDTOMapper.movieToMovieDTO(movieRepository.save(updatedMovie));
         }
-        throw new DocumentNotFoundException(id);
+        throw new DocumentNotFoundException(id.toString());
     }
 
     @Override
-    public void deleteById(String id) {
-        String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id).getPosterUrl();
+    public void deleteById(UUID id) {
+        String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id.toString()).getPosterUrl();
         if (posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
-        movieRepository.deleteById(id);
+        movieRepository.deleteMovieById(id);
     }
 
     public static Movie unwrapMovie(Optional<Movie> document, String paramValue) {

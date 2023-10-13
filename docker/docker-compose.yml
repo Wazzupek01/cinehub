@@ -2,25 +2,34 @@
 
 version: "3.8"
 
-name: cinehub-backend
 services:
-  mongodb:
-    image: "mongo:latest"
-    container_name: mongodb
-    ports:
-      - "27017:27017"
+#  mongodb:
+#    image: "mongo:latest"
+#    container_name: mongodb
+#    ports:
+#      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: "root"
+#      MONGO_INITDB_ROOT_PASSWORD: "password"
+#      MONGO_NAME: "cinehub"
+#      MONGO_USER: "cinehub"
+#      MONGO_PASS: "cinehub"
+#    volumes:
+#      - "./mongodb:/docker-entrypoint-initdb.d"
+
+  postgres:
+    image: "postgres:latest"
+    container_name: ch_postgres
+    ports: 
+      - "5432:5432"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "root"
-      MONGO_INITDB_ROOT_PASSWORD: "password"
-      MONGO_NAME: "cinehub"
-      MONGO_USER: "cinehub"
-      MONGO_PASS: "cinehub"
-    volumes:
-      - "./mongodb:/docker-entrypoint-initdb.d"
+      POSTGRES_USER: "cinehub"
+      POSTGRES_PASSWORD: "cinehub"
+      POSTGRES_DB: "cinehub" 
 
   minio:
     image: "bitnami/minio:latest"
-    container_name: minio
+    container_name: ch_minio
     ports:
       - "9000:9000"
       - "9001:9001"

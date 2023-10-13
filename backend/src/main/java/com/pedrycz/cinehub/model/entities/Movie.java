@@ -1,28 +1,26 @@
 package com.pedrycz.cinehub.model.entities;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Getter
 @Setter
-@Document
+@Entity
+@NoArgsConstructor
 public class Movie {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @NonNull
     @NotBlank
@@ -31,6 +29,7 @@ public class Movie {
 
     @NonNull
     @NotBlank
+    @Column(length = 1000)
     private String plot;
 
     @NonNull
@@ -42,22 +41,29 @@ public class Movie {
     private String posterUrl;
 
     @NonNull
-    @NotBlank
+    @ElementCollection(targetClass = String.class)
+    @JoinTable(name = "genres", joinColumns = @JoinColumn(name = "movie_id"))
     private List<String> genres;
 
     @NonNull
-    @NotBlank
+    @ElementCollection(targetClass = String.class)
+    @JoinTable(name = "directors", joinColumns = @JoinColumn(name = "movie_id"))
     private List<String> directors;
 
     @NonNull
-    @NotBlank
-    private List<String> cast;
+    @ElementCollection(targetClass = String.class)
+    @JoinTable(name = "actors", joinColumns = @JoinColumn(name = "movie_id"))
+    private List<String> actors;
 
-    @DocumentReference
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<Review> reviews;
+    
+    @ManyToMany(mappedBy = "watchLater")
+    private Set<User> watchedLater;
+    
 
     public Movie(@NotNull String title, @NotNull String plot, @NotNull String releaseYear, Integer runtime, String posterUrl,
-                 @NotNull List<String> genres, @NotNull List<String> directors, @NotNull List<String> cast) {
+                 @NotNull List<String> genres, @NotNull List<String> directors, @NotNull List<String> actors) {
         this.title = title;
         this.plot = plot;
         this.rating = 0F;
@@ -66,7 +72,7 @@ public class Movie {
         this.posterUrl = posterUrl;
         this.genres = genres;
         this.directors = directors;
-        this.cast = cast;
+        this.actors = actors;
         this.reviews = new HashSet<>();
     }
 

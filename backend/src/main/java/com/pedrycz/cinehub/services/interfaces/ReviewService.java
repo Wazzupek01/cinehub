@@ -5,15 +5,16 @@ import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.Set;
+import java.util.UUID;
 
 public interface ReviewService {
 
     ReviewDTO add(String userToken, ReviewDTO reviewDTO);
-    void remove(String userToken, String reviewId);
-    ReviewDTO getById(String id);
-    Page<ReviewDTO> getByUserId(String userId, GetParams getParams);
-    Page<ReviewDTO> getByMovieId(String movieId, GetParams getParams);
-    Set<ReviewDTO> getSetByMovieId(String movieId);
-    Page<ReviewDTO> getContainingContentByMovieId(String movieId, GetParams getParams);
-    Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(String movieId);
+    void remove(String userToken, UUID reviewId);
+    ReviewDTO getById(UUID id);
+    Page<ReviewDTO> getByUserId(UUID userId, GetParams getParams);
+    Page<ReviewDTO> getByMovieId(UUID movieId, GetParams getParams);
+    Set<ReviewDTO> getSetByMovieId(UUID movieId);
+    Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, GetParams getParams);
+    Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(UUID movieId);
 }

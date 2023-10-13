@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(value = "/movies")
 @Tag(name = "Movie", description = "Requests for getting single movies, or pages of movies, updating existing, and adding new movies.")
@@ -47,7 +49,7 @@ public class MovieController {
     })
     @Operation(summary = "Get movie by ID", description = "Get movie of requested ID")
     @GetMapping("/id/{id}")
-    public ResponseEntity<MovieDTO> getMovieById(@PathVariable String id){
+    public ResponseEntity<MovieDTO> getMovieById(@PathVariable UUID id){
         return new ResponseEntity<>(movieService.getById(id), HttpStatus.FOUND);
     }
 
@@ -260,7 +262,7 @@ public class MovieController {
             @ApiResponse(responseCode = "204", description = "Movie deleted", content = @Content)
     })
     @Operation(summary = "Delete movie", description = "Delete movie")
-    public ResponseEntity<HttpStatus> deleteMovie(@PathVariable String id, @CookieValue("jwt") String token){
+    public ResponseEntity<HttpStatus> deleteMovie(@PathVariable UUID id, @CookieValue("jwt") String token){
         if (jwtService.extractAllClaims(token).get("ROLE") != "ADMIN") {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -275,7 +277,7 @@ public class MovieController {
                 content = @Content(mediaType = "application/json", schema = @Schema(implementation = MovieDTO.class)))
     })
     @Operation(summary = "Update movie", description = "Update movie data")
-    public ResponseEntity<MovieDTO> updateMovie(@PathVariable String id, @Valid @ParameterObject @ModelAttribute AddMovieDTO movieDTO){
+    public ResponseEntity<MovieDTO> updateMovie(@PathVariable UUID id, @Valid @ParameterObject @ModelAttribute AddMovieDTO movieDTO){
         return new ResponseEntity<>(movieService.updateById(id, movieDTO), HttpStatus.OK);
     }
 }
