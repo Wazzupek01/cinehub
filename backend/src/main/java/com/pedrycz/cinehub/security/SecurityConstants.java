@@ -4,7 +4,8 @@ public class SecurityConstants {
     public static final String[] AUTHORIZATION_WHITELIST = {
             "/documentation/**",
             "/auth/**",
-            "auth/authenticate",
+            "/auth/register",
+            "/auth/authenticate",
             "/user/nickname/**",
             "/user/id/**",
             "/poster/**",

@@ -32,10 +32,10 @@ public class User implements UserDetails {
     private String nickname;
 
     @Email
-    @UniqueEmail
+//    @UniqueEmail
     private String email;
 
-    @Password
+//    @Password
     private String password;
 
     private Role role;

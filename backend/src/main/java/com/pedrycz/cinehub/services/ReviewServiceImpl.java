@@ -93,9 +93,9 @@ public class ReviewServiceImpl implements ReviewService {
         }
         Review review = new Review(reviewDTO.rating(), reviewDTO.content(), movie, user);
         review = reviewRepository.save(review);
-        user.getMyReviews().add(review);
-        userRepository.save(user);
-        movie.getReviews().add(review);
+//        user.getMyReviews().add(review);
+//        userRepository.save(user);
+//        movie.getReviews().add(review);
         movie.updateRating();
         movieRepository.save(movie);
         return ReviewToReviewDTOMapper.reviewToReviewDTO(review);
@@ -107,17 +107,18 @@ public class ReviewServiceImpl implements ReviewService {
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
         if (review.getUser().getEmail().equals(email)) {
-            Set<Review> userReviews = user.getMyReviews();
-            userReviews.removeIf((r) -> r.getId().equals(reviewId));
-            user.setMyReviews(userReviews);
-            userRepository.save(user);
+//            Set<Review> userReviews = user.getMyReviews();
+//            userReviews.removeIf((r) -> r.getId().equals(reviewId));
+//            user.setMyReviews(userReviews);
+//            userRepository.save(user);
             Movie movie = review.getMovie();
-            Set<Review> movieReviews = movie.getReviews();
-            movieReviews.removeIf((r) -> r.getId().equals(reviewId));
-            movie.setReviews(movieReviews);
-            movieRepository.deleteMovieById(movie.getId());
-            movieRepository.save(movie);
+//            Set<Review> movieReviews = movie.getReviews();
+//            movieReviews.removeIf((r) -> r.getId().equals(reviewId));
+//            movie.setReviews(movieReviews);
+//            movieRepository.deleteMovieById(movie.getId());
             reviewRepository.delete(review);
+            movie.updateRating();
+            movieRepository.save(movie);
         } else throw new ReviewNotOwnedException();
     }
 
