@@ -3,19 +3,21 @@ package com.pedrycz.cinehub.validation;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NicknameValidator implements ConstraintValidator<Nickname, String> {
+    
+    private UserRepository userRepository;
 
-
-    private final UserRepository userRepository;
-
-    @Autowired
-    public NicknameValidator(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Override
+    public void initialize(Nickname constraintAnnotation) {
     }
 
     @Override

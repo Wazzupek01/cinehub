@@ -41,12 +41,19 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        userRepository.save(user);
         
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("ROLE", user.getRole());
-        String jwtToken = jwtService.generateToken(extraClaims, user);
-        return new AuthenticationResponse(jwtToken, user.getNickname());
+        if(userRepository.findUserByEmail(user.getEmail()).isEmpty()) {
+
+            userRepository.save(user);
+
+            Map<String, Object> extraClaims = new HashMap<>();
+            extraClaims.put("ROLE", user.getRole());
+            String jwtToken = jwtService.generateToken(extraClaims, user);
+            return new AuthenticationResponse(jwtToken, user.getNickname());
+        } else {
+            //TODO: implement own exception or find way to use old validator
+            throw new RuntimeException();
+        }
     }
 
     public AuthenticationResponse authenticate(UserLoginDTO request) {

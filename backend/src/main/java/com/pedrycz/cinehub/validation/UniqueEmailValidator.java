@@ -9,12 +9,8 @@ import java.util.NoSuchElementException;
 
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UniqueEmailValidator(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
