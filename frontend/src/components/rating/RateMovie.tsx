@@ -76,10 +76,10 @@ function RateMovie(props: any) {
     <Rating
       value={ratingValue}
       precision={0.5}
-      onChange={(event, newRatingValue) => {
+      onChange={(_event, newRatingValue) => {
         setRatingValue(newRatingValue as number);
         setNewReview({
-          rating: newRatingValue,
+          rating: newRatingValue as number,
           content: newReview.content
         })
       }}

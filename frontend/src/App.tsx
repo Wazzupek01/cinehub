@@ -109,7 +109,7 @@ function App() {
                 data = movieService.getMoviesByRuntimeSorted(
                   +params.page,
                   params.orderBy,
-                  params.filterValue,
+                  params.filterValue as string,
                   params.isAscending
                 );
                 break;

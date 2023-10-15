@@ -50,7 +50,7 @@ public class MovieController {
     @Operation(summary = "Get movie by ID", description = "Get movie of requested ID")
     @GetMapping("/id/{id}")
     public ResponseEntity<MovieDTO> getMovieById(@PathVariable UUID id){
-        return new ResponseEntity<>(movieService.getById(id), HttpStatus.FOUND);
+        return new ResponseEntity<>(movieService.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/all/{page}")

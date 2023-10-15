@@ -22,6 +22,8 @@ function MoviePage() {
       
       const data = await response.json();
 
+      console.log(data)
+
       const transformedReviews = data.map((reviewData: any) => {
         return {
           id: reviewData.id,

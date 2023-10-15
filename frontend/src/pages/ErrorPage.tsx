@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import TopBar from "../components/navigation/TopBar";
 import Footer from "../components/navigation/Footer";
 import classes from "./ErrorPage.module.css";

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,7 +31,7 @@ class UserServiceTest {
     private static final String EMAIL_SUFFIX = "@test.com";
 
     private static final Optional<User> EXPECTED_OPTIONAL_USER = Optional.of(User.builder()
-            .id(EXPECTED_USER_ID)
+            .id(UUID.fromString(EXPECTED_USER_ID))
             .nickname(EXPECTED_NICKNAME)
             .email(EXPECTED_NICKNAME + EMAIL_SUFFIX)
             .password("randomstring")
@@ -68,12 +69,12 @@ class UserServiceTest {
         when(userRepository.findById(EXPECTED_USER_ID))
                 .thenReturn(EXPECTED_OPTIONAL_USER);
 
-        UserInfoDTO foundUser = userService.getUserInfoById(EXPECTED_USER_ID);
+        UserInfoDTO foundUser = userService.getUserInfoById(UUID.fromString(EXPECTED_USER_ID));
 
         assertThat(expectedUser.getNickname())
                 .isEqualTo(foundUser.getNickname());
 
-        assertThatThrownBy(() -> userService.getUserInfoById("444400004444"))
+        assertThatThrownBy(() -> userService.getUserInfoById(UUID.fromString("444400004444")))
                 .isInstanceOf(DocumentNotFoundException.class);
     }
 }

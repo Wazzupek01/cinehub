@@ -1,0 +1,7 @@
+{
+  "name": "cinehub",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
