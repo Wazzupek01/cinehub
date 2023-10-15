@@ -42,7 +42,7 @@ public class AuthenticationService {
                 .role(Role.USER)
                 .build();
         
-        if(userRepository.findUserByEmail(user.getEmail()).isEmpty()) {
+        if(userRepository.findUserByEmail(user.getEmail()).isEmpty() && userRepository.findUserByNickname(user.getNickname()).isEmpty()) {
 
             userRepository.save(user);
 

@@ -11,7 +11,7 @@ class MovieService {
 
   // TODO: Implement addMovie(formData: FormData)
 
-  private async getCarouselMovie(title: string): IMovieDto {
+  private async getCarouselMovie(title: string): Promise<IMovieDto> {
     const res = await fetch(
       "http://localhost:8080/movies/title/" + title + "/0"
     );
@@ -80,7 +80,7 @@ class MovieService {
   }
 
 
-  async getMoviesByRuntimeSorted(page: number, orderBy: string, filterValue: string | undefined, isAscending: string): Promise<string>{
+  async getMoviesByRuntimeSorted(page: number, orderBy: string, filterValue: string, isAscending: string): Promise<string>{
     const values = filterValue.split('-');
 
     const response = await fetch(

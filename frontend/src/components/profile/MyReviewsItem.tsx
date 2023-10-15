@@ -4,7 +4,7 @@ import { Grid } from "@mui/material";
 import dateFormat from "dateformat";
 
 function MyReviewsItem(props: any) {
-  const timestamp: Date = Date(props.review.timestamp);
+  const timestamp: string = props.review.timestamp;
 
   return (
     <>

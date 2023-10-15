@@ -5,7 +5,7 @@ function RecentReviews(props: any) {
   return (
     <div className={classes.RecentReviews_container}>
       <h1>Most recent reviews</h1>
-      {props.reviews.map((review: any) => (
+      {(props.reviews !== undefined) && props.reviews.map((review: any) => (
         <Review
           key={review.id}
           rating={review.rating}

@@ -7,7 +7,7 @@ function BrowseMoviesPage() {
   const pathVariables: string[] = url.split('/');
   const howMuchToTrim: number = pathVariables[pathVariables.length-1].length;
 
-  const data: unknown = useLoaderData();
+  const data: string = useLoaderData() as string;
 
   return (
     <>

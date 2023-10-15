@@ -1,11 +1,11 @@
-import MovieService from "../services/MovieService";
+// import MovieService from "../services/MovieService";
 
 function AddMovie() {
-  const movieService = new MovieService();
+  // const movieService = new MovieService();
   const addMovieHandler = async (event: any) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    console.log(await movieService.addMovie(new FormData(form)));
+    // const form = event.currentTarget;
+    // console.log(await movieService.addMovie(new FormData(form)));
   };
 
   return (

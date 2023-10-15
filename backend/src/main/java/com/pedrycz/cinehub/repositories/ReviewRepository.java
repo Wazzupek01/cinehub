@@ -1,5 +1,6 @@
 package com.pedrycz.cinehub.repositories;
 
+import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.model.entities.Review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,5 +19,5 @@ public interface ReviewRepository extends JpaRepository<Review, String> {
     Set<Review> findReviewsByMovieId(UUID movieId);
 //    @Query("{ 'movie' : ObjectId(?0), '$expr': { '$gt': [{ '$strLenCP': '$content' }, 0 ] }}")
     @Query("SELECT r FROM Review r WHERE r.movie = ?1 and r.content != '' and r.content != null")
-    Page<Review> findReviewsByMovieIdWithReviewNotEmpty(UUID MovieId, Pageable pageable); // Use Sort parameter in PageRequest here
+    Page<Review> findReviewsByMovieWithReviewNotEmpty(Movie MovieId, Pageable pageable); // Use Sort parameter in PageRequest here
 }

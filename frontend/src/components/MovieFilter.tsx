@@ -40,7 +40,7 @@ function MovieFilter() {
     return `${value}`;
   }
 
-  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+  const handleSliderChange = (_event: Event, newValue: number | number[]) => {
     setSliderValue(newValue as number[]);
     if(filterBy === "runtime")
       setFilterValue(`${sliderValue[0]}-${sliderValue[1]}`);

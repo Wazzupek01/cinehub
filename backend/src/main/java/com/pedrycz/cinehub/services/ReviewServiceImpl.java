@@ -70,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
         Page<Review> reviewPage = switch(param.name()) {
             case USER_ID -> reviewRepository.findReviewsByUserId((UUID) param.value(), pageRequest);
             case MOVIE_ID -> reviewRepository.findReviewsByMovieId((UUID) param.value(), pageRequest);
-            case MOVIE_ID_WITH_CONTENT -> reviewRepository.findReviewsByMovieIdWithReviewNotEmpty((UUID) param.value(), pageRequest);
+            case MOVIE_ID_WITH_CONTENT -> reviewRepository.findReviewsByMovieWithReviewNotEmpty(movieRepository.findMovieById((UUID) param.value()).get(), pageRequest);
         };
 
         try {
@@ -125,7 +125,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(UUID movieId) {
         PageRequest pageRequest = PageRequest.of(0, 5).withSort(Sort.by("timestamp").descending());
-        Page<Review> reviewPage = reviewRepository.findReviewsByMovieIdWithReviewNotEmpty(movieId, pageRequest);
+        Page<Review> reviewPage = reviewRepository.findReviewsByMovieWithReviewNotEmpty(movieRepository.findMovieById(movieId).get(), pageRequest);
         Set<Review> reviewSet = new HashSet<>(reviewPage.getContent());
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewSet);
     }
