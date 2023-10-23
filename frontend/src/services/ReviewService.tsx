@@ -5,8 +5,21 @@ class ReviewService {
     return data;
   }
 
+  removeReviewById(id: string){
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    fetch("http://localhost:8080/review/delete/" + id, {
+      method: "DELETE",
+      headers: headers,
+      mode: "cors",
+      credentials: "include",
+      redirect: "follow"
+    })
+  }
+
   async addReview(rating: number, content: string, movieId: string){
-    var headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const response = await fetch("http://localhost:8080/review/add", {

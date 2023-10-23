@@ -2,9 +2,17 @@ import classes from "./MyReviewsItem.module.css";
 import RateMovie from "../rating/RateMovie";
 import { Grid } from "@mui/material";
 import dateFormat from "dateformat";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ReviewService from "../../services/ReviewService";
 
 function MyReviewsItem(props: any) {
+  const reviewService: ReviewService = new ReviewService();
   const timestamp: string = props.review.timestamp;
+  const removeReview = () => {
+    console.log(props)
+      reviewService.removeReviewById(props.review.id);
+      window.location.reload()
+  }
 
   return (
     <>
@@ -38,6 +46,8 @@ function MyReviewsItem(props: any) {
             />
             <b>{props.review.content}</b>
             <p>{dateFormat(timestamp, "H:MM dd mmmm yyyy")}</p>
+            {props.showDelete && <div onClick={removeReview}><DeleteIcon /></div>}
+            
           </div>
         </Grid>
       </Grid>
