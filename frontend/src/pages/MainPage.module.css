@@ -23,4 +23,5 @@
 
 .mainPage_container {
     text-align: center;
+    filter: blur(1.5rem);
 }

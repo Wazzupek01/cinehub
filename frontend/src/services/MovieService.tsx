@@ -20,9 +20,9 @@ class MovieService {
   }
 
   async loadCarouselMovies() {
-    let carouselMovies: IMovieDto[] = [];
+    const carouselMovies: IMovieDto[] = [];
     for (let i = 0; i < this.MainPageTitles.length; i++) {
-      let movie: IMovieDto = await this.getCarouselMovie(this.MainPageTitles[i]);
+      const movie: IMovieDto = await this.getCarouselMovie(this.MainPageTitles[i]);
       carouselMovies.push(movie);
     }
     return carouselMovies;

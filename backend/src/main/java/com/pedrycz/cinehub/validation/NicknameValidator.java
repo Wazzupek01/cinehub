@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
+@AllArgsConstructor
 public class NicknameValidator implements ConstraintValidator<Nickname, String> {
     
-    private UserRepository userRepository;
-
-    @Override
-    public void initialize(Nickname constraintAnnotation) {
-    }
+    private final UserRepository userRepository;
+    
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {

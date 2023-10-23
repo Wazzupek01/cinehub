@@ -1,4 +1,4 @@
-package com.pedrycz.cinehub.batch;
+package com.pedrycz.cinehub.batch.init_database_job;
 
 import com.pedrycz.cinehub.exceptions.IncompleteDocumentException;
 import com.pedrycz.cinehub.model.entities.Movie;
