@@ -3,7 +3,7 @@ import classes from "./MyReviews.module.css";
 
 function MyReviews(props: any) {
   const reviews = props.data.map((review: any) => (
-    <MyReviewsItem review={review} />
+    <MyReviewsItem review={review} showDelete={props.showDelete} />
   ));
 
   return (

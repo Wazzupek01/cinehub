@@ -21,7 +21,7 @@ function UserLists() {
           </ul>
         </nav>
       {isMyReviewsActive ? (
-        <MyReviews data={data.myReviews} />
+        <MyReviews data={data.myReviews} showDelete={nickname == localStorage.getItem('nickname')} />
       ) : (
         <WatchLater data={data.watchLater} />
       )}
