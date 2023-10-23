@@ -19,6 +19,7 @@ import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.security.JwtService;
 import com.pedrycz.cinehub.services.interfaces.ReviewService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
@@ -93,11 +95,11 @@ public class ReviewServiceImpl implements ReviewService {
         }
         Review review = new Review(reviewDTO.rating(), reviewDTO.content(), movie, user);
         review = reviewRepository.save(review);
-//        user.getMyReviews().add(review);
-//        userRepository.save(user);
-//        movie.getReviews().add(review);
         movie.updateRating();
         movieRepository.save(movie);
+
+        log.info("User {} added review for movie {}", user.getNickname(), movie.getTitle());
+        
         return ReviewToReviewDTOMapper.reviewToReviewDTO(review);
     }
 
@@ -119,6 +121,9 @@ public class ReviewServiceImpl implements ReviewService {
             reviewRepository.delete(review);
             movie.updateRating();
             movieRepository.save(movie);
+            
+            log.info("User {} removed his review for movie {}", user.getNickname(), movie.getTitle());
+            
         } else throw new ReviewNotOwnedException();
     }
 

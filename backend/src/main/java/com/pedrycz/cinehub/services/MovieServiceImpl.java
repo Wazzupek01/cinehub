@@ -27,8 +27,8 @@ import java.util.UUID;
 
 import static com.pedrycz.cinehub.model.enums.GetMovieByParamName.*;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MovieServiceImpl implements MovieService {
 
@@ -111,7 +111,6 @@ public class MovieServiceImpl implements MovieService {
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            log.error("Movie with {} {} not found!", param.name(), param.value());
             throw new PageNotFoundException(getParams.getPageNum());
         } catch (NullPointerException e) {
             throw new PageNotFoundException(getParams.getPageNum());
@@ -128,6 +127,8 @@ public class MovieServiceImpl implements MovieService {
                 movie.genres(), movie.directors(), movie.cast()));
 
         inserted.setPosterUrl(posterService.add(inserted.getId() + Constants.FILE_TYPE, movie.posterFile()));
+        
+        log.info("Adding movie: {}", inserted.getTitle());
         return movieDTOMapper.movieToMovieDTO(movieRepository.save(inserted));
     }
 
@@ -145,8 +146,10 @@ public class MovieServiceImpl implements MovieService {
             updatedMovie.setRuntime(movieDTO.runtime());
             updatedMovie.setTitle(movieDTO.title());
             updatedMovie.setPosterUrl(posterService.add(updatedMovie.getId() + Constants.FILE_TYPE, movieDTO.posterFile()));
+            log.info("Updating data for movie: {}", updatedMovie.getTitle());
             return movieDTOMapper.movieToMovieDTO(movieRepository.save(updatedMovie));
         }
+        
         throw new DocumentNotFoundException(id.toString());
     }
 
@@ -154,6 +157,7 @@ public class MovieServiceImpl implements MovieService {
     public void deleteById(UUID id) {
         String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id.toString()).getPosterUrl();
         if (posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
+        log.info("Deleting movie with id: {}", id);
         movieRepository.deleteMovieById(id);
     }
 

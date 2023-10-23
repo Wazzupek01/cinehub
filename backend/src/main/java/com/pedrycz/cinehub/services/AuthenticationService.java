@@ -7,6 +7,7 @@ import com.pedrycz.cinehub.model.entities.User;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.security.AuthenticationResponse;
 import com.pedrycz.cinehub.security.JwtService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Service
 public class AuthenticationService {
 
@@ -41,19 +43,15 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        
-        if(userRepository.findUserByEmail(user.getEmail()).isEmpty() && userRepository.findUserByNickname(user.getNickname()).isEmpty()) {
 
             userRepository.save(user);
 
             Map<String, Object> extraClaims = new HashMap<>();
             extraClaims.put("ROLE", user.getRole());
             String jwtToken = jwtService.generateToken(extraClaims, user);
+            
+            log.info("Registered user: {}", user.getNickname());
             return new AuthenticationResponse(jwtToken, user.getNickname());
-        } else {
-            //TODO: implement own exception or find way to use old validator
-            throw new RuntimeException();
-        }
     }
 
     public AuthenticationResponse authenticate(UserLoginDTO request) {
@@ -67,6 +65,8 @@ public class AuthenticationService {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("ROLE", user.getRole());
         String jwtToken = jwtService.generateToken(extraClaims, user);
+        
+        log.info("Authenticated user: {}", user.getNickname());
         return new AuthenticationResponse(jwtToken, user.getNickname());
     }
 }
