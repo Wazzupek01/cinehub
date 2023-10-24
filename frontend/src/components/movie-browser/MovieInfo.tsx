@@ -13,7 +13,7 @@ function MovieInfo(props: IMovieInfoProps) {
   }
 
   const genreString: string = genCommaDividedList(movie.genres);
-  const castString: string = (movie.cast !== null) ? genCommaDividedList(movie.cast) : "";
+  const castString: string = (movie.actors !== null) ? genCommaDividedList(movie.actors) : "";
 
 
   return (
