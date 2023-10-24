@@ -8,5 +8,5 @@ export interface IMovieDto {
   posterUrl: string;
   genres: string[];
   directors: string[];
-  cast: string[];
+  actors: string[];
 }

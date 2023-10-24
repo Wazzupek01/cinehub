@@ -161,3 +161,9 @@ backend/target/test-classes/application.yml
 backend/target/test-classes/com/pedrycz/cinehub/CinehubApplicationTests.class
 backend/target/test-classes/com/pedrycz/cinehub/unit/UserServiceTest.class
 frontend/package-lock.json
+backend/target/classes/com/pedrycz/cinehub/services/BadWordsCleaningService.class
+backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+backend/target/classes/com/pedrycz/cinehub/services/BadWordsCleaningService.class
+backend/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+backend/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst

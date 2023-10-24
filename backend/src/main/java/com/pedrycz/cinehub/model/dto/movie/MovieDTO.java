@@ -12,5 +12,5 @@ public record MovieDTO(UUID id,
                        String posterUrl,
                        List<String> genres,
                        List<String> directors,
-                       List<String> cast) {
+                       List<String> actors) {
 }
