@@ -3,20 +3,6 @@
 version: "3.8"
 
 services:
-#  mongodb:
-#    image: "mongo:latest"
-#    container_name: mongodb
-#    ports:
-#      - "27017:27017"
-#    environment:
-#      MONGO_INITDB_ROOT_USERNAME: "root"
-#      MONGO_INITDB_ROOT_PASSWORD: "password"
-#      MONGO_NAME: "cinehub"
-#      MONGO_USER: "cinehub"
-#      MONGO_PASS: "cinehub"
-#    volumes:
-#      - "./mongodb:/docker-entrypoint-initdb.d"
-
   postgres:
     image: "postgres:latest"
     container_name: ch_postgres
@@ -26,7 +12,8 @@ services:
       POSTGRES_USER: "cinehub"
       POSTGRES_PASSWORD: "cinehub"
       POSTGRES_DB: "cinehub" 
-
+    volumes: 
+      - ./db-init.sql:/docker-entrypoint-initdb.d/db-init.sql
   minio:
     image: "bitnami/minio:latest"
     container_name: ch_minio

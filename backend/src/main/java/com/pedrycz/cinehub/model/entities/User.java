@@ -1,9 +1,6 @@
 package com.pedrycz.cinehub.model.entities;
 
-import com.pedrycz.cinehub.model.enums.Role;
 import com.pedrycz.cinehub.validation.Nickname;
-import com.pedrycz.cinehub.validation.Password;
-import com.pedrycz.cinehub.validation.UniqueEmail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -38,6 +35,8 @@ public class User implements UserDetails {
 //    @Password
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name="role_id", nullable=false)
     private Role role;
 
     @ManyToMany
@@ -58,7 +57,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(role.getName()));
     }
 
     @Override

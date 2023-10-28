@@ -102,7 +102,7 @@ public class ReviewController {
                                                                          @PathVariable String orderBy,
                                                                          @PathVariable boolean isAscending){
         Page<ReviewDTO> reviewPage = reviewService.getContainingContentByMovieId(movieId,
-                new GetParams(pageNum, orderBy, isAscending));
+                new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 
@@ -116,7 +116,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(@PathVariable UUID userId,@PathVariable int pageNum,
                                                               @PathVariable String orderBy,
                                                               @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getByUserId(userId, new GetParams(pageNum, orderBy, isAscending));
+        Page<ReviewDTO> reviewPage = reviewService.getByUserId(userId, new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 
@@ -139,7 +139,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewDTO>> getPageFromAllReviewsForMovie(@PathVariable UUID movieId,@PathVariable int pageNum,
                                                                          @PathVariable String orderBy,
                                                                          @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getByMovieId(movieId, new GetParams(pageNum, orderBy, isAscending));
+        Page<ReviewDTO> reviewPage = reviewService.getByMovieId(movieId, new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 }

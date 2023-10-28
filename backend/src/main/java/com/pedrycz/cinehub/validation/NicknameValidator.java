@@ -13,12 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-@AllArgsConstructor
+@NoArgsConstructor
 public class NicknameValidator implements ConstraintValidator<Nickname, String> {
     
-    private final UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
     
-
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
         try {

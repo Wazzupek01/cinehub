@@ -1,6 +1,6 @@
 package com.pedrycz.cinehub.services;
 
-import com.pedrycz.cinehub.controllers.GetParams;
+import com.pedrycz.cinehub.controllers.SortParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.exceptions.ReviewAlreadyExistsException;
@@ -46,13 +46,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getByUserId(UUID userId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.USER_ID, userId), getParams);
+    public Page<ReviewDTO> getByUserId(UUID userId, SortParams sortParams) {
+        return getBy(new GetByParam<>(GetReviewByParamName.USER_ID, userId), sortParams);
     }
 
     @Override
-    public Page<ReviewDTO> getByMovieId(UUID movieId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID, movieId), getParams);
+    public Page<ReviewDTO> getByMovieId(UUID movieId, SortParams sortParams) {
+        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID, movieId), sortParams);
     }
 
     @Override
@@ -61,13 +61,13 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID_WITH_CONTENT, movieId), getParams);
+    public Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, SortParams sortParams) {
+        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID_WITH_CONTENT, movieId), sortParams);
     }
 
-    private <U> Page<ReviewDTO> getBy(GetByParam<GetReviewByParamName, U> param, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20)
-                .withSort(SortUtils.getSort(getParams));
+    private <U> Page<ReviewDTO> getBy(GetByParam<GetReviewByParamName, U> param, SortParams sortParams) {
+        PageRequest pageRequest = PageRequest.of(sortParams.getPageNum(), 20)
+                .withSort(SortUtils.getSort(sortParams));
 
         Page<Review> reviewPage = switch(param.name()) {
             case USER_ID -> reviewRepository.findReviewsByUserId((UUID) param.value(), pageRequest);
@@ -77,9 +77,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         try {
             if (!reviewPage.getContent().isEmpty()) return reviewPage.map(ReviewToReviewDTOMapper::reviewToReviewDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
+            else throw new PageNotFoundException(sortParams.getPageNum());
         } catch (NullPointerException e) {
-            throw new PageNotFoundException(getParams.getPageNum());
+            throw new PageNotFoundException(sortParams.getPageNum());
         }
     }
 
@@ -109,15 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
         if (review.getUser().getEmail().equals(email)) {
-//            Set<Review> userReviews = user.getMyReviews();
-//            userReviews.removeIf((r) -> r.getId().equals(reviewId));
-//            user.setMyReviews(userReviews);
-//            userRepository.save(user);
             Movie movie = review.getMovie();
-//            Set<Review> movieReviews = movie.getReviews();
-//            movieReviews.removeIf((r) -> r.getId().equals(reviewId));
-//            movie.setReviews(movieReviews);
-//            movieRepository.deleteMovieById(movie.getId());
             reviewRepository.delete(review);
             movie.updateRating();
             movieRepository.save(movie);
