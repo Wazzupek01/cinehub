@@ -17,28 +17,8 @@ import java.util.UUID;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, String>, 
         JpaSpecificationExecutor<Movie> {
-
-//    @NonNull
-//    Page<Movie> findAll(@NonNull Pageable pageable);
-
+    
     Optional<Movie> findMovieById(UUID id);
-
-//    Page<Movie> findMoviesByTitleIsContainingIgnoreCase(String title, Pageable pageable);
-//    
-//    @Query("SELECT m from Movie m join m.directors d where lower(d) like lower(concat('%', :director, '%'))")
-//    Page<Movie> findMoviesByDirectorsIsContainingIgnoreCase(@Param("director") String director, Pageable pageable);
-//
-//    @Query("SELECT m from Movie m join m.actors a where lower(a) like lower(concat('%', :actor, '%'))")
-//    Page<Movie> findMoviesByActorsIsContainingIgnoreCase(@Param("actor") String actor, Pageable pageable);
-//
-//    @Query("SELECT m from Movie m join m.genres g where lower(g) like lower(concat('%', :genre, '%'))")
-//    Page<Movie> findMoviesByGenresContainingIgnoreCase(@Param("genre") String genre, Pageable pageable);
-//
-//    Page<Movie> findMoviesByRuntimeBetween(Integer min, Integer max, Pageable pageable);
-//
-//    Page<Movie> findMoviesByRuntimeGreaterThanEqual(Integer min, Pageable pageable);
-//
-//    Page<Movie> findMoviesByRuntimeLessThan(Integer max, Pageable pageable);
 
     void deleteMovieById(UUID id);
 }

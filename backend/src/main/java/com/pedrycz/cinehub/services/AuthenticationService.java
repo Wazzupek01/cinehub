@@ -34,7 +34,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(UserRegisterDTO request) {
 
-        Role role = roleRepository.findRoleByName("USER").orElseThrow(() -> new RoleNotFoundException("USER"));
+        Role role = roleRepository.findRoleByName("ROLE_USER").orElseThrow(() -> new RoleNotFoundException("ROLE_USER"));
         
         User user = User.builder()
                 .nickname(request.getNickname())

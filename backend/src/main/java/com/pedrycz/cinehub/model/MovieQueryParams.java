@@ -14,4 +14,8 @@ public class MovieQueryParams {
     private final String genre;
     private final String director;
     private final String actor;
+    
+    public static MovieQueryParams empty() {
+        return builder().build();
+    }
 }

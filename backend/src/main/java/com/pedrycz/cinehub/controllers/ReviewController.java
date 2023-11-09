@@ -1,5 +1,6 @@
 package com.pedrycz.cinehub.controllers;
 
+import com.pedrycz.cinehub.model.ReviewQueryParams;
 import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.services.interfaces.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,7 +48,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "400", description = "Invalid argument (rating) or user already reviewed this movie", content = @Content)
     })
     @Operation(summary = "Add review", description = "Add new review by active user for selected movie")
-    public ResponseEntity<ReviewDTO> addReview(@CookieValue("jwt") String token, @Valid @RequestBody ReviewDTO reviewDTO){
+    public ResponseEntity<ReviewDTO> addReview(@CookieValue("jwt") String token, @Valid @RequestBody ReviewDTO reviewDTO) {
         return new ResponseEntity<>(reviewService.add(token, reviewDTO), HttpStatus.OK);
     }
 
@@ -59,7 +60,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "Review not found", content = @Content)
     })
     @Operation(summary = "Remove review", description = "Remove review if created by active user")
-    public ResponseEntity<HttpStatus> removeReview(@CookieValue("jwt") String token, @PathVariable UUID reviewId){
+    public ResponseEntity<HttpStatus> removeReview(@CookieValue("jwt") String token, @PathVariable UUID reviewId) {
         reviewService.remove(token, reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -67,11 +68,11 @@ public class ReviewController {
     @GetMapping("/id/{reviewId}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Review with requested id found",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDTO.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ReviewDTO.class))),
             @ApiResponse(responseCode = "404", description = "Review not found", content = @Content)
     })
     @Operation(summary = "Get review by ID", description = "Find review using its' id")
-    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable UUID reviewId){
+    public ResponseEntity<ReviewDTO> getReviewById(@PathVariable UUID reviewId) {
         return new ResponseEntity<>(reviewService.getById(reviewId), HttpStatus.OK);
     }
 
@@ -93,15 +94,15 @@ public class ReviewController {
     @GetMapping("/movie/{movieId}/{pageNum}/{orderBy}/{isAscending}")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "movie page with requested parameters found",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class))),
             @ApiResponse(responseCode = "404", description = "Requested page not found", content = @Content)
     })
     @Operation(summary = "Get reviews for a movie", description = "Get reviews for a movie with content, sorted by TIMESTAMP, or RATING")
     public ResponseEntity<Page<ReviewDTO>> getReviewsWithContentByMovieId(@PathVariable UUID movieId,
-                                                                         @PathVariable int pageNum,
-                                                                         @PathVariable String orderBy,
-                                                                         @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getContainingContentByMovieId(movieId,
+                                                                          @PathVariable int pageNum,
+                                                                          @PathVariable String orderBy,
+                                                                          @PathVariable boolean isAscending) {
+        Page<ReviewDTO> reviewPage = reviewService.getBy(ReviewQueryParams.builder().movieId(movieId).build(),
                 new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
@@ -113,10 +114,11 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "Requested page not found", content = @Content),
     })
     @Operation(summary = "Get reviews of a user", description = "Get all reviews created by user, sorted by TIMESTAMP, or RATING")
-    public ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(@PathVariable UUID userId,@PathVariable int pageNum,
+    public ResponseEntity<Page<ReviewDTO>> getReviewsByUserId(@PathVariable UUID userId, @PathVariable int pageNum,
                                                               @PathVariable String orderBy,
-                                                              @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getByUserId(userId, new SortParams(pageNum, orderBy, isAscending));
+                                                              @PathVariable boolean isAscending) {
+        Page<ReviewDTO> reviewPage = reviewService.getBy(ReviewQueryParams.builder().userId(userId).build(),
+                new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 
@@ -130,16 +132,17 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "Movie doesn't exist or has no reviews", content = @Content)
     })
     @Operation(summary = "Get all reviews for movie", description = "Get a set of all reviews for specified movie")
-    public ResponseEntity<Set<ReviewDTO>> getAllReviewsForMovie(@PathVariable UUID movieId){
+    public ResponseEntity<Set<ReviewDTO>> getAllReviewsForMovie(@PathVariable UUID movieId) {
         return new ResponseEntity<>(reviewService.getSetByMovieId(movieId), HttpStatus.OK);
     }
 
     @GetMapping("/movie/all/{movieId}/{pageNum}/{orderBy}/{isAscending}")
     @Operation(summary = "Get page from all reviews for movie", description = "Get page of all reviews (with and without content) for requested movie, sorted by TIMESTAMP, or RATING")
-    public ResponseEntity<Page<ReviewDTO>> getPageFromAllReviewsForMovie(@PathVariable UUID movieId,@PathVariable int pageNum,
+    public ResponseEntity<Page<ReviewDTO>> getPageFromAllReviewsForMovie(@PathVariable UUID movieId, @PathVariable int pageNum,
                                                                          @PathVariable String orderBy,
-                                                                         @PathVariable boolean isAscending){
-        Page<ReviewDTO> reviewPage = reviewService.getByMovieId(movieId, new SortParams(pageNum, orderBy, isAscending));
+                                                                         @PathVariable boolean isAscending) {
+        Page<ReviewDTO> reviewPage = reviewService.getBy(ReviewQueryParams.builder().movieId(movieId).build(),
+                new SortParams(pageNum, orderBy, isAscending));
         return new ResponseEntity<>(reviewPage, HttpStatus.OK);
     }
 }

@@ -2,6 +2,7 @@ package com.pedrycz.cinehub.unit;
 
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.model.dto.user.UserInfoDTO;
+import com.pedrycz.cinehub.model.entities.Role;
 import com.pedrycz.cinehub.model.entities.User;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.services.UserServiceImpl;
@@ -28,13 +29,14 @@ class UserServiceTest {
     private static final UUID EXPECTED_USER_ID = UUID.randomUUID();
 
     private static final String EMAIL_SUFFIX = "@test.com";
+    private static final Role ROLE_USER = new Role(0, "ROLE_USER");
 
     private static final Optional<User> EXPECTED_OPTIONAL_USER = Optional.of(User.builder()
             .id(EXPECTED_USER_ID)
             .nickname(EXPECTED_NICKNAME)
             .email(EXPECTED_NICKNAME + EMAIL_SUFFIX)
             .password("randomstring")
-            .role(Role.USER)
+            .role(ROLE_USER)
             .myReviews(Set.of())
             .watchLater(Set.of()).build());
 

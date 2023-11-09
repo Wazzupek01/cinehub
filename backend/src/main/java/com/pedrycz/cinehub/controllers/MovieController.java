@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,6 +34,7 @@ import java.util.UUID;
 @Tag(name = "Movie", description = "Requests for getting single movies, or pages of movies, updating existing, and adding new movies.")
 public class MovieController {
 
+    private static final int SHORTS_MAX_RUNTIME = 60;
     private final MovieService movieService;
     private final JwtService jwtService;
 
@@ -55,21 +55,21 @@ public class MovieController {
         return new ResponseEntity<>(movieService.getById(id), HttpStatus.OK);
     }
 
-//    @GetMapping("/all/{page}/{orderBy}/{isAscending}")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page", content = @Content),
-//            @ApiResponse(responseCode = "200", description = "Requested page for all movies found",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
-//    })
-//    @Operation(summary = "Get one of pages of all movies ordered",
-//            description = "Get requested page from all movies ordered by RATING, RELEASEYEAR or RUNTIME")
-//    public ResponseEntity<Page<MovieDTO>> getAllMovies(@PathVariable int page,
-//                                                       @PathVariable(required = false) String orderBy,
-//                                                       @PathVariable(required = false) boolean isAscending) {
-//        return new ResponseEntity<>(movieService.getAll(new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
-//    }
+    @GetMapping({"/all/{page}", "/all/{page}/{orderBy}/{isAscending}"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Requested page for all movies found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
+    })
+    @Operation(summary = "Get one of pages of all movies ordered",
+            description = "Get requested page from all movies ordered by RATING, RELEASEYEAR or RUNTIME")
+    public ResponseEntity<Page<MovieDTO>> getAllMovies(@PathVariable int page,
+                                                       @PathVariable(required = false) String orderBy,
+                                                       @PathVariable(required = false) boolean isAscending) {
+        return new ResponseEntity<>(movieService.getBy(MovieQueryParams.empty(), new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
+    }
 
-    @GetMapping("/title/{title}/{page}/{orderBy}/{isAscending}")
+    @GetMapping({"/title/{title}/{page}", "/title/{title}/{page}/{orderBy}/{isAscending}"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this title", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this title found",
@@ -85,7 +85,7 @@ public class MovieController {
                 new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
-    @GetMapping("/director/{director}/{page}/{orderBy}/{isAscending}")
+    @GetMapping({"/director/{director}/{page}", "/director/{director}/{page}/{orderBy}/{isAscending}"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this director", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this director found",
@@ -101,7 +101,7 @@ public class MovieController {
                 new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
-    @GetMapping("/actor/{actor}/{page}/{orderBy}/{isAscending}")
+    @GetMapping({"/actor/{actor}/{page}", "/actor/{actor}/{page}/{orderBy}/{isAscending}"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this actor", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this actor found",
@@ -117,7 +117,7 @@ public class MovieController {
                 new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
-    @GetMapping("/genre/{genre}/{page}/{orderBy}/{isAscending}")
+    @GetMapping({"/genre/{genre}/{page}", "/genre/{genre}/{page}/{orderBy}/{isAscending}"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies page for this genre", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page for this genre found",
@@ -133,34 +133,35 @@ public class MovieController {
                 new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
-//    @GetMapping("/runtime/shorts/{page}/{orderBy}/{isAscending}")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "404", description = "Couldn't find requested short movies page", content = @Content),
-//            @ApiResponse(responseCode = "200", description = "Requested short movies page found",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
-//    })
-//    @Operation(summary = "Get page of short movies ordered", description = "Get page of short movies ordered by RATING, RELEASEYEAR or RUNTIME")
-//    public ResponseEntity<Page<MovieDTO>> getShorts(@PathVariable int page,
-//                                                    @PathVariable(required = false) String orderBy,
-//                                                    @PathVariable(required = false) boolean isAscending) {
-//        return new ResponseEntity<>(movieService.getShorts(new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
-//    }
-//
-//    @GetMapping("/runtime/full/{page}/{orderBy}/{isAscending}")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "404", description = "Couldn't find requested full length movies page", content = @Content),
-//            @ApiResponse(responseCode = "200", description = "Requested page of full length found",
-//                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
-//    })
-//    @Operation(summary = "Get page of full lenght movies ordered",
-//            description = "Get page of full length movies ordered by RATING, RELEASEYEAR or RUNTIME")
-//    public ResponseEntity<Page<MovieDTO>> getFullLength(@PathVariable int page,
-//                                                        @PathVariable(required = false) String orderBy,
-//                                                        @PathVariable(required = false) boolean isAscending) {
-//        return new ResponseEntity<>(movieService.getFullLength(new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
-//    }
+    @GetMapping({"/runtime/shorts/{page}", "/runtime/shorts/{page}/{orderBy}/{isAscending}"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Couldn't find requested short movies page", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Requested short movies page found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
+    })
+    @Operation(summary = "Get page of short movies ordered", description = "Get page of short movies ordered by RATING, RELEASEYEAR or RUNTIME")
+    public ResponseEntity<Page<MovieDTO>> getShorts(@PathVariable int page,
+                                                    @PathVariable(required = false) String orderBy,
+                                                    @PathVariable(required = false) boolean isAscending) {
+        return new ResponseEntity<>(movieService.getBy(MovieQueryParams.builder().maxRuntime(SHORTS_MAX_RUNTIME).build(),
+                new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
+    }
 
-    @GetMapping("/runtime/{min}/{max}/{page}/{orderBy}/{isAscending}")
+    @GetMapping({"/runtime/full/{page}", "/runtime/full/{page}/{orderBy}/{isAscending}"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404", description = "Couldn't find requested full length movies page", content = @Content),
+            @ApiResponse(responseCode = "200", description = "Requested page of full length found",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Page.class)))
+    })
+    @Operation(summary = "Get page of full lenght movies ordered",
+            description = "Get page of full length movies ordered by RATING, RELEASEYEAR or RUNTIME")
+    public ResponseEntity<Page<MovieDTO>> getFullLength(@PathVariable int page,
+                                                        @PathVariable(required = false) String orderBy,
+                                                        @PathVariable(required = false) boolean isAscending) {
+        return new ResponseEntity<>(movieService.getBy(MovieQueryParams.builder().minRuntime(SHORTS_MAX_RUNTIME).build(),new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
+    }
+
+    @GetMapping({"/runtime/{min}/{max}/{page}", "/runtime/{min}/{max}/{page}/{orderBy}/{isAscending}"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movies with runtime in requested range", content = @Content),
             @ApiResponse(responseCode = "200", description = "Requested page of movies with runtime in requested range found",
