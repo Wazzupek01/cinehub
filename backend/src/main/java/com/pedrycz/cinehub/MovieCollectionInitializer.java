@@ -1,8 +1,10 @@
 package com.pedrycz.cinehub;
 
 import com.pedrycz.cinehub.model.entities.Role;
+import com.pedrycz.cinehub.model.entities.User;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.repositories.RoleRepository;
+import com.pedrycz.cinehub.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -24,6 +26,7 @@ public class MovieCollectionInitializer implements CommandLineRunner {
     private final JobLauncher jobLauncher;
     private final MovieRepository movieRepository;
     private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
     private final Job initDatabaseJob;
 
     @Override
@@ -38,8 +41,18 @@ public class MovieCollectionInitializer implements CommandLineRunner {
 
         if (roleRepository.count() == 0) {
             roleRepository.saveAll(List.of(new Role(1, "ROLE_ADMIN"), new Role(0, "ROLE_USER")));
-
-            log.info("Database initialized");
         }
+
+        if (userRepository.count() == 0) {
+            userRepository.save(User.builder()
+                    .nickname("Admin01")
+                    .password("Password!01")
+                    .email("admin01@gmail.com")
+                    .role(roleRepository.findRoleByName("ROLE_ADMIN").orElse(new Role(1, "ROLE_ADMIN")))
+                    .build()
+            );
+        }
+
+        log.info("Database initialized");
     }
 }
