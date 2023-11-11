@@ -1,8 +1,8 @@
 spring:
-  data:
-    mongodb:
-      uri: mongodb://cinehub:cinehub@localhost:27017/cinehub_tests
-      auto-index-creation: true
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/test
+    username: test
+    password: test
   jpa:
     hibernate:
       ddl-auto: create-drop

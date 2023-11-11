@@ -1,6 +1,7 @@
 package com.pedrycz.cinehub.services.interfaces;
 
-import com.pedrycz.cinehub.controllers.GetParams;
+import com.pedrycz.cinehub.controllers.SortParams;
+import com.pedrycz.cinehub.model.ReviewQueryParams;
 import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import org.springframework.data.domain.Page;
 
@@ -11,10 +12,11 @@ public interface ReviewService {
 
     ReviewDTO add(String userToken, ReviewDTO reviewDTO);
     void remove(String userToken, UUID reviewId);
+    
     ReviewDTO getById(UUID id);
-    Page<ReviewDTO> getByUserId(UUID userId, GetParams getParams);
-    Page<ReviewDTO> getByMovieId(UUID movieId, GetParams getParams);
+    
+    Page<ReviewDTO> getBy(ReviewQueryParams params, SortParams sortParams);
     Set<ReviewDTO> getSetByMovieId(UUID movieId);
-    Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, GetParams getParams);
+//    Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, SortParams sortParams);
     Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(UUID movieId);
 }

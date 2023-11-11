@@ -1,16 +1,15 @@
 package com.pedrycz.cinehub.services;
 
-import com.pedrycz.cinehub.controllers.GetParams;
+import com.pedrycz.cinehub.controllers.SortParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
-import com.pedrycz.cinehub.exceptions.IllegalParamTypeException;
 import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.helpers.Constants;
+import com.pedrycz.cinehub.helpers.MovieSpecifications;
 import com.pedrycz.cinehub.helpers.SortUtils;
-import com.pedrycz.cinehub.model.GetByParam;
+import com.pedrycz.cinehub.model.MovieQueryParams;
 import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
-import com.pedrycz.cinehub.model.enums.GetMovieByParamName;
 import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
@@ -19,13 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.util.Pair;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.pedrycz.cinehub.model.enums.GetMovieByParamName.*;
 
 @Slf4j
 @Service
@@ -36,85 +33,60 @@ public class MovieServiceImpl implements MovieService {
     private final PosterService posterService;
     private final MovieToMovieDTOMapper movieDTOMapper;
 
-    @Override
-    public MovieDTO getById(UUID id) {
-        return movieDTOMapper.movieToMovieDTO(unwrapMovie(movieRepository.findMovieById(id), id.toString()));
-    }
 
     @Override
-    public Page<MovieDTO> getByTitleMatching(String title, GetParams getParams) {
-        return getBy(new GetByParam<>(GetMovieByParamName.TITLE, title), getParams);
-    }
+    public Page<MovieDTO> getBy(MovieQueryParams params, SortParams sortParams) {
+        PageRequest pageRequest = PageRequest.of(sortParams.getPageNum(), 20)
+                .withSort(SortUtils.getSort(sortParams));
 
-
-    @Override
-    public Page<MovieDTO> getAll(GetParams getParams) {
-        return getBy(new GetByParam<>(GetMovieByParamName.ALL, null), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getByDirector(String director, GetParams getParams) {
-        return getBy(new GetByParam<>(DIRECTOR, director), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getByActor(String actor, GetParams getParams) {
-        return getBy(new GetByParam<>(GetMovieByParamName.ACTOR, actor), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getByGenre(String genre, GetParams getParams) {
-        return getBy(new GetByParam<>(GENRE, genre), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getByRuntimeBetween(int min, int max, GetParams getParams) {
-        return getBy(new GetByParam<>(RUNTIME_BETWEEN, Pair.of(min, max)), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getShorts(GetParams getParams) {
-        return getBy(new GetByParam<>(GetMovieByParamName.SHORTS, null), getParams);
-    }
-
-    @Override
-    public Page<MovieDTO> getFullLength(GetParams getParams) {
-        return getBy(new GetByParam<>(GetMovieByParamName.FULL_LENGTH, null), getParams);
-    }
-
-    private <U> Page<MovieDTO> getBy(GetByParam<GetMovieByParamName, U> param, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20)
-                .withSort(SortUtils.getSort(getParams));
-
-        Page<Movie> moviePage = switch (param.name()) {
-            case DIRECTOR ->
-                    movieRepository.findMoviesByDirectorsIsContainingIgnoreCase((String) param.value(), pageRequest);
-            case GENRE -> movieRepository.findMoviesByGenresContainingIgnoreCase((String) param.value(), pageRequest);
-            case RUNTIME_BETWEEN -> {
-                if (!(param.value() instanceof Pair)) {
-                    throw new IllegalParamTypeException(param.value().getClass(), Pair.class);
-                }
-
-                yield movieRepository.findMoviesByRuntimeBetween(
-                        ((Pair<Integer, Integer>) param.value()).getFirst(),
-                        ((Pair<Integer, Integer>) param.value()).getSecond(),
-                        pageRequest
-                );
-            }
-            case SHORTS -> movieRepository.findMoviesByRuntimeLessThan(60, pageRequest);
-            case FULL_LENGTH -> movieRepository.findMoviesByRuntimeGreaterThanEqual(60, pageRequest);
-            case ACTOR -> movieRepository.findMoviesByActorsIsContainingIgnoreCase((String) param.value(), pageRequest);
-            case TITLE -> movieRepository.findMoviesByTitleIsContainingIgnoreCase((String) param.value(), pageRequest);
-            default -> movieRepository.findAll(pageRequest);
-        };
-
+        Specification<Movie> specification = getQuerySpecification(params);
+        Page<Movie> moviePage = movieRepository.findAll(specification, pageRequest);
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            throw new PageNotFoundException(getParams.getPageNum());
+            throw new PageNotFoundException(sortParams.getPageNum());
         } catch (NullPointerException e) {
-            throw new PageNotFoundException(getParams.getPageNum());
+            throw new PageNotFoundException(sortParams.getPageNum());
         }
+    }
+
+    private Specification<Movie> getQuerySpecification(MovieQueryParams params) {
+        Specification<Movie> specification = Specification.where(null);
+
+        if (params.getTitle() != null) {
+            specification = specification.and(MovieSpecifications.hasTitleLike(params.getTitle()));
+        }
+
+        if (params.getMinRuntime() != null && params.getMaxRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeBetween(params.getMinRuntime(), params.getMaxRuntime()));
+        }
+        
+        if(params.getMaxRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeUnder(params.getMaxRuntime()));
+        }
+
+        if(params.getMinRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeOver(params.getMinRuntime()));
+        }
+
+        if (params.getGenre() != null) {
+            specification = specification.and(MovieSpecifications.hasGenre(params.getGenre()));
+        }
+
+        if (params.getDirector() != null) {
+            specification = specification.and(MovieSpecifications.hasDirectorLike(params.getDirector()));
+        }
+
+        if (params.getActor() != null) {
+            specification = specification.and(MovieSpecifications.hasActorLike(params.getActor()));
+        }
+
+        return specification;
+    }
+
+    @Override
+    public MovieDTO getById(UUID id) {
+        return movieDTOMapper.movieToMovieDTO(unwrapMovie(movieRepository.findMovieById(id), id.toString()));
     }
 
     @Override
@@ -127,7 +99,7 @@ public class MovieServiceImpl implements MovieService {
                 movie.genres(), movie.directors(), movie.cast()));
 
         inserted.setPosterUrl(posterService.add(inserted.getId() + Constants.FILE_TYPE, movie.posterFile()));
-        
+
         log.info("Adding movie: {}", inserted.getTitle());
         return movieDTOMapper.movieToMovieDTO(movieRepository.save(inserted));
     }
@@ -149,7 +121,7 @@ public class MovieServiceImpl implements MovieService {
             log.info("Updating data for movie: {}", updatedMovie.getTitle());
             return movieDTOMapper.movieToMovieDTO(movieRepository.save(updatedMovie));
         }
-        
+
         throw new DocumentNotFoundException(id.toString());
     }
 

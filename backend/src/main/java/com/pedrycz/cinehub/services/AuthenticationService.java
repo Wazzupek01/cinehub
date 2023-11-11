@@ -1,12 +1,15 @@
 package com.pedrycz.cinehub.services;
 
+import com.pedrycz.cinehub.exceptions.RoleNotFoundException;
 import com.pedrycz.cinehub.model.dto.user.UserLoginDTO;
 import com.pedrycz.cinehub.model.dto.user.UserRegisterDTO;
-import com.pedrycz.cinehub.model.enums.Role;
+import com.pedrycz.cinehub.model.entities.Role;
 import com.pedrycz.cinehub.model.entities.User;
+import com.pedrycz.cinehub.repositories.RoleRepository;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.security.AuthenticationResponse;
 import com.pedrycz.cinehub.security.JwtService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,30 +23,26 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService,
-                                 AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
-
     public AuthenticationResponse register(UserRegisterDTO request) {
+
+        Role role = roleRepository.findRoleByName("ROLE_USER").orElseThrow(() -> new RoleNotFoundException("ROLE_USER"));
+        
         User user = User.builder()
                 .nickname(request.getNickname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .role(role)
                 .build();
-
+        
             userRepository.save(user);
 
             Map<String, Object> extraClaims = new HashMap<>();

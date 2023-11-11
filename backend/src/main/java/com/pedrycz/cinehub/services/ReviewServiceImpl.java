@@ -1,17 +1,17 @@
 package com.pedrycz.cinehub.services;
 
-import com.pedrycz.cinehub.controllers.GetParams;
+import com.pedrycz.cinehub.controllers.SortParams;
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.exceptions.PageNotFoundException;
 import com.pedrycz.cinehub.exceptions.ReviewAlreadyExistsException;
 import com.pedrycz.cinehub.exceptions.ReviewNotOwnedException;
+import com.pedrycz.cinehub.helpers.ReviewSpecifications;
 import com.pedrycz.cinehub.helpers.SortUtils;
-import com.pedrycz.cinehub.model.GetByParam;
+import com.pedrycz.cinehub.model.ReviewQueryParams;
 import com.pedrycz.cinehub.model.dto.review.ReviewDTO;
 import com.pedrycz.cinehub.model.entities.Movie;
 import com.pedrycz.cinehub.model.entities.Review;
 import com.pedrycz.cinehub.model.entities.User;
-import com.pedrycz.cinehub.model.enums.GetReviewByParamName;
 import com.pedrycz.cinehub.model.mappers.ReviewToReviewDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.repositories.ReviewRepository;
@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -46,42 +47,46 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getByUserId(UUID userId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.USER_ID, userId), getParams);
-    }
-
-    @Override
-    public Page<ReviewDTO> getByMovieId(UUID movieId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID, movieId), getParams);
-    }
-
-    @Override
     public Set<ReviewDTO> getSetByMovieId(UUID movieId) {
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewRepository.findReviewsByMovieId(movieId));
     }
 
-    @Override
-    public Page<ReviewDTO> getContainingContentByMovieId(UUID movieId, GetParams getParams) {
-        return getBy(new GetByParam<>(GetReviewByParamName.MOVIE_ID_WITH_CONTENT, movieId), getParams);
-    }
+    public Page<ReviewDTO> getBy(ReviewQueryParams params, SortParams sortParams) {
+        PageRequest pageRequest = PageRequest.of(sortParams.getPageNum(), 20)
+                .withSort(SortUtils.getSort(sortParams));
+        Specification<Review> specification = getQuerySpecification(params);
 
-    private <U> Page<ReviewDTO> getBy(GetByParam<GetReviewByParamName, U> param, GetParams getParams) {
-        PageRequest pageRequest = PageRequest.of(getParams.getPageNum(), 20)
-                .withSort(SortUtils.getSort(getParams));
-
-        Page<Review> reviewPage = switch(param.name()) {
-            case USER_ID -> reviewRepository.findReviewsByUserId((UUID) param.value(), pageRequest);
-            case MOVIE_ID -> reviewRepository.findReviewsByMovieId((UUID) param.value(), pageRequest);
-            case MOVIE_ID_WITH_CONTENT -> reviewRepository.findReviewsByMovieWithReviewNotEmpty(movieRepository.findMovieById((UUID) param.value()).get(), pageRequest);
-        };
+        Page<Review> reviewPage = reviewRepository.findAll(specification, pageRequest);
 
         try {
             if (!reviewPage.getContent().isEmpty()) return reviewPage.map(ReviewToReviewDTOMapper::reviewToReviewDTO);
-            else throw new PageNotFoundException(getParams.getPageNum());
+            else throw new PageNotFoundException(sortParams.getPageNum());
         } catch (NullPointerException e) {
-            throw new PageNotFoundException(getParams.getPageNum());
+            throw new PageNotFoundException(sortParams.getPageNum());
         }
     }
+
+    private Specification<Review> getQuerySpecification(ReviewQueryParams params) {
+        Specification<Review> specification = Specification.where(null);
+        if (params.getReviewId() != null) {
+            specification = specification.and(ReviewSpecifications.hasId(params.getReviewId()));
+        }
+
+        if (params.getMovieId() != null) {
+            specification = specification.and(ReviewSpecifications.isForMovie(params.getMovieId()));
+        }
+
+        if (params.getUserId() != null) {
+            specification = specification.and(ReviewSpecifications.createdByUserWithId(params.getUserId()));
+        }
+
+        if (params.getWithContent() != null && params.getWithContent() == Boolean.TRUE) {
+            specification = specification.and(ReviewSpecifications.hasContent());
+        }
+
+        return specification;
+    }
+
 
     @Override
     public ReviewDTO add(String userToken, ReviewDTO reviewDTO) {
@@ -99,7 +104,7 @@ public class ReviewServiceImpl implements ReviewService {
         movieRepository.save(movie);
 
         log.info("User {} added review for movie {}", user.getNickname(), movie.getTitle());
-        
+
         return ReviewToReviewDTOMapper.reviewToReviewDTO(review);
     }
 
@@ -109,21 +114,13 @@ public class ReviewServiceImpl implements ReviewService {
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
         if (review.getUser().getEmail().equals(email)) {
-//            Set<Review> userReviews = user.getMyReviews();
-//            userReviews.removeIf((r) -> r.getId().equals(reviewId));
-//            user.setMyReviews(userReviews);
-//            userRepository.save(user);
             Movie movie = review.getMovie();
-//            Set<Review> movieReviews = movie.getReviews();
-//            movieReviews.removeIf((r) -> r.getId().equals(reviewId));
-//            movie.setReviews(movieReviews);
-//            movieRepository.deleteMovieById(movie.getId());
             reviewRepository.delete(review);
             movie.updateRating();
             movieRepository.save(movie);
-            
+
             log.info("User {} removed his review for movie {}", user.getNickname(), movie.getTitle());
-            
+
         } else throw new ReviewNotOwnedException();
     }
 

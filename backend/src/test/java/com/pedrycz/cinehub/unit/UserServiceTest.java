@@ -2,8 +2,8 @@ package com.pedrycz.cinehub.unit;
 
 import com.pedrycz.cinehub.exceptions.DocumentNotFoundException;
 import com.pedrycz.cinehub.model.dto.user.UserInfoDTO;
+import com.pedrycz.cinehub.model.entities.Role;
 import com.pedrycz.cinehub.model.entities.User;
-import com.pedrycz.cinehub.model.enums.Role;
 import com.pedrycz.cinehub.repositories.UserRepository;
 import com.pedrycz.cinehub.services.UserServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -26,16 +26,17 @@ class UserServiceTest {
     private static final String EXPECTED_NICKNAME = "ExampleUser1";
     private static final String NON_EXISTING_NICKNAME = "NonExisting404";
 
-    private static final String EXPECTED_USER_ID = "507f1f77bcf86cd799439011";
+    private static final UUID EXPECTED_USER_ID = UUID.randomUUID();
 
     private static final String EMAIL_SUFFIX = "@test.com";
+    private static final Role ROLE_USER = new Role(0, "ROLE_USER");
 
     private static final Optional<User> EXPECTED_OPTIONAL_USER = Optional.of(User.builder()
-            .id(UUID.fromString(EXPECTED_USER_ID))
+            .id(EXPECTED_USER_ID)
             .nickname(EXPECTED_NICKNAME)
             .email(EXPECTED_NICKNAME + EMAIL_SUFFIX)
             .password("randomstring")
-            .role(Role.USER)
+            .role(ROLE_USER)
             .myReviews(Set.of())
             .watchLater(Set.of()).build());
 
@@ -66,15 +67,15 @@ class UserServiceTest {
     void getUserInfoByIdTest() {
         UserInfoDTO expectedUser = new UserInfoDTO(EXPECTED_NICKNAME, Set.of(), Set.of());
 
-        when(userRepository.findById(EXPECTED_USER_ID))
+        when(userRepository.findUserById(EXPECTED_USER_ID))
                 .thenReturn(EXPECTED_OPTIONAL_USER);
 
-        UserInfoDTO foundUser = userService.getUserInfoById(UUID.fromString(EXPECTED_USER_ID));
+        UserInfoDTO foundUser = userService.getUserInfoById(EXPECTED_USER_ID);
 
         assertThat(expectedUser.getNickname())
                 .isEqualTo(foundUser.getNickname());
 
-        assertThatThrownBy(() -> userService.getUserInfoById(UUID.fromString("444400004444")))
+        assertThatThrownBy(() -> userService.getUserInfoById(UUID.randomUUID()))
                 .isInstanceOf(DocumentNotFoundException.class);
     }
 }

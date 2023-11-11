@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -41,17 +43,23 @@ public class Movie {
 
     @NonNull
     @ElementCollection(targetClass = String.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name = "genres", joinColumns = @JoinColumn(name = "movie_id"))
+    @JoinColumn(name = "movie_id")
     private List<String> genres;
 
     @NonNull
     @ElementCollection(targetClass = String.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name = "directors", joinColumns = @JoinColumn(name = "movie_id"))
+    @JoinColumn(name = "movie_id")
     private List<String> directors;
 
     @NonNull
     @ElementCollection(targetClass = String.class)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(name = "actors", joinColumns = @JoinColumn(name = "movie_id"))
+    @JoinColumn(name = "movie_id")
     private List<String> actors;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)

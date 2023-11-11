@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,16 +34,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.cors().and().csrf().ignoringRequestMatchers(SecurityConstants.CSRF_IGNORED).and()
-                .authorizeHttpRequests()
-                .requestMatchers(SecurityConstants.AUTHORIZATION_WHITELIST)
-                .permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/**"))
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers(SecurityConstants.AUTHORIZATION_WHITELIST)
+                                .permitAll()
+                                .requestMatchers("/movies/add")
+                                .hasRole("ADMIN")
+                                .anyRequest()
+                                .authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(exceptionFilter, JwtAuthenticationFilter.class);
