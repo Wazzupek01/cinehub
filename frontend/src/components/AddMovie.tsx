@@ -1,12 +1,18 @@
-// import MovieService from "../services/MovieService";
+import MovieService from "../services/MovieService";
+import { useNavigate } from "react-router-dom";
 
 function AddMovie() {
-  // const movieService = new MovieService();
+  const navigate = useNavigate();
+  const movieService = new MovieService();
   const addMovieHandler = async (event: any) => {
     event.preventDefault();
-    // const form = event.currentTarget;
-    // console.log(await movieService.addMovie(new FormData(form)));
+    const form = event.currentTarget;
+    console.log(await movieService.addMovie(new FormData(form)));
   };
+
+  if(localStorage.getItem("role") !== "ROLE_ADMIN") {
+    navigate("/")
+  }
 
   return (
     <>

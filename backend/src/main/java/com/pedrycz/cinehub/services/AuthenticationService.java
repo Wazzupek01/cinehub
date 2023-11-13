@@ -50,7 +50,7 @@ public class AuthenticationService {
             String jwtToken = jwtService.generateToken(extraClaims, user);
             
             log.info("Registered user: {}", user.getNickname());
-            return new AuthenticationResponse(jwtToken, user.getNickname());
+            return new AuthenticationResponse(jwtToken, user.getNickname(), user.getRole().getName());
     }
 
     public AuthenticationResponse authenticate(UserLoginDTO request) {
@@ -66,6 +66,6 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(extraClaims, user);
         
         log.info("Authenticated user: {}", user.getNickname());
-        return new AuthenticationResponse(jwtToken, user.getNickname());
+        return new AuthenticationResponse(jwtToken, user.getNickname(), user.getRole().getName());
     }
 }

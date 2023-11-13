@@ -1,6 +1,6 @@
 class AuthenticationService {
   async loginUser(email: string, password: string) {
-    var headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const response = await fetch("http://localhost:8080/auth/authenticate", {
@@ -19,7 +19,7 @@ class AuthenticationService {
   }
 
   async registerUser(nickname: string, email: string, password: string) {
-    var headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const response = await fetch("http://localhost:8080/auth/register", {
@@ -39,7 +39,7 @@ class AuthenticationService {
   }
 
   async logout(){
-    var headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     const response = await fetch("http://localhost:8080/auth/logout", {

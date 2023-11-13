@@ -9,6 +9,7 @@ import MoviePage from "./pages/MoviePage";
 import AuthenticationPage from "./pages/AuthenticationPage";
 import UserService from "./services/UserService";
 import UserLists from "./components/profile/UserLists";
+import AddMovie from "./components/AddMovie";
 
 function App() {
   const movieService: MovieService = new MovieService();
@@ -146,6 +147,10 @@ function App() {
             if(params.nickname === undefined) throw new Error("No nickname defined");
             return await userService.getUserByNickname(params.nickname);
           }
+        },
+        {
+          path: "/add",
+          element: <AddMovie />
         }
       ],
     },

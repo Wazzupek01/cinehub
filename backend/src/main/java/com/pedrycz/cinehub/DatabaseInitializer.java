@@ -11,8 +11,8 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -21,13 +21,14 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MovieCollectionInitializer implements CommandLineRunner {
+public class DatabaseInitializer implements CommandLineRunner {
 
     private final JobLauncher jobLauncher;
+    private final Job initDatabaseJob;
     private final MovieRepository movieRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final Job initDatabaseJob;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -46,9 +47,17 @@ public class MovieCollectionInitializer implements CommandLineRunner {
         if (userRepository.count() == 0) {
             userRepository.save(User.builder()
                     .nickname("Admin01")
-                    .password("Password!01")
+                    .password(passwordEncoder.encode("Password!01"))
                     .email("admin01@gmail.com")
                     .role(roleRepository.findRoleByName("ROLE_ADMIN").orElse(new Role(1, "ROLE_ADMIN")))
+                    .build()
+            );
+            
+            userRepository.save(User.builder()
+                    .nickname("TestUser01")
+                    .password(passwordEncoder.encode("Password!01"))
+                    .email("testuser01@gmail.com")
+                    .role(roleRepository.findRoleByName("ROLE_USER").orElse(new Role(0, "ROLE_USER")))
                     .build()
             );
         }

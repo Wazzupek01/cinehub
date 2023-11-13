@@ -10,7 +10,6 @@ spring:
     defer-datasource-initialization: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         validation-mode: none
     show-sql: false

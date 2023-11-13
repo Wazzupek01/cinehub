@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public static User unwrapUser(Optional<User> user, String id){
+    public static User unwrapUser(Optional<User> user, String id) throws DocumentNotFoundException {
         if(user.isEmpty()) throw new DocumentNotFoundException(id);
         return user.get();
     }

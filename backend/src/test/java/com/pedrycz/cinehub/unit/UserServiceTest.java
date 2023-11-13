@@ -60,7 +60,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.getUserInfoByNickname(NON_EXISTING_NICKNAME))
                 .isInstanceOf(DocumentNotFoundException.class)
-                .hasMessageContaining("Document with parameter of value '" + NON_EXISTING_NICKNAME + "' not found");
+                .hasMessageContaining("Document with parameter of value " + NON_EXISTING_NICKNAME + " not found");
     }
 
     @Test

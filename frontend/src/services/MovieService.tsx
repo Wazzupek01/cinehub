@@ -6,10 +6,18 @@ class MovieService {
     "The SpongeBob Movie: Sponge Out of Water",
     "Inception",
     "Iron Man 2",
-    "Fear and Loathing in Las Vegas"
+    "Fear and Loathing in Las Vegas",
   ];
 
-  // TODO: Implement addMovie(formData: FormData)
+  async addMovie(formData: FormData) {
+    const res = await fetch("http://localhost:8080/movies/add", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+      redirect: "follow",
+      body: formData,
+    });
+  }
 
   private async getCarouselMovie(title: string): Promise<IMovieDto> {
     const res = await fetch(
@@ -22,19 +30,25 @@ class MovieService {
   async loadCarouselMovies() {
     const carouselMovies: IMovieDto[] = [];
     for (let i = 0; i < this.MainPageTitles.length; i++) {
-      const movie: IMovieDto = await this.getCarouselMovie(this.MainPageTitles[i]);
+      const movie: IMovieDto = await this.getCarouselMovie(
+        this.MainPageTitles[i]
+      );
       carouselMovies.push(movie);
     }
     return carouselMovies;
   }
 
-  async getMovieById(id: string): Promise<string>{
+  async getMovieById(id: string): Promise<string> {
     const response = await fetch("http://localhost:8080/movies/id/" + id);
     const data = await response.text();
     return data;
   }
 
-  async getAllMoviesSorted(page: number, orderBy: string, isAscending: string): Promise<string> {
+  async getAllMoviesSorted(
+    page: number,
+    orderBy: string,
+    isAscending: string
+  ): Promise<string> {
     const response = await fetch(
       "http://localhost:8080/movies/all/" +
         page +
@@ -47,7 +61,12 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByDirectorSorted(page: number, orderBy: string, filterValue: string | undefined, isAscending: string): Promise<string> {
+  async getMoviesByDirectorSorted(
+    page: number,
+    orderBy: string,
+    filterValue: string | undefined,
+    isAscending: string
+  ): Promise<string> {
     const response = await fetch(
       "http://localhost:8080/movies/director/" +
         filterValue +
@@ -55,7 +74,7 @@ class MovieService {
         page +
         "/" +
         orderBy +
-        "/"+
+        "/" +
         isAscending
     );
 
@@ -63,7 +82,12 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByActorSorted(page: number, orderBy: string, filterValue: string | undefined, isAscending: string): Promise<string> {
+  async getMoviesByActorSorted(
+    page: number,
+    orderBy: string,
+    filterValue: string | undefined,
+    isAscending: string
+  ): Promise<string> {
     const response = await fetch(
       "http://localhost:8080/movies/actor/" +
         filterValue +
@@ -71,7 +95,7 @@ class MovieService {
         page +
         "/" +
         orderBy +
-        "/"+
+        "/" +
         isAscending
     );
 
@@ -79,9 +103,13 @@ class MovieService {
     return data;
   }
 
-
-  async getMoviesByRuntimeSorted(page: number, orderBy: string, filterValue: string, isAscending: string): Promise<string>{
-    const values = filterValue.split('-');
+  async getMoviesByRuntimeSorted(
+    page: number,
+    orderBy: string,
+    filterValue: string,
+    isAscending: string
+  ): Promise<string> {
+    const values = filterValue.split("-");
 
     const response = await fetch(
       "http://localhost:8080/movies/runtime/" +
@@ -92,7 +120,7 @@ class MovieService {
         page +
         "/" +
         orderBy +
-        "/"+
+        "/" +
         isAscending
     );
 
@@ -100,7 +128,12 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByGenreSorted(page: number, orderBy: string, filterValue: string | undefined, isAscending: string): Promise<string> {
+  async getMoviesByGenreSorted(
+    page: number,
+    orderBy: string,
+    filterValue: string | undefined,
+    isAscending: string
+  ): Promise<string> {
     const response = await fetch(
       "http://localhost:8080/movies/genre/" +
         filterValue +
@@ -108,7 +141,7 @@ class MovieService {
         page +
         "/" +
         orderBy +
-        "/"+
+        "/" +
         isAscending
     );
 
@@ -124,7 +157,12 @@ class MovieService {
     return data;
   }
 
-  async getMoviesByTitleSorted(page: number, orderBy: string, filterValue: string | undefined, isAscending: string): Promise<string> {
+  async getMoviesByTitleSorted(
+    page: number,
+    orderBy: string,
+    filterValue: string | undefined,
+    isAscending: string
+  ): Promise<string> {
     const response = await fetch(
       "http://localhost:8080/movies/title/" +
         filterValue +
@@ -132,7 +170,7 @@ class MovieService {
         page +
         "/" +
         orderBy +
-        "/"+
+        "/" +
         isAscending
     );
 

@@ -71,13 +71,6 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
         log.error(String.join(",", error.getMessage()));
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
-    
-    @ExceptionHandler({IllegalParamTypeException.class})
-    private ResponseEntity<Object> handleIllegalParamTypeException(IllegalParamTypeException e) {
-        ErrorResponse error = new ErrorResponse(List.of(e.getMessage(),"Body of request is invalid"));
-        log.error(String.join(",", error.getMessage()));
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
 
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,

@@ -5,6 +5,7 @@ import AuthenticationService from "../../services/AuthenticationService";
 import Input from "../ui/Input";
 import { regexEmail, regexPassword } from "../../helpers/validation-constants";
 import { IInput } from "../../interfaces/IInput"
+import { IAuthenticationResponse } from "../../interfaces/IAuthenticationResponse";
 
 const Login = () => {
 
@@ -40,9 +41,12 @@ const Login = () => {
   const handleLogin = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (email.isValid && password.isValid) {
-      const nickname = await authService.loginUser(email.value, password.value);
-      if (nickname !== "") {
-        localStorage.setItem("nickname", nickname);
+      const authenticationResponse: IAuthenticationResponse = JSON.parse(await authService.loginUser(email.value, password.value));
+      const {nickname, role} = authenticationResponse;
+
+      if (nickname !== null || nickname !== "") {
+        localStorage.setItem("nickname", nickname!);
+        localStorage.setItem("role", role!)
         navigate("/");
       } else  {
           setError("Wrong credentials!")

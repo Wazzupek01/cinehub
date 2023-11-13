@@ -40,7 +40,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "User registered successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user credentials")
     })
-    public ResponseEntity<String> register(@Valid @RequestBody UserRegisterDTO request, HttpServletResponse response){
+    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody UserRegisterDTO request, HttpServletResponse response){
         AuthenticationResponse authenticationResponse = authenticationService.register(request);
         Cookie jwt = new Cookie("jwt", authenticationResponse.getToken());
         jwt.setMaxAge(24*60*60);
@@ -48,7 +48,7 @@ public class AuthenticationController {
         jwt.setHttpOnly(true);
         jwt.setPath("/");
         response.addCookie(jwt);
-        return new ResponseEntity<>(authenticationResponse.getNickname(), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @PostMapping("/authenticate")
@@ -58,7 +58,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "200", description = "User logged in successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid user credentials")
     })
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginDTO request, HttpServletResponse response){
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody UserLoginDTO request, HttpServletResponse response){
         AuthenticationResponse authenticationResponse = authenticationService.authenticate(request);
         Cookie jwt = new Cookie("jwt", authenticationResponse.getToken());
         jwt.setMaxAge(24*60*60);
@@ -66,7 +66,7 @@ public class AuthenticationController {
         jwt.setHttpOnly(true);
         jwt.setPath("/");
         response.addCookie(jwt);
-        return new ResponseEntity<>(authenticationResponse.getNickname(), HttpStatus.OK);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @GetMapping("/logout")
