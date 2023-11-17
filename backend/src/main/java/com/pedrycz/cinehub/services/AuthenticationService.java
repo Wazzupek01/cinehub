@@ -11,7 +11,6 @@ import com.pedrycz.cinehub.security.AuthenticationResponse;
 import com.pedrycz.cinehub.security.JwtService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,9 +36,9 @@ public class AuthenticationService {
         Role role = roleRepository.findRoleByName("ROLE_USER").orElseThrow(() -> new RoleNotFoundException("ROLE_USER"));
         
         User user = User.builder()
-                .nickname(request.getNickname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+                .nickname(request.nickname())
+                .email(request.email())
+                .password(passwordEncoder.encode(request.password()))
                 .role(role)
                 .build();
         
@@ -56,11 +55,11 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(UserLoginDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    request.getEmail(), request.getPassword()
+                    request.email(), request.password()
                 )
             );
 
-        User user =  userRepository.findUserByEmail(request.getEmail()).orElseThrow(() -> new UsernameNotFoundException(request.getEmail()));
+        User user =  userRepository.findUserByEmail(request.email()).orElseThrow(() -> new UsernameNotFoundException(request.email()));
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("ROLE", user.getRole());
         String jwtToken = jwtService.generateToken(extraClaims, user);
