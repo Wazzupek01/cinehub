@@ -55,8 +55,8 @@ class UserServiceTest {
 
         UserInfoDTO foundUser = userService.getUserInfoByNickname(EXPECTED_NICKNAME);
 
-        assertThat(expectedUser.getNickname())
-                .isEqualTo(foundUser.getNickname());
+        assertThat(expectedUser.nickname())
+                .isEqualTo(foundUser.nickname());
 
         assertThatThrownBy(() -> userService.getUserInfoByNickname(NON_EXISTING_NICKNAME))
                 .isInstanceOf(DocumentNotFoundException.class)
@@ -72,8 +72,8 @@ class UserServiceTest {
 
         UserInfoDTO foundUser = userService.getUserInfoById(EXPECTED_USER_ID);
 
-        assertThat(expectedUser.getNickname())
-                .isEqualTo(foundUser.getNickname());
+        assertThat(expectedUser.nickname())
+                .isEqualTo(foundUser.nickname());
 
         assertThatThrownBy(() -> userService.getUserInfoById(UUID.randomUUID()))
                 .isInstanceOf(DocumentNotFoundException.class);

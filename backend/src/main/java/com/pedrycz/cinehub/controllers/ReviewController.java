@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +29,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/review")
+@RequiredArgsConstructor
 @Tag(name = "Review", description = "Endpoints for reviews management")
 public class ReviewController {
 
     private final ReviewService reviewService;
-
-    @Autowired
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
 
     @PostMapping("/add")
     @ApiResponses({
@@ -61,7 +57,7 @@ public class ReviewController {
     })
     @Operation(summary = "Remove review", description = "Remove review if created by active user")
     public ResponseEntity<HttpStatus> removeReview(@CookieValue("jwt") String token, @PathVariable UUID reviewId) {
-        reviewService.remove(token, reviewId);
+        reviewService.deleteById(token, reviewId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

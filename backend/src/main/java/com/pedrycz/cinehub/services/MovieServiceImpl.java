@@ -14,6 +14,7 @@ import com.pedrycz.cinehub.model.mappers.MovieToMovieDTOMapper;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import com.pedrycz.cinehub.services.interfaces.PosterService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Page<MovieDTO> getBy(MovieQueryParams params, SortParams sortParams) {
-        PageRequest pageRequest = PageRequest.of(sortParams.getPageNum(), 20)
+        PageRequest pageRequest = PageRequest.of(sortParams.pageNum(), 20)
                 .withSort(SortUtils.getSort(sortParams));
 
         Specification<Movie> specification = getQuerySpecification(params);
@@ -44,41 +45,41 @@ public class MovieServiceImpl implements MovieService {
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
-            throw new PageNotFoundException(sortParams.getPageNum());
+            throw new PageNotFoundException(sortParams.pageNum());
         } catch (NullPointerException e) {
-            throw new PageNotFoundException(sortParams.getPageNum());
+            throw new PageNotFoundException(sortParams.pageNum());
         }
     }
 
     private Specification<Movie> getQuerySpecification(MovieQueryParams params) {
         Specification<Movie> specification = Specification.where(null);
 
-        if (params.getTitle() != null) {
-            specification = specification.and(MovieSpecifications.hasTitleLike(params.getTitle()));
+        if (params.title() != null) {
+            specification = specification.and(MovieSpecifications.hasTitleLike(params.title()));
         }
 
-        if (params.getMinRuntime() != null && params.getMaxRuntime() != null) {
-            specification = specification.and(MovieSpecifications.hasRuntimeBetween(params.getMinRuntime(), params.getMaxRuntime()));
-        }
-        
-        if(params.getMaxRuntime() != null) {
-            specification = specification.and(MovieSpecifications.hasRuntimeUnder(params.getMaxRuntime()));
+        if (params.minRuntime() != null && params.maxRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeBetween(params.minRuntime(), params.maxRuntime()));
         }
 
-        if(params.getMinRuntime() != null) {
-            specification = specification.and(MovieSpecifications.hasRuntimeOver(params.getMinRuntime()));
+        if (params.maxRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeUnder(params.maxRuntime()));
         }
 
-        if (params.getGenre() != null) {
-            specification = specification.and(MovieSpecifications.hasGenre(params.getGenre()));
+        if (params.minRuntime() != null) {
+            specification = specification.and(MovieSpecifications.hasRuntimeOver(params.minRuntime()));
         }
 
-        if (params.getDirector() != null) {
-            specification = specification.and(MovieSpecifications.hasDirectorLike(params.getDirector()));
+        if (params.genre() != null) {
+            specification = specification.and(MovieSpecifications.hasGenre(params.genre()));
         }
 
-        if (params.getActor() != null) {
-            specification = specification.and(MovieSpecifications.hasActorLike(params.getActor()));
+        if (params.director() != null) {
+            specification = specification.and(MovieSpecifications.hasDirectorLike(params.director()));
+        }
+
+        if (params.actor() != null) {
+            specification = specification.and(MovieSpecifications.hasActorLike(params.actor()));
         }
 
         return specification;
@@ -105,6 +106,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public MovieDTO updateById(UUID id, AddMovieDTO movieDTO) {
         Optional<Movie> movie = movieRepository.findMovieById(id);
         if (movie.isPresent()) {
@@ -126,11 +128,12 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public void deleteById(UUID id) {
         String posterUrl = unwrapMovie(movieRepository.findMovieById(id), id.toString()).getPosterUrl();
         if (posterUrl.contains(Constants.SERVER_ADDRESS)) posterService.deleteByFilename(id + Constants.FILE_TYPE);
         log.info("Deleting movie with id: {}", id);
-        movieRepository.deleteMovieById(id);
+        movieRepository.deleteById(id);
     }
 
     public static Movie unwrapMovie(Optional<Movie> document, String paramValue) {

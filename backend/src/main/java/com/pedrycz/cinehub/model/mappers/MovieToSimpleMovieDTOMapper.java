@@ -6,5 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface MovieToSimpleMovieDTOMapper {
+    
     SimpleMovieDTO movieToSimpleMovieDTO(Movie movie);
 }

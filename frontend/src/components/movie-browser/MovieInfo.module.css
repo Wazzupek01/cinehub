@@ -4,6 +4,16 @@
   align-items: right;
 }
 
+.title {
+  display: flex;
+  flex-direction: row;
+}
+
+.title div {
+  margin-left: 20px;
+  cursor: pointer;
+}
+
 @media (max-width: 900px){
   .MovieInfo_container{
     align-items: center;

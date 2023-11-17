@@ -13,12 +13,13 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public abstract class UserToUserInfoDTOMapper {
+    
     @Named("UserToUserInfoDTO")
-    public UserInfoDTO UserToUserInfoDTO(User user){
+    public UserInfoDTO UserToUserInfoDTO(User user) {
         MovieToMovieDTOMapper movieMapper = Mappers.getMapper(MovieToMovieDTOMapper.class);
         ReviewWithMovieDTOMapper reviewMapper = Mappers.getMapper(ReviewWithMovieDTOMapper.class);
         Set<MovieDTO> movieDTOs = new HashSet<>();
-        for(Movie m: user.getWatchLater()){
+        for (Movie m : user.getWatchLater()) {
             movieDTOs.add(movieMapper.movieToMovieDTO(m));
         }
 

@@ -50,7 +50,7 @@ function UserMenu() {
 
   return (
     <div>
-        <span>{nickname}</span>
+        <span style={{"cursor":"default"}}>{nickname}</span>
         <IconButton
           size="large"
           aria-label="account of current user"

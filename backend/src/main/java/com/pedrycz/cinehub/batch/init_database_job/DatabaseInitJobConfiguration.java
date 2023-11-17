@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 @Configuration
 @RequiredArgsConstructor
 public class DatabaseInitJobConfiguration {
-    
+
     private final BsonMovieObjectReader movieObjectReader;
 
     @Bean
@@ -46,7 +46,7 @@ public class DatabaseInitJobConfiguration {
                 .skipLimit(10000)
                 .build();
     }
-    
+
     @Bean
     @SneakyThrows
     JsonItemReader<Movie> reader() {
@@ -56,7 +56,7 @@ public class DatabaseInitJobConfiguration {
         reader.setName("movieItemReader");
         return reader;
     }
-    
+
     @Bean
     ItemWriter<Movie> writer(EntityManager entityManager) {
         JpaItemWriter<Movie> writer = new JpaItemWriter<>();

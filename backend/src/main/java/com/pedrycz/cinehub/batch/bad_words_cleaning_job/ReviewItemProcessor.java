@@ -19,29 +19,34 @@ import org.springframework.web.client.RestTemplate;
 public class ReviewItemProcessor implements ItemProcessor<Review, Review> {
 
     private static final String URL_TEMPLATE = "https://api.api-ninjas.com/v1/profanityfilter?text=%s";
-    
+
     private final RestTemplate restTemplate;
-    
+
     @Value("${security.profanity-filter-api-key}")
     private String apiKey;
-    
+
     @Override
-    public Review process(Review item) throws Exception {
+    public Review process(Review item) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Api-Key", apiKey);
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
-        
+
         String url = String.format(URL_TEMPLATE, item.getContent());
-        
-        ResponseEntity<BadWordApiResponseDto> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, BadWordApiResponseDto.class);   
-        
-        if(response.hasBody()) {
-            if(!item.getContent().equals(response.getBody().getCensored())) {
-                item.setContent(response.getBody().getCensored());
-                log.info("Censored comment: {}", response.getBody().getCensored());
+
+        ResponseEntity<BadWordApiResponseDto> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                httpEntity,
+                BadWordApiResponseDto.class
+        );
+
+        if (response.hasBody() && response.getBody() != null) {
+            if (!item.getContent().equals(response.getBody().censored())) {
+                item.setContent(response.getBody().censored());
+                log.info("Censored comment: {}", response.getBody().censored());
             }
         }
-        
+
         return item;
     }
 }

@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -29,14 +30,12 @@ public class User implements UserDetails {
     private String nickname;
 
     @Email
-//    @UniqueEmail
     private String email;
 
-//    @Password
     private String password;
 
     @ManyToOne
-    @JoinColumn(name="role_id", nullable=false)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @ManyToMany

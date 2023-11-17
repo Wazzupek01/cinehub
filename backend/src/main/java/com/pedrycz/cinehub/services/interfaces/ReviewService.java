@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ReviewService {
 
     ReviewDTO add(String userToken, ReviewDTO reviewDTO);
-    void remove(String userToken, UUID reviewId);
+    void deleteById(String userToken, UUID reviewId);
     
     ReviewDTO getById(UUID id);
     

@@ -11,4 +11,5 @@ public record ReviewWithMovieDTO(
         LocalDateTime timestamp,
         String content,
         SimpleMovieDTO movie
-){}
+) {
+}

@@ -2,7 +2,6 @@ package com.pedrycz.cinehub.batch.bad_words_cleaning_job;
 
 import com.pedrycz.cinehub.model.entities.Review;
 import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -15,12 +14,11 @@ import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilde
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 public class BadWordsCleaningJobConfiguration {
-    
+
     @Bean
     Job badWordsCleaningJob(JobRepository jobRepository,
                             @Qualifier("removeBadWordsStep") Step removeBadWordsStep) {
@@ -42,7 +40,7 @@ public class BadWordsCleaningJobConfiguration {
                 .writer(writer)
                 .build();
     }
-    
+
     @Bean
     ItemReader<Review> reviewReader(EntityManager entityManager) {
         return new JpaCursorItemReaderBuilder<Review>()

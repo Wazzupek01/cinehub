@@ -1,15 +1,16 @@
 .border_gradient{
     background: linear-gradient(120deg, var(--violet) 40%, var(--light-blue) 100%);
     padding: 2px;
-    border: 0px solid;
+    border: 0 solid;
     border-radius: 15px;
 }
 .search_module{
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
     padding: 3px;
-    border: 0px solid;
+    border: 0 solid;
     border-radius: 15px;
     background-color: var(--bg-darker);
     transition-duration: 0.3s;

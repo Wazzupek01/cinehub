@@ -8,6 +8,7 @@ function RecentReviews(props: any) {
       {(props.reviews !== undefined) && props.reviews.map((review: any) => (
         <Review
           key={review.id}
+          reviewId={review.id}
           rating={review.rating}
           userId={review.userId}
           content={review.content}

@@ -26,7 +26,7 @@ public class Review {
     private Integer rating;
     private String content;
     private LocalDateTime timestamp;
-    
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
     private Movie movie;

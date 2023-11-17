@@ -93,7 +93,7 @@ function RateMovie(props: any) {
     <div className={classes.RateMovie_container}>
       {ratedByActiveUser && <span>Your rating: </span> }
       <div className={classes.verticalFlex}>{rating}
-      {!isReadOnly && <div>{watchListButton}</div>}
+      {!isReadOnly && <div className={classes.pointer}>{watchListButton}</div>}
       </div>
       
       {!isReadOnly && (

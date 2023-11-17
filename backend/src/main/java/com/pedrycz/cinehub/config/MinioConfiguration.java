@@ -39,7 +39,7 @@ public class MinioConfiguration {
                 .endpoint(minioUrl)
                 .build();
         try {
-            if (!client.bucketExists(BucketExistsArgs.builder().bucket("cinehub").build())){
+            if (!client.bucketExists(BucketExistsArgs.builder().bucket("cinehub").build())) {
                 client.makeBucket(MakeBucketArgs.builder().bucket("cinehub").build());
             }
         } catch (ServerException | InsufficientDataException | ErrorResponseException | IOException |

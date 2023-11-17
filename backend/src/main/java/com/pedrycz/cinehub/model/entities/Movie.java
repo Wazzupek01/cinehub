@@ -64,10 +64,10 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<Review> reviews;
-    
+
     @ManyToMany(mappedBy = "watchLater")
     private Set<User> watchedLater;
-    
+
 
     public Movie(@NotNull String title, @NotNull String plot, @NotNull String releaseYear, Integer runtime, String posterUrl,
                  @NotNull List<String> genres, @NotNull List<String> directors, @NotNull List<String> actors) {
@@ -83,12 +83,18 @@ public class Movie {
         this.reviews = new HashSet<>();
     }
 
-    public void updateRating(){
+    public void updateRating() {
         float rating = 0;
 
-        for(Review r: reviews){
+        if (reviews.isEmpty()) {
+            this.rating = rating;
+            return;
+        }
+
+        for (Review r : reviews) {
             rating += r.getRating();
         }
+        
         rating /= reviews.size();
 
         this.rating = rating;

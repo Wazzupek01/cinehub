@@ -4,10 +4,18 @@
   max-width: 300px;
 }
 
+.RateMovie_container input[type="submit"] {
+  cursor: pointer;
+}
+
 .RateMovie_container * {
   font-family: 'Roboto';
 }
 .verticalFlex {
   display: flex;
   flex-direction: row;
+}
+
+.pointer {
+  cursor: pointer
 }

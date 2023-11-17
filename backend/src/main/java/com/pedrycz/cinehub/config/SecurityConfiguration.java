@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                         auth
                                 .requestMatchers(SecurityConstants.AUTHORIZATION_WHITELIST)
                                 .permitAll()
-                                .requestMatchers("/movies/add")
+                                .requestMatchers(SecurityConstants.ADMIN_ONLY)
                                 .hasRole("ADMIN")
                                 .anyRequest()
                                 .authenticated()

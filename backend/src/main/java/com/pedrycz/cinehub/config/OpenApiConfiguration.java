@@ -21,8 +21,10 @@ public class OpenApiConfiguration {
         return new OpenAPI()
                 .info(new Info()
                         .title("CineHub API")
-                        .description("Movie API allowing users to browse movies stored in database, posting their opinions " +
-                                "and adding movies not included in database")
+                        .description("""
+                                Movie API allowing users to browse movies stored in database, posting their reviews
+                                and adding movies not included in database
+                                """)
                         .version("v1.0"));
     }
 }

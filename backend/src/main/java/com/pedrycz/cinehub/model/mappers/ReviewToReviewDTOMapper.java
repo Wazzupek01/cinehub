@@ -12,15 +12,15 @@ import java.util.Set;
 public interface ReviewToReviewDTOMapper {
 
     @Named("reviewToReviewDTO")
-    static ReviewDTO reviewToReviewDTO(Review review){
-        return new ReviewDTO(review.getId(), review.getRating(),review.getTimestamp(),
+    static ReviewDTO reviewToReviewDTO(Review review) {
+        return new ReviewDTO(review.getId(), review.getRating(), review.getTimestamp(),
                 review.getContent(), review.getMovie().getId(), review.getUser().getId());
     }
 
     @Named("reviewSetToReviewDTOSet")
-    static Set<ReviewDTO> reviewSetToReviewDTOSet(Set<Review> reviews){
+    static Set<ReviewDTO> reviewSetToReviewDTOSet(Set<Review> reviews) {
         Set<ReviewDTO> reviewDTOs = new HashSet<>();
-        for(Review r: reviews){
+        for (Review r : reviews) {
             reviewDTOs.add(reviewToReviewDTO(r));
         }
         return reviewDTOs;

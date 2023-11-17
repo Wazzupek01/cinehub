@@ -7,7 +7,8 @@ function AddMovie() {
   const addMovieHandler = async (event: any) => {
     event.preventDefault();
     const form = event.currentTarget;
-    console.log(await movieService.addMovie(new FormData(form)));
+    const movie = JSON.parse(await movieService.addMovie(new FormData(form)));
+    if(movie.id != null) navigate("/movie/" + movie.id)
   };
 
   if(localStorage.getItem("role") !== "ROLE_ADMIN") {

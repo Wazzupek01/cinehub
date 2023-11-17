@@ -17,6 +17,22 @@ class MovieService {
       redirect: "follow",
       body: formData,
     });
+
+    const data = await res.text();
+    return data;
+  }
+
+  async deleteMovieById(id: string) {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    fetch("http://localhost:8080/movies/delete/" + id, {
+      method: "DELETE",
+      headers: headers,
+      mode: "cors",
+      credentials: "include",
+      redirect: "follow"
+    })
   }
 
   private async getCarouselMovie(title: string): Promise<IMovieDto> {

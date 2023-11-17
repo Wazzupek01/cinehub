@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     public Page<ReviewDTO> getBy(ReviewQueryParams params, SortParams sortParams) {
-        PageRequest pageRequest = PageRequest.of(sortParams.getPageNum(), 20)
+        PageRequest pageRequest = PageRequest.of(sortParams.pageNum(), 20)
                 .withSort(SortUtils.getSort(sortParams));
         Specification<Review> specification = getQuerySpecification(params);
 
@@ -60,27 +60,27 @@ public class ReviewServiceImpl implements ReviewService {
 
         try {
             if (!reviewPage.getContent().isEmpty()) return reviewPage.map(ReviewToReviewDTOMapper::reviewToReviewDTO);
-            else throw new PageNotFoundException(sortParams.getPageNum());
+            else throw new PageNotFoundException(sortParams.pageNum());
         } catch (NullPointerException e) {
-            throw new PageNotFoundException(sortParams.getPageNum());
+            throw new PageNotFoundException(sortParams.pageNum());
         }
     }
 
     private Specification<Review> getQuerySpecification(ReviewQueryParams params) {
         Specification<Review> specification = Specification.where(null);
-        if (params.getReviewId() != null) {
-            specification = specification.and(ReviewSpecifications.hasId(params.getReviewId()));
+        if (params.reviewId() != null) {
+            specification = specification.and(ReviewSpecifications.hasId(params.reviewId()));
         }
 
-        if (params.getMovieId() != null) {
-            specification = specification.and(ReviewSpecifications.isForMovie(params.getMovieId()));
+        if (params.movieId() != null) {
+            specification = specification.and(ReviewSpecifications.isForMovie(params.movieId()));
         }
 
-        if (params.getUserId() != null) {
-            specification = specification.and(ReviewSpecifications.createdByUserWithId(params.getUserId()));
+        if (params.userId() != null) {
+            specification = specification.and(ReviewSpecifications.createdByUserWithId(params.userId()));
         }
 
-        if (params.getWithContent() != null && params.getWithContent() == Boolean.TRUE) {
+        if (params.withContent() != null && params.withContent() == Boolean.TRUE) {
             specification = specification.and(ReviewSpecifications.hasContent());
         }
 
@@ -109,7 +109,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void remove(String userToken, UUID reviewId) {
+    public void deleteById(String userToken, UUID reviewId) {
         String email = jwtService.extractUsername(userToken);
         User user = UserServiceImpl.unwrapUser(userRepository.findUserByEmail(email), email);
         Review review = unwrapReview(reviewRepository.findReviewById(reviewId), reviewId);
@@ -121,13 +121,20 @@ public class ReviewServiceImpl implements ReviewService {
 
             log.info("User {} removed his review for movie {}", user.getNickname(), movie.getTitle());
 
+        } else if (user.getRole().getName().equals("ROLE_ADMIN")) {
+            Movie movie = review.getMovie();
+            reviewRepository.delete(review);
+            movie.updateRating();
+            movieRepository.save(movie);
+            log.info("Administrator removed review for movie {}", movie.getTitle());
         } else throw new ReviewNotOwnedException();
     }
 
     @Override
     public Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(UUID movieId) {
         PageRequest pageRequest = PageRequest.of(0, 5).withSort(Sort.by("timestamp").descending());
-        Page<Review> reviewPage = reviewRepository.findReviewsByMovieWithReviewNotEmpty(movieRepository.findMovieById(movieId).get(), pageRequest);
+        Movie movie = movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId.toString()));
+        Page<Review> reviewPage = reviewRepository.findReviewsByMovieWithReviewNotEmpty(movie, pageRequest);
         Set<Review> reviewSet = new HashSet<>(reviewPage.getContent());
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewSet);
     }

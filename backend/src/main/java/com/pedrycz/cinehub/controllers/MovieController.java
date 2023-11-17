@@ -3,7 +3,6 @@ package com.pedrycz.cinehub.controllers;
 import com.pedrycz.cinehub.model.MovieQueryParams;
 import com.pedrycz.cinehub.model.dto.movie.AddMovieDTO;
 import com.pedrycz.cinehub.model.dto.movie.MovieDTO;
-import com.pedrycz.cinehub.security.JwtService;
 import com.pedrycz.cinehub.services.interfaces.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,8 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,25 +23,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/movies")
-@Tag(name = "Movie", description = "Requests for getting single movies, or pages of movies, updating existing, and adding new movies.")
+@RequiredArgsConstructor
+@Tag(name = "Movie", description = "Requests for getting single movies, or pages of movies, updating existing and adding new movies.")
 public class MovieController {
 
     private static final int SHORTS_MAX_RUNTIME = 60;
-    private final MovieService movieService;
-    private final JwtService jwtService;
 
-    @Autowired
-    public MovieController(MovieService movieService, JwtService jwtService) {
-        this.movieService = movieService;
-        this.jwtService = jwtService;
-    }
+    private final MovieService movieService;
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "404", description = "Couldn't find requested movie", content = @Content),
@@ -158,7 +151,7 @@ public class MovieController {
     public ResponseEntity<Page<MovieDTO>> getFullLength(@PathVariable int page,
                                                         @PathVariable(required = false) String orderBy,
                                                         @PathVariable(required = false) boolean isAscending) {
-        return new ResponseEntity<>(movieService.getBy(MovieQueryParams.builder().minRuntime(SHORTS_MAX_RUNTIME).build(),new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
+        return new ResponseEntity<>(movieService.getBy(MovieQueryParams.builder().minRuntime(SHORTS_MAX_RUNTIME).build(), new SortParams(page, orderBy, isAscending)), HttpStatus.OK);
     }
 
     @GetMapping({"/runtime/{min}/{max}/{page}", "/runtime/{min}/{max}/{page}/{orderBy}/{isAscending}"})
@@ -195,10 +188,7 @@ public class MovieController {
             @ApiResponse(responseCode = "204", description = "Movie deleted", content = @Content)
     })
     @Operation(summary = "Delete movie", description = "Delete movie")
-    public ResponseEntity<HttpStatus> deleteMovie(@PathVariable UUID id, @CookieValue("jwt") String token) {
-        if (jwtService.extractAllClaims(token).get("ROLE") != "ADMIN") {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+    public ResponseEntity<HttpStatus> deleteMovie(@PathVariable UUID id) {
         movieService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

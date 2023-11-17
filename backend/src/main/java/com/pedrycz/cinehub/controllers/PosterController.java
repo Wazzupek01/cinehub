@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/poster")
+@RequiredArgsConstructor
 @Tag(name = "Poster", description = "Get single poster for requested movie from Minio Storage only")
 public class PosterController {
 
     private final PosterService posterService;
-
-    @Autowired
-    public PosterController(PosterService posterService) {
-        this.posterService = posterService;
-    }
 
     @GetMapping(value = "/{filename}")
     @ApiResponses(value = {

@@ -10,15 +10,16 @@ import java.util.Set;
 
 @Mapper
 public abstract class ReviewWithMovieDTOMapper {
-    public static ReviewWithMovieDTO ReviewToReviewWithMovieDTOMapper(Review review){
+    
+    public static ReviewWithMovieDTO ReviewToReviewWithMovieDTOMapper(Review review) {
         MovieToSimpleMovieDTOMapper movieMapper = Mappers.getMapper(MovieToSimpleMovieDTOMapper.class);
         return new ReviewWithMovieDTO(review.getId(), review.getRating(), review.getTimestamp(), review.getContent(),
                 movieMapper.movieToSimpleMovieDTO(review.getMovie()));
     }
 
-    public Set<ReviewWithMovieDTO> ReviewSetToReviewWithMovieDTOSetMapper(Set<Review> reviews){
+    public Set<ReviewWithMovieDTO> ReviewSetToReviewWithMovieDTOSetMapper(Set<Review> reviews) {
         Set<ReviewWithMovieDTO> reviewDTOs = new HashSet<>();
-        for(Review r: reviews){
+        for (Review r : reviews) {
             reviewDTOs.add(ReviewToReviewWithMovieDTOMapper(r));
         }
         return reviewDTOs;
