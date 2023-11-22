@@ -7,7 +7,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="cinehub" value="978b3cb4-7c13-4bba-83b1-6bb2f6425c71" />
-          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="entityManagerFactory" value="978b3cb4-7c13-4bba-83b1-6bb2f6425c71" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>

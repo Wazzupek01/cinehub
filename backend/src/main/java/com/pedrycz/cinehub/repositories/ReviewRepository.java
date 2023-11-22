@@ -18,5 +18,5 @@ public interface ReviewRepository extends JpaRepository<Review, String>, JpaSpec
     Set<Review> findReviewsByMovieId(UUID movieId);
 
     @Query("SELECT r FROM Review r WHERE r.movie = ?1 and r.content != '' and r.content != null")
-    Page<Review> findReviewsByMovieWithReviewNotEmpty(Movie MovieId, Pageable pageable);
+    Page<Review> findReviewsByMovieWithContentNotEmpty(Movie Movie, Pageable pageable);
 }

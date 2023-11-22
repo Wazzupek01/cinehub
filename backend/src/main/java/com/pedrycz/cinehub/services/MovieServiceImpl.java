@@ -18,10 +18,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,9 +41,10 @@ public class MovieServiceImpl implements MovieService {
     public Page<MovieDTO> getBy(MovieQueryParams params, SortParams sortParams) {
         PageRequest pageRequest = PageRequest.of(sortParams.pageNum(), 20)
                 .withSort(SortUtils.getSort(sortParams));
+        Page<Movie> moviePage;
 
         Specification<Movie> specification = getQuerySpecification(params);
-        Page<Movie> moviePage = movieRepository.findAll(specification, pageRequest);
+        moviePage = movieRepository.findAll(specification, pageRequest);
 
         try {
             if (!moviePage.getContent().isEmpty()) return moviePage.map(movieDTOMapper::movieToMovieDTO);
@@ -70,17 +73,17 @@ public class MovieServiceImpl implements MovieService {
             specification = specification.and(MovieSpecifications.hasRuntimeOver(params.minRuntime()));
         }
 
-        if (params.genre() != null) {
-            specification = specification.and(MovieSpecifications.hasGenre(params.genre()));
-        }
-
-        if (params.director() != null) {
-            specification = specification.and(MovieSpecifications.hasDirectorLike(params.director()));
-        }
-
-        if (params.actor() != null) {
-            specification = specification.and(MovieSpecifications.hasActorLike(params.actor()));
-        }
+//        if (params.genre() != null) {
+//            specification = specification.and(MovieSpecifications.hasGenre(params.genre()));
+//        }
+//
+//        if (params.director() != null) {
+//            specification = specification.and(MovieSpecifications.hasDirectorLike(params.director()));
+//        }
+//
+//        if (params.actor() != null) {
+//            specification = specification.and(MovieSpecifications.hasActorLike(params.actor()));
+//        }
 
         return specification;
     }

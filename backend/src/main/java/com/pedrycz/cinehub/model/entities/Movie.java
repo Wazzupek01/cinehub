@@ -17,6 +17,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Movie {
 
     @Id

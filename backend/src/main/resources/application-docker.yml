@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/cinehub
+    username: cinehub
+    password: cinehub
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      order_inserts: true
+      order_updates: true
+      hibernate:
+        jdbc:
+          batch_size: 100
+          batch_versioned_data: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+minio:
+  bucket:
+    name: cinehub
+  access:
+    key: root
+    secret: password
+  url: http://minio:9000
+
+security:
+  secret-key: "566B59703373357638792F423F4528482B4D6251655468576D5A7134743777397A24432646294A404E635266556A586E3272357538782F4125442A472D4B6150"
+  profanity-filter-api-key: "fwVZG3ZX63cg+JFMqFKOWw==RhwYy3gKXfkB37hs"
+  key-expiration-time: 86400

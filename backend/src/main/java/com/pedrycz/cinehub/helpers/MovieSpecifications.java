@@ -12,20 +12,20 @@ public class MovieSpecifications {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), STR. "%\{ title.toLowerCase() }%" );
     }
 
-    public static Specification<Movie> hasDirectorLike(String director) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("directors")), STR. "%\{ director.toLowerCase() }%" );
-    }
-
-    public static Specification<Movie> hasActorLike(String actor) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("actors")), STR. "%\{ actor.toLowerCase() }%" );
-    }
-
-    public static Specification<Movie> hasGenre(String genre) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(criteriaBuilder.lower(root.get("genres")), STR. "%\{ genre.toLowerCase() }%" );
-    }
+//    public static Specification<Movie> hasDirectorLike(String director) {
+//        return (root, query, criteriaBuilder) ->
+//                criteriaBuilder.like(criteriaBuilder.lower(root.get("directors")), STR. "%\{ director.toLowerCase() }%" );
+//    }
+//
+//    public static Specification<Movie> hasActorLike(String actor) {
+//        return (root, query, criteriaBuilder) ->
+//                criteriaBuilder.like(criteriaBuilder.lower(root.get("actors")), STR. "%\{ actor.toLowerCase() }%" );
+//    }
+//
+//    public static Specification<Movie> hasGenre(String genre) {
+//        return (root, query, criteriaBuilder) ->
+//                criteriaBuilder.like(criteriaBuilder.lower(root.get("genres")), STR. "%\{ genre.toLowerCase() }%" );
+//    }
 
     public static Specification<Movie> hasRuntimeBetween(int min, int max) {
         return (root, query, criteriaBuilder) ->

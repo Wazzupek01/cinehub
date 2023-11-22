@@ -134,7 +134,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Set<ReviewDTO> getSetOfMostRecentWithContentByMovieId(UUID movieId) {
         PageRequest pageRequest = PageRequest.of(0, 5).withSort(Sort.by("timestamp").descending());
         Movie movie = movieRepository.findMovieById(movieId).orElseThrow(() -> new DocumentNotFoundException(movieId.toString()));
-        Page<Review> reviewPage = reviewRepository.findReviewsByMovieWithReviewNotEmpty(movie, pageRequest);
+        Page<Review> reviewPage = reviewRepository.findReviewsByMovieWithContentNotEmpty(movie, pageRequest);
         Set<Review> reviewSet = new HashSet<>(reviewPage.getContent());
         return ReviewToReviewDTOMapper.reviewSetToReviewDTOSet(reviewSet);
     }
