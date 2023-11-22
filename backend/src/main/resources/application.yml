@@ -12,6 +12,10 @@ spring:
       hibernate:
         format_sql: true
         validation-mode: none
+        enable_lazy_load_no_trans: true
+        event:
+          merge:
+            entity_copy_observer: allow
     show-sql: false
   main:
     web-application-type: servlet

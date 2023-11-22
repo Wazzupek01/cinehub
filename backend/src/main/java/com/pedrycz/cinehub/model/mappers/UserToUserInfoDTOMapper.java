@@ -16,11 +16,10 @@ public abstract class UserToUserInfoDTOMapper {
     
     @Named("UserToUserInfoDTO")
     public UserInfoDTO UserToUserInfoDTO(User user) {
-        MovieToMovieDTOMapper movieMapper = Mappers.getMapper(MovieToMovieDTOMapper.class);
         ReviewWithMovieDTOMapper reviewMapper = Mappers.getMapper(ReviewWithMovieDTOMapper.class);
         Set<MovieDTO> movieDTOs = new HashSet<>();
         for (Movie m : user.getWatchLater()) {
-            movieDTOs.add(movieMapper.movieToMovieDTO(m));
+            movieDTOs.add(MovieToMovieDTOMapper.movieToMovieDTO(m));
         }
 
 
