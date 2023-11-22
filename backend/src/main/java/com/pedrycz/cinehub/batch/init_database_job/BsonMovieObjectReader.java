@@ -13,10 +13,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.jar.Attributes;
 
 @Component
 @Slf4j
@@ -37,7 +35,7 @@ public class BsonMovieObjectReader implements JsonObjectReader<Movie> {
                 Set<Director> movieDirectors = prepareDirectors((List<String>) getField(document, "directors"));
                 Set<Actor> movieActors = prepareActors((List<String>) getField(document, "cast"));
                 
-                Movie movie = new Movie(getField(document, "title").toString(),
+                return new Movie(getField(document, "title").toString(),
                         getField(document, "plot").toString(),
                         getField(document, "year").toString(),
                         (Integer) getField(document, "runtime"),
@@ -46,8 +44,6 @@ public class BsonMovieObjectReader implements JsonObjectReader<Movie> {
                         movieDirectors,
                         movieActors
                         );
-                
-                return movie;
             } catch (NullPointerException e) {
                 throw new IncompleteDocumentException();
             }

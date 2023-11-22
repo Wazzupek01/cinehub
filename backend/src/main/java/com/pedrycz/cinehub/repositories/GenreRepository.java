@@ -2,7 +2,6 @@ package com.pedrycz.cinehub.repositories;
 
 import com.pedrycz.cinehub.model.entities.Genre;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
 import java.util.Set;
