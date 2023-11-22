@@ -32,6 +32,8 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        long startTime = System.currentTimeMillis();
+        
         if (movieRepository.count() == 0) {
             log.info("Initializing database...");
             JobParameters jobParameters = new JobParameters(
@@ -62,6 +64,6 @@ public class DatabaseInitializer implements CommandLineRunner {
             );
         }
 
-        log.info("Database initialized");
+        log.info("Database initialized in {}s", (System.currentTimeMillis() - startTime)/1000);
     }
 }

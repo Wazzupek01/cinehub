@@ -4,12 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,25 +40,31 @@ public class Movie {
     private String posterUrl;
 
     @NonNull
-    @ElementCollection(targetClass = String.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name = "genres", joinColumns = @JoinColumn(name = "movie_id"))
-    @JoinColumn(name = "movie_id")
-    private List<String> genres;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "movie_genre",
+            joinColumns = { @JoinColumn(name = "movie_id")},
+            inverseJoinColumns = { @JoinColumn(name = "genre_id")}
+    )
+    private Set<Genre> genres;
 
     @NonNull
-    @ElementCollection(targetClass = String.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name = "directors", joinColumns = @JoinColumn(name = "movie_id"))
-    @JoinColumn(name = "movie_id")
-    private List<String> directors;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "movie_director",
+            joinColumns = { @JoinColumn(name = "movie_id")},
+            inverseJoinColumns = { @JoinColumn(name = "director_id")}
+    )
+    private Set<Director> directors;
 
     @NonNull
-    @ElementCollection(targetClass = String.class)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(name = "actors", joinColumns = @JoinColumn(name = "movie_id"))
-    @JoinColumn(name = "movie_id")
-    private List<String> actors;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "movie_actor",
+            joinColumns = { @JoinColumn(name = "movie_id")},
+            inverseJoinColumns = { @JoinColumn(name = "actor_id")}
+    )
+    private Set<Actor> actors;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private Set<Review> reviews;
@@ -71,7 +74,7 @@ public class Movie {
 
 
     public Movie(@NotNull String title, @NotNull String plot, @NotNull String releaseYear, Integer runtime, String posterUrl,
-                 @NotNull List<String> genres, @NotNull List<String> directors, @NotNull List<String> actors) {
+                 @NotNull Set<Genre> genres, @NotNull Set<Director> directors, @NotNull Set<Actor> actors) {
         this.title = title;
         this.plot = plot;
         this.rating = 0F;

@@ -1,0 +1,58 @@
+# docker/docker-compose.yaml
+
+version: "3.8"
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  postgres:
+    image: "postgres:14-alpine"
+    container_name: ch_postgres
+    ports: 
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "cinehub"
+      POSTGRES_PASSWORD: "cinehub"
+      POSTGRES_DB: "cinehub" 
+    networks:
+      - backend
+
+  minio:
+    image: "bitnami/minio:latest"
+    container_name: ch_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "root"
+      MINIO_ROOT_PASSWORD: "password"
+    networks:
+      - backend
+
+
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    container_name: ch_backend
+    ports: 
+      - "8080:8080"
+    networks:
+      - backend
+    links:
+      - minio
+      - postgres
+    depends_on:
+      - minio
+      - postgres
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    container_name: ch_frontend
+    ports:
+     - "5173:5173"
+

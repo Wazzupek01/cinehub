@@ -1,9 +1,6 @@
 package com.pedrycz.cinehub.unit;
 
-import com.pedrycz.cinehub.model.entities.Movie;
-import com.pedrycz.cinehub.model.entities.Review;
-import com.pedrycz.cinehub.model.entities.Role;
-import com.pedrycz.cinehub.model.entities.User;
+import com.pedrycz.cinehub.model.entities.*;
 import com.pedrycz.cinehub.repositories.MovieRepository;
 import com.pedrycz.cinehub.repositories.ReviewRepository;
 import com.pedrycz.cinehub.repositories.RoleRepository;
@@ -46,9 +43,9 @@ public class ReviewRepositoryTest {
                         "2023",
                         120,
                         "http://test.pl",
-                        List.of("Comedy", "Drama"),
-                        List.of("Wes Anderson"),
-                        List.of("Ryan Reynolds"), 
+                        Set.of(new Genre(1L, "Comedy"), new Genre(2L,"Drama")),
+                        Set.of(new Director(1L,"Wes Anderson")),
+                        Set.of(new Actor(1L, "Ryan Reynolds")), 
                         Set.of(),
                         Set.of()
                 ));
