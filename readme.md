@@ -1,8 +1,8 @@
 # CineHub
 Project main goal is to recreate key functionalities of websites such as imdb and 
-rottentomatoes using SpringBoot, ReactJS and noSQL database. Application also uses minIO object storage for poster pictures for movies uploaded by users. Other posters are retrieved from URLs provided in `movies` collection from MongoDB example dataset `Sample Mflix Dataset`, which is also used as initial movie data in this project.
+rottentomatoes using SpringBoot, ReactJS and PostgreSQL database. Application also uses minIO object storage for poster pictures for movies uploaded by users. Other posters are retrieved from URLs provided in `movies` collection from MongoDB example dataset `Sample Mflix Dataset`, which is also used as initial movie data in this project.
 
-# Executing
+# Launching
 ## Backend
 ### Install JDK 19, Docker and Maven
 1. Install [docker](https://docs.docker.com/engine/install/) in your operating system 
